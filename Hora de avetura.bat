@@ -1,6 +1,17 @@
 @echo off
 setlocal enabledelayedexpansion
 
+:: ========================================================================
+:: MOTOR DE TEXTO HÍBRIDO (VBScript) - Geração do Arquivo
+:: ========================================================================
+echo Set objArgs = WScript.Arguments > "%temp%\motor_texto.vbs"
+echo texto = objArgs(0) >> "%temp%\motor_texto.vbs"
+echo atraso = CInt(objArgs(1)) >> "%temp%\motor_texto.vbs"
+echo For i = 1 To Len(texto) >> "%temp%\motor_texto.vbs"
+echo    WScript.StdOut.Write Mid(texto, i, 1) >> "%temp%\motor_texto.vbs"
+echo    WScript.Sleep atraso >> "%temp%\motor_texto.vbs"
+echo Next >> "%temp%\motor_texto.vbs"
+
 :: 0. THREAD DE ANIMAÇÃO
 :: Esta diretriz captura a inicialização da linha secundária e a redireciona.
 if "%~1" == "motor_neve" goto :snow_loop_thread
@@ -76,9 +87,9 @@ for /l %%l in (1,1,12) do echo.!L%%l!
 
 echo =============================================================================================
 echo.
-echo      ▄████▄ ▄▄▄▄   ▄▄ ▄▄ ▄▄▄▄▄ ▄▄  ▄▄ ▄▄▄▄▄▄ ▄▄ ▄▄ ▄▄▄▄  ▄▄▄▄▄   ██████ ▄▄ ▄▄   ▄▄ ▄▄▄▄▄ 
-echo      ██▄▄██ ██▀██  ██▄██ ██▄▄  ███▄██   ██   ██ ██ ██▄█▄ ██▄▄      ██   ██ ██▀▄▀██ ██▄▄  
-echo      ██  ██ ████▀   ▀█▀  ██▄▄▄ ██ ▀██   ██   ▀███▀ ██ ██ ██▄▄▄     ██   ██ ██   ██ ██▄▄▄ 
+echo      ▄████▄ ▄▄▄▄  ▄▄ ▄▄ ▄▄▄▄▄ ▄▄  ▄▄ ▄▄▄▄▄▄ ▄▄ ▄▄ ▄▄▄▄  ▄▄▄▄▄   ██████ ▄▄ ▄▄   ▄▄ ▄▄▄▄▄ 
+echo      ██▄▄██ ██▀██ ██▄██ ██▄▄  ███▄██   ██   ██ ██ ██▄█▄ ██▄▄      ██   ██ ██▀▄▀██ ██▄▄  
+echo      ██  ██ ████▀  ▀█▀  ██▄▄▄ ██ ▀██   ██   ▀███▀ ██ ██ ██▄▄▄     ██   ██ ██   ██ ██▄▄▄ 
 echo.
 echo =============================================================================================
 echo.
@@ -99,6 +110,10 @@ goto snow_loop
 
 :tela_selecao_aberto
 cls
+echo.
+echo.
+echo.
+echo.
 echo =============================================================================================
 echo.
 echo 	     ┏━╸┏━┓┏━╸┏━┓╻  ╻ ╻┏━┓   ┏━┓┏━╸╻ ╻   ┏━┓┏━╸┏━┓┏━┓┏━┓┏┓╻┏━┓┏━╸┏━╸┏┳┓
@@ -118,13 +133,14 @@ echo.
 echo =============================================================================================
 echo.
 echo  Atributos Base em Memoria:
-echo  [1] Alta Forca Magica (HP: 10 ^| Forca: 5)
-echo  [2] Combate Corpo-a-Corpo (HP: 25 ^| Forca: 25)
-echo  [3] Evasao e Artes das Trevas (HP: 10 ^| Forca: 10)
+echo.
+echo                          [1] Alta Força Magica (HP: 10 ^| Forca: 5)
+echo                        [2] Combate Corpo-a-Corpo (HP: 25 ^| Forca: 25)
+echo                      [3] Evasão e Artes das Trevas (HP: 10 ^| Forca: 10)
 echo.
 
 :: Aguarda 2 segundos. Se nada for digitado, aciona a opcao '0' (piscar)
-choice /c 1230 /n /t 2 /d 0 /m " Pressione o digito correspondente: "
+choice /c 1230 /n /t 2 /d 0 /m " Pressione o dígito correspondente: "
 
 :: A LINHA ABAIXO FOI RESTAURADA PARA GARANTIR O CICLO
 if errorlevel 4 goto :tela_selecao_fechado
@@ -134,6 +150,10 @@ if errorlevel 1 goto :set_tulio
 
 :tela_selecao_fechado
 cls
+echo.
+echo.
+echo.
+echo.
 echo =============================================================================================
 echo.
 echo 	     ┏━╸┏━┓┏━╸┏━┓╻  ╻ ╻┏━┓   ┏━┓┏━╸╻ ╻   ┏━┓┏━╸┏━┓┏━┓┏━┓┏┓╻┏━┓┏━╸┏━╸┏┳┓
@@ -153,13 +173,14 @@ echo.
 echo =============================================================================================
 echo.
 echo  Atributos Base em Memoria:
-echo  [1] Alta Forca Magica (HP: 10 ^| Forca: 5)
-echo  [2] Combate Corpo-a-Corpo (HP: 25 ^| Forca: 25)
-echo  [3] Evasao e Artes das Trevas (HP: 10 ^| Forca: 10)
+echo.
+echo                          [1] Alta Força Magica (HP: 10 ^| Forca: 5)
+echo                        [2] Combate Corpo-a-Corpo (HP: 25 ^| Forca: 25)
+echo                      [3] Evasão e Artes das Trevas (HP: 10 ^| Forca: 10)
 echo.
 
 :: Aguarda 1 segundo. Se nada for digitado, aciona a opcao '0' (abrir olhos)
-choice /c 1230 /n /t 1 /d 0 /m " Pressione o digito correspondente: "
+choice /c 1230 /n /t 1 /d 0 /m " Pressione o dígito correspondente: "
 
 :: A LINHA ABAIXO FOI RESTAURADA PARA GARANTIR O CICLO
 if errorlevel 4 goto :tela_selecao_aberto
@@ -214,8 +235,7 @@ echo.
 echo  Entidade selecionada: %nome_personagem% - %classe_personagem%
 echo  Carga de Atributos: %hp_jogador% HP ^| %forca_jogador% FOR
 echo.
-echo  Os parametros estao corretos?
-echo  [Y] Confirmar Insercao    [N] Retornar a Selecao
+echo  [Y] Confirmar Inserção    [N] Retornar a Seleção
 echo.
 
 choice /c YN /n /m " Pressione a tecla correspondente: "
@@ -232,21 +252,24 @@ if errorlevel 1 goto :prologo
 cls
 color 0A
 echo =============================================================================================
-echo  Dados gravados na memoria com sucesso. 
-echo  Preparando a transferencia para a arena de combate...
+
+:: Execução do efeito máquina de escrever utilizando o Motor VBScript
+:: Sintaxe: cscript //nologo "%temp%\motor_texto.vbs" "Texto entre aspas" Milissegundos
+
+cscript //nologo "%temp%\motor_texto.vbs" " Dados gravados na memoria com sucesso." 40
+echo.
+cscript //nologo "%temp%\motor_texto.vbs" " Preparando para iniciar a historia..." 40
+echo.
+
 echo =============================================================================================
-pause > nul
+pathping -n -q 1 -p 1100 localhost >nul
 
-:: Criar o arquivo de sinalização específico para a neve do prólogo
+:: ==========================================
+:: INÍCIO DO PRÓLOGO (NEVE)
+:: ==========================================
 echo executando > "%temp%\sinal_prologo.tmp"
-
-:: Iniciar a renderização do cenário em segundo plano
 start /b "" cmd.exe /c "%~f0" motor_prologo
-
-:: A linha primária pausa aqui, permitindo que o usuário leia a narrativa em seu próprio tempo
 pause > nul
-
-:: Ao toque de uma tecla, o sinal é destruído e a thread secundária é encerrada
 del "%temp%\sinal_prologo.tmp" >nul 2>nul
 
 goto capitulo_um
@@ -279,17 +302,18 @@ for /l %%i in (1,1,17) do (
     )
 )
 
-:: 2. DESLOCAMENTO (Calibrado para 11 linhas)
-for /l %%i in (15,-1,2) do (
+:: 2. DESLOCAMENTO
+for /l %%i in (14,-1,2) do (
     set /a "prev=%%i-1"
     for %%p in (!prev!) do set "L%%i=!L%%p!"
 )
 set "L1=!newLine!"
 
-:: 3. RENDERIZAÇÃO DO CÉU (15 linhas)
-for /l %%l in (1,1,15) do echo.!L%%l!
+:: 3. RENDERIZAÇÃO DO CÉU 
+for /l %%l in (1,1,14) do echo.!L%%l!
 
-:: 4. RENDERIZAÇÃO DA PAISAGEM (15 linhas totais)
+:: 4. RENDERIZAÇÃO DA PAISAGEM
+echo        * ´ *
 echo      `  /┃  ´                                        /\
 echo      ,  \┃  ,                      /\               /  \
 echo        * . *                      /  \      /\     /\ /V\                    /\
@@ -304,8 +328,6 @@ echo  ´                     ``~_-~´´             `~-.__              \    _.-
 echo                  ..-~-==-~-..                                    \..-~-==-~-..
 echo           _..-~´´            ``~-.._      _.~~~~._        _..-~´´              ``~-.._
 echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-:: 5. RENDERIZAÇÃO DA NARRATIVA (7 linhas totais entre texto e espaços)
 echo.
 echo      O inverno chegou como uma sentenca de morte, cobrindo o reino com um manto de neve
 echo      implacavel e isolando os poucos vilarejos que ousam resistir a sua furia glacial.
@@ -331,9 +353,6 @@ echo executando > "%temp%\sinal_portal.tmp"
 :: DISPARAR A ANIMAÇÃO EM SEGUNDO PLANO
 start /b "" cmd.exe /c "%~f0" motor_portal
 
-:: O TEXTO QUE APARECE JUNTO COM A ANIMAÇÃO
-:: (Lembre-se: o motor_portal_thread é quem vai desenhar a arte e este texto no loop)
-
 :: O SCRIPT PRINCIPAL PARA AQUI E ESPERA O JOGADOR
 pause > nul
 
@@ -343,9 +362,7 @@ del "%temp%\sinal_portal.tmp" >nul 2>nul
 
 :: Limpa a tela e segue para a próxima parte (ex: o encontro com o monstro)
 cls
-echo O portal brilha intensamente e algo comeca a emergir...
-pause
-goto 
+goto cena_vila_frame1
 
 :: ================================================================================================================
 :: THREAD SECUNDÁRIA - MOTOR DE ANIMAÇÃO DO PORTAL REDONDO NA FLORESTA
@@ -356,9 +373,10 @@ goto
 :frame_a
 if not exist "%temp%\sinal_portal.tmp" exit
 cls
-echo    ` /┃  ´    +    *    /\       *   / \         +     /\      +                   *    / 
-echo  `  ┃ ┃ - ┃´           /  \    ┃    /   \   *         /__\  /\    +  /\    /\    +   * /_
-echo  ,/\ \┃  / \     +    /    \  / \  /     \       ┃/\  /  \ /__\ *   /  \ */  \     +   /
+echo     *   *                  .          ┃       .           *              +             . /
+echo   `  /┃   ´   +    *    /\       *   / \         +     /\      +         .         *    / 
+echo  `  ┃ ┃ - ┃´   .       /  \ .  ┃    /   \   *         /__\  /\    +  /\    /\    +   * /_
+echo  ,/\ \┃  / \     +    /    \  / \  /     \     . ┃/\  /  \ /__\ *   /  \ */  \     +   /
 echo  /  \   /   \/\    /\/      \/   \/      _\+ /\ / \ \/    \   /\ /\/    \/    \  +/\* /
 echo   \  \ /_   _\ \  /  \      /     \ /\  /\\ /  /_ _\ \   /\\ /  \ /_    /_    _\ /  \/
 echo    \   /     \  \/    \    /_     _\  \/  ┃/   /   \ _\ /  \/_  _\/     /      \/   /_
@@ -384,7 +402,7 @@ echo /┃┃\┃┃┃      v    *     o      v    *        ┃┃┃┃  \/    
 echo ┃┃┃┃    o   *       v         *      v     *      o     /┃┃\       ┃┃┃┃   ┃┃┃┃┃┃┃ ┃┃  ┃┃  ┃┃┃┃ 
 echo ==============================================================================================
 echo.
-echo             No coracao da Floresta Sombria, uma sombra seita esta concluindo um 
+echo             No coração da Floresta Sombria, uma sombra seita está concluindo um 
 echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
 echo.
 echo                                                     (Pressione qualquer tecla para continuar)
@@ -394,10 +412,11 @@ goto frame_b
 :frame_b
 if not exist "%temp%\sinal_portal.tmp" exit
 cls
-echo    ` /┃  ´    +    *    /\       *   / \         +     /\      +                   *    / 
-echo  `  ┃ ┃ - ┃´           /  \    ┃    /   \   *         /__\  /\    +  /\    /\    +   * /_
-echo  ,/\ \┃  / \     +    /    \  / \  /     \       ┃/\  /  \ /__\ *   /  \ */  \     +   /
-echo  /  \   /   \/\    /\/      \/   \/      _\+ /\ / \ \/    \   /\ /\/    \/    \  +/\* /
+echo     *   *                  .          ┃       .           *              +             . /
+echo   `  /┃   ´   +    *    /\       *   / \         +     /\      +         .         +    / 
+echo  `  ┃ ┃ - ┃´   .       /  \ .  ┃    /   \   *         /__\  /\    +  /\    /\    *   + /_
+echo  ,/\ \┃  / \     *    /    \  / \  /     \     . ┃/\  /  \ /__\ *   /  \ */  \     +   /
+echo  /  \   /   \/\    /\/      \/   \/      _\* /\ / \ \/    \   /\ /\/    \/    \  */\* /
 echo   \  \ /_   _\ \  /  \      /     \ /\  /\\ /  /_ _\ \   /\\ /  \ /_    /_    _\ /  \/
 echo    \   /     \  \/    \    /_     _\  \/  ┃/   /   \ _\ /  \/_  _\/     /      \/   /_
 echo     \ /_     _\ /_    _\/\ /       \  /_ / \  /     \ \/_  _\    \  /\ /        \   /
@@ -422,7 +441,7 @@ echo /┃┃\┃┃┃      v    *     o      v    *        ┃┃┃┃  \/    
 echo ┃┃┃┃    o   *       v         *      v     *      o     /┃┃\       ┃┃┃┃   ┃┃┃┃┃┃┃ ┃┃  ┃┃  ┃┃┃┃ 
 echo ==============================================================================================
 echo.
-echo             No coracao da Floresta Sombria, uma sombra seita esta concluindo um 
+echo             No coração da Floresta Sombria, uma sombra seita está concluindo um 
 echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
 echo.
 echo                                                     (Pressione qualquer tecla para continuar)
@@ -432,10 +451,11 @@ goto frame_c
 :frame_c
 if not exist "%temp%\sinal_portal.tmp" exit
 cls
-echo    ` /┃  ´    +    *    /\       *   / \         +     /\      +                   *    / 
-echo  `  ┃ ┃ - ┃´           /  \    ┃    /   \   *         /__\  /\    +  /\    /\    +   * /_
-echo  ,/\ \┃  / \     +    /    \  / \  /     \       ┃/\  /  \ /__\ *   /  \ */  \     +   /
-echo  /  \   /   \/\    /\/      \/   \/      _\+ /\ / \ \/    \   /\ /\/    \/    \  +/\* /
+echo     *   *                  .          ┃       .           +              *             . /
+echo   `  /┃   ´   *    *    /\       *   / \         *     /\      *         .         *    / 
+echo  `  ┃ ┃ - ┃´   .       /  \ .  ┃    /   \   +         /__\  /\    *  /\    /\    *   * /_
+echo  ,/\ \┃  / \     +    /    \  / \  /     \     . ┃/\  /  \ /__\ +   /  \ */  \     +   /
+echo  /  \   /   \/\    /\/      \/   \/      _\+ /\ / \ \/    \   /\ /\/    \/    \  +/\+ /
 echo   \  \ /_   _\ \  /  \      /     \ /\  /\\ /  /_ _\ \   /\\ /  \ /_    /_    _\ /  \/
 echo    \   /     \  \/    \    /_     _\  \/  ┃/   /   \ _\ /  \/_  _\/     /      \/   /_
 echo     \ /_     _\ /_    _\/\ /       \  /_ / \  /     \ \/_  _\    \  /\ /        \   /
@@ -460,7 +480,7 @@ echo /┃┃\┃┃┃      v    *     o      v    *        ┃┃┃┃  \/    
 echo ┃┃┃┃    o   *       v         *      v     *      o     /┃┃\       ┃┃┃┃   ┃┃┃┃┃┃┃ ┃┃  ┃┃  ┃┃┃┃ 
 echo ==============================================================================================
 echo.
-echo             No coracao da Floresta Sombria, uma sombra seita esta concluindo um 
+echo             No coração da Floresta Sombria, uma sombra seita está concluindo um 
 echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
 echo.
 echo                                                     (Pressione qualquer tecla para continuar)
@@ -470,7 +490,8 @@ goto frame_d
 :frame_d
 if not exist "%temp%\sinal_portal.tmp" exit
 cls
-echo    ` /┃  ´    +    *    /\       *   / \         +     /\      +                   *    / 
+echo     *   *                  .          ┃       .           *              +             . /
+echo   `  /┃   ´   +    *    /\       *   / \         +     /\      +                   *    / 
 echo  `  ┃ ┃ - ┃´           /  \    ┃    /   \   *         /__\  /\    +  /\    /\    +   * /_
 echo  ,/\ \┃  / \     +    /    \  / \  /     \       ┃/\  /  \ /__\ *   /  \ */  \     +   /
 echo  /  \   /   \/\    /\/      \/   \/      _\+ /\ / \ \/    \   /\ /\/    \/    \  +/\* /
@@ -498,11 +519,142 @@ echo /┃┃\┃┃┃      v    *     o      v    *        ┃┃┃┃  \/    
 echo ┃┃┃┃    o   *       v         *      v     *      o     /┃┃\       ┃┃┃┃   ┃┃┃┃┃┃┃ ┃┃  ┃┃  ┃┃┃┃ 
 echo ==============================================================================================
 echo.
-echo             No coracao da Floresta Sombria, uma sombra seita esta concluindo um 
+echo             No coração da Floresta Sombria, uma sombra seita está concluindo um 
 echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
 echo.
 echo                                                     (Pressione qualquer tecla para continuar)
 pathping -n -q 1 -p 100 localhost >nul
 goto frame_a
+
+:: ================================================================================================================
+:: CENA: O DESAPARECIMENTO E O BANQUETE MACABRO
+:: ================================================================================================================
+
+:: Inicializa o contador de ciclos da animacao
+set /a contador_cena=0
+
+:cena_vila_frame1
+cls
+echo.
+echo   _       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
+echo   u\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
+echo   ┃ /\// ┃  ______    ┃  ┃┃  _  /\  ┃    ┃  ___  ____ ┃ ┃ ___ _/  \  ┃┃  ┃ ____ _____ ┃ \\ ┃ ┃
+echo   ┃/  \ ┃┃  ┃ \o/┃    ┃  ┃┃ ┃_┃/__\ ┃    ┃ ┃___┃ ┃  ┃ ┃ ┃ ┃_┃ ┃/__\  ┃┃  ┃ ┃  ┃ ┃ ┃ ┃ ┃┃   ┃ ┃
+echo  _┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
+echo  ___┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
+echo                                         o        \┃/
+echo           \┃/           \o             /┃\                                 \┃/    
+echo                          ┃\            / \                        o     \┃/
+echo                 \o\     / \                         o            /┃\                 o 
+echo      \┃/         ┃                                 /┃\           / \                /┃\
+echo                 / \                \┃/             / \                      \┃/     / \
+echo.
+echo  =============================================================================================
+echo.
+echo   Civis estão desaparecendo, arrancados de suas casas para servirem como o banquete macabro  
+echo                           que celebrará a conclusão do rito.
+pathping -n -q 1 -p 100 localhost >nul
+
+:cena_vila_frame2
+cls
+echo.
+echo   _       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
+echo   u\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
+echo   ┃ /\// ┃  ______    ┃  ┃┃  _  /\  ┃    ┃  ___  ____ ┃ ┃ ___ _/  \  ┃┃  ┃ ____ _____ ┃ \\ ┃ ┃
+echo   ┃/  \ ┃┃  ┃ \o/┃    ┃  ┃┃ ┃_┃/__\ ┃    ┃ ┃___┃ ┃  ┃ ┃ ┃ ┃_┃ ┃/__\  ┃┃  ┃ ┃  ┃ ┃ ┃ ┃ ┃┃   ┃ ┃
+echo  _┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
+echo  ___┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
+echo                                       __o__      \┃/
+echo           \┃/            o/             ┃                                  \┃/    
+echo                         /┃             / \                        o     \┃/       
+echo                 /o/     / \                        \o/           /┃\                \o/
+echo      \┃/         ┃                                  ┃            / \                 ┃
+echo                 / \                \┃/             / \                      \┃/     / \
+echo.
+echo  =============================================================================================
+echo.
+echo   Civis estão desaparecendo, arrancados de suas casas para servirem como o banquete macabro  
+echo                           que celebrará a conclusão do rito.
+pathping -n -q 1 -p 100 localhost >nul
+
+:cena_vila_frame3
+cls
+echo.
+echo   _       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
+echo   u\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
+echo   ┃ /\// ┃  ______    ┃  ┃┃  _  /\  ┃    ┃  ___  ____ ┃ ┃ ___ _/  \  ┃┃  ┃ ____ _____ ┃ \\ ┃ ┃
+echo   ┃/  \ ┃┃  ┃ \o/┃    ┃  ┃┃ ┃_┃/__\ ┃    ┃ ┃___┃ ┃  ┃ ┃ ┃ ┃_┃ ┃/__\  ┃┃  ┃ ┃  ┃ ┃ ┃ ┃ ┃┃   ┃ ┃
+echo  _┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
+echo  ___┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
+echo                                         o        \┃/
+echo           \┃/           \o             /┃\                                 \┃/ 
+echo                          ┃\            / \                       \o/    \┃/
+echo                 \o\     / \                         o             ┃                  o 
+echo      \┃/         ┃                                 /┃\           / \                /┃\
+echo                 / \                \┃/             / \                      \┃/     / \
+echo.
+echo  =============================================================================================
+echo.
+echo   Civis estão desaparecendo, arrancados de suas casas para servirem como o banquete macabro  
+echo                           que celebrará a conclusão do rito.
+pathping -n -q 1 -p 100 localhost >nul
+
+:: Mecanismo de contagem e verificacao do loop
+set /a contador_cena+=1
+if %contador_cena% lss 30 (
+    goto cena_vila_frame1
+) else (
+    goto cena_vila_temp1
+)
+
+:cena_vila_temp1
+cls
+echo.
+echo   _       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
+echo   u\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
+echo   ┃ /\// ┃  ______    ┃  ┃┃  _  /\  ┃    ┃  ___  ____ ┃ ┃ ___ _/  \  ┃┃  ┃ ____ _____ ┃ \\ ┃ ┃
+echo   ┃/  \ ┃┃  ┃ \*/┃    ┃  ┃┃ ┃_┃/__\ ┃    ┃ ┃___┃ ┃  ┃ ┃ ┃ ┃_┃ ┃/__\  ┃┃  ┃ ┃  ┃ ┃ ┃ ┃ ┃┃   ┃ ┃
+echo  _┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
+echo  ___┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
+echo                          !             \o/       \┃/
+echo           \┃/           \o/             ┃                         !        \┃/              
+echo                  !       ┃             / \          !            \o/    \┃/          !      
+echo                 \o/     / \                        \o/            ┃                 \o/     
+echo      \┃/         ┃                                  ┃            / \                 ┃       
+echo                 / \                \┃/             / \                      \┃/     / \      
+echo.
+echo  =============================================================================================
+echo.
+echo                [ O vento começa a soprar as primeiras fagulhas de gelo... ]  
+pathping -n -q 1 -p 100 localhost >nul
+goto 
+
+:banquete_macabro
+cls
+echo.
+echo  ==============================================================================================
+echo                     (  )   (  )                            (  )   (  )
+echo                      )(     )(                              )(     )(
+echo                     (  )   (  )                            (  )   (  )
+echo                     _┃┃_   _┃┃_                            _┃┃_   _┃┃_
+echo                    ┃____┃ ┃____┃                          ┃____┃ ┃____┃
+echo   .......__________┃    ┃_┃    ┃__________......__________┃    ┃_┃    ┃__________.......
+echo         /          ┃    ┃ ┃    ┃          \    /          ┃    ┃ ┃    ┃          \
+echo        /           ┃    ┃ ┃    ┃      o    \  /  o     o  ┃    ┃ ┃    ┃           \
+echo       /            ┃____┃ ┃____┃     ┃┃┃    \/  /┃\   ┃┃┃ ┃____┃ ┃____┃            \
+echo      /                               / \        / \   / \                           \
+echo   __/________________________________________________________________________________\__
+echo    /                                                                                  \
+echo   /     [====]             [====]               [====]               [====]            \
+echo   ┃                                                                                    ┃
+echo   ┃____________________________________________________________________________________┃
+echo   ┃====================================================================================┃
+echo   ┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃
+echo.
+echo   Civis estão desaparecendo, arrancados de suas casas para servirem como o banquete macabro  
+echo                           que celebrará a conclusão do rito.
+echo.
+echo   Pressione qualquer tecla para prosseguir para o confronto...
+pause >nul
 
 exit
