@@ -4,6 +4,7 @@ setlocal enabledelayedexpansion
 :: 0. THREAD DE ANIMAÇÃO
 :: Esta diretriz captura a inicialização da linha secundária e a redireciona.
 if "%~1" == "motor_neve" goto :snow_loop_thread
+if "%~1" == "motor_prologo" goto :neve_prologo_thread
 
 :: 1. VERIFICACAO DE AMBIENTE (Obrigatorio para redimensionamento no Windows moderno)
 if "%~1" neq "motor_classico" (
@@ -223,7 +224,7 @@ if errorlevel 2 goto :tela_selecao_aberto
 if errorlevel 1 goto :prologo
 
 :: ================================================================================================================
-:: INICIO
+:: INICIO - PRÓLOGO
 :: ================================================================================================================
 
 :prologo
@@ -233,6 +234,99 @@ echo ===========================================================================
 echo  Dados gravados na memoria com sucesso. 
 echo  Preparando a transferencia para a arena de combate...
 echo =============================================================================================
-pause
-:: Neste ponto o script prosseguiria para a label :interface_principal do nosso combate
+pause > nul
+
+:: Criar o arquivo de sinalização específico para a neve do prólogo
+echo executando > "%temp%\sinal_prologo.tmp"
+
+:: Iniciar a renderização do cenário em segundo plano
+start /b "" cmd.exe /c "%~f0" motor_prologo
+
+:: A linha primária pausa aqui, permitindo que o usuário leia a narrativa em seu próprio tempo
+pause > nul
+
+:: Ao toque de uma tecla, o sinal é destruído e a thread secundária é encerrada
+del "%temp%\sinal_prologo.tmp" >nul 2>nul
+
+:: Breve pausa de estabilização
+ping -n 2 127.0.0.1 >nul
+
+goto capitulo_um
+
+
+:: ================================================================================================================
+:: MOTOR SECUNDÁRIO - RENDERIZAÇÃO DO PRÓLOGO
+:: ================================================================================================================
+
+:neve_prologo_thread
+color 0B
+
+:: Reduzi o céu para 11 linhas para evitar o transbordo (flickering)
+for /l %%i in (1,1,11) do set "L%%i=                                                                                          "
+
+:neve_prologo_loop
+if not exist "%temp%\sinal_prologo.tmp" exit
+
+:: O comando CLS é o ponto zero. Não deve haver "echo." acima dele.
+cls
+
+:: 1. GERAR NOVA LINHA DE NEVE
+set "newLine=     "
+for /l %%i in (1,1,17) do (
+    set /a "r=!random! %% 15"
+    if !r! equ 0 (set "newLine=!newLine!  * ") else (
+        if !r! equ 1 (set "newLine=!newLine!  .  ") else (
+            set "newLine=!newLine!     "
+        )
+    )
+)
+
+:: 2. DESLOCAMENTO (Calibrado para 11 linhas)
+for /l %%i in (15,-1,2) do (
+    set /a "prev=%%i-1"
+    for %%p in (!prev!) do set "L%%i=!L%%p!"
+)
+set "L1=!newLine!"
+
+:: 3. RENDERIZAÇÃO DO CÉU (15 linhas)
+for /l %%l in (1,1,15) do echo.!L%%l!
+
+:: 4. RENDERIZAÇÃO DA PAISAGEM (15 linhas totais)
+echo                                                      /\
+echo                                    /\               /  \
+echo                                   /  \      /\     /\ /V\                    /\
+echo                    /\            /____\    /  \   /  V   \    /\            /  \
+echo                   /  \   /\               /____\ /        \  /  \/\        /____\
+echo     /\           /____\ /  \                    /          \/___/WV\
+echo    /  \                /    \            /\    /            \  /    \
+echo   /    \              /______\          /VV\  /              \/      \               /\
+echo  /     .-~-**-~-.                      /    \/                \       \             /  \
+echo / ,,-~´           `~-,,        ,.-~-**-~-.,,/                  \       \    .-~****~-.  \
+echo  ´                     ``~_-~´´             `~-.__              \    _.-~´´            ``~-.__
+echo                  ..-~-==-~-..                                    \..-~-==-~-..
+echo           _..-~´´            ``~-.._      _.~~~~._        _..-~´´              ``~-.._
+echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:: 5. RENDERIZAÇÃO DA NARRATIVA (7 linhas totais entre texto e espaços)
+echo.
+echo      O inverno chegou como uma sentenca de morte, cobrindo o reino com um manto de neve
+echo      implacavel e isolando os poucos vilarejos que ousam resistir a sua furia glacial.
+echo.
+echo                                                     (Pressione qualquer tecla para continuar)
+
+:: 6. CONTROLE DE VELOCIDADE
+pathping -n -q 1 -p 300 localhost >nul
+
+goto neve_prologo_loop
+
+
+:: ================================================================================================================
+:: PRIMEIRO ATO
+:: ================================================================================================================
+:capitulo_um
+cls
+color 0F
+echo.
+echo  A jornada na Floresta Sombria se inicia...
+pause > nul
 exit
