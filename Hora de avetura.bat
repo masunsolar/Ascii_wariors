@@ -151,10 +151,7 @@ goto tela_selecao_aberto
 
 :tela_selecao_aberto
     cls
-    echo.
-    echo.
-    echo.
-    echo.
+    for /l %%i in (1,1,5) do echo.
     echo =============================================================================================
     echo.
     echo 	     ┏━╸┏━┓┏━╸┏━┓╻  ╻ ╻┏━┓   ┏━┓┏━╸╻ ╻   ┏━┓┏━╸┏━┓┏━┓┏━┓┏┓╻┏━┓┏━╸┏━╸┏┳┓
@@ -163,10 +160,10 @@ goto tela_selecao_aberto
     echo.
     echo =============================================================================================
     echo.
-    echo            /\                              _/\_  ┳━┓                          
-    echo          _/__\_┏┓                         ( o_o)┣┃━┛                      .=.
-    echo          ( o.o)┃                          /^|__^|\_┃                       (º_º)
-    echo          /(__)/┃                           [__]  ┃                    ━┫╸━(_)━╺┣━
+    echo            /\                              _/\_  ┳━┓                       .        
+    echo          _/__\_┏┓                         ( o¬o)┣┃━┛                      /_\
+    echo          ( o.o)┃                          /^|__^|\_┃                       (¬_¬)
+    echo          /(__)/┃                           [__]  ┃                    ━┫╸━}_{━╺┣━
     echo           /  \ ┃                           /  \                          _/ \_ 
     echo.
     echo    [1] Tulio - O Mago             [2] Sara - A Guerreira         [3] Soso - A Ladina
@@ -191,10 +188,7 @@ goto tela_selecao_aberto
 
 :tela_selecao_fechado
     cls
-    echo.
-    echo.
-    echo.
-    echo.
+    for /l %%i in (1,1,5) do echo.
     echo =============================================================================================
     echo.
     echo 	     ┏━╸┏━┓┏━╸┏━┓╻  ╻ ╻┏━┓   ┏━┓┏━╸╻ ╻   ┏━┓┏━╸┏━┓┏━┓┏━┓┏┓╻┏━┓┏━╸┏━╸┏┳┓
@@ -203,10 +197,10 @@ goto tela_selecao_aberto
     echo.
     echo =============================================================================================
     echo.
-    echo            /\                              _/\_  ┳━┓                          
-    echo          _/__\_┏┓                         ( -_-)┣┃━┛                      .=.
-    echo          ( -.-)┃                          /^|__^|\_┃                       (=_=)
-    echo          /(__)/┃                           [__]  ┃                    ━┫╸━(_)━╺┣━
+    echo            /\                              _/\_  ┳━┓                       .                 
+    echo          _/__\_┏┓                         ( -¬-)┣┃━┛                      /_\
+    echo          ( -.-)┃                          /^|__^|\_┃                       (-_-)
+    echo          /(__)/┃                           [__]  ┃                    ━┫╸━}_{━╺┣━
     echo           /  \ ┃                           /  \                          _/ \_ 
     echo.
     echo    [1] Tulio - O Mago             [2] Sara - A Guerreira         [3] Soso - A Ladina
@@ -240,7 +234,7 @@ goto tela_selecao_aberto
     set /a agil_jogador=15
     set /a def_jogador=15
     set /a mana_jogador=30
-    goto :confirmacao
+    goto :set_sprites
 
 :set_sara
     set "nome_personagem=Sara"
@@ -250,7 +244,7 @@ goto tela_selecao_aberto
     set /a agil_jogador=10
     set /a def_jogador=15
     set /a mana_jogador=0
-    goto :confirmacao
+    goto :set_sprites
 
 :set_soso
     set "nome_personagem=Soso"
@@ -260,30 +254,66 @@ goto tela_selecao_aberto
     set /a agil_jogador=28
     set /a def_jogador=15
     set /a mana_jogador=10
+    goto :set_sprites
+
+:: ==========================================
+:: DEFINIÇÃO DOS SPRITES
+:: ==========================================
+
+:set_sprites
+if "%nome_personagem%"=="Tulio" goto :sprite_tulio
+if "%nome_personagem%"=="Sara"  goto :sprite_sara
+if "%nome_personagem%"=="Soso"  goto :sprite_soso
+goto :confirmacao
+
+:sprite_tulio
+    set "s1=   /\      "
+    set "s2= _/__\_┏┓  "
+    set "s3= ( o.o)┃   "
+    set "s4= /(__)/┃   "
+    set "s5=  /  \ ┃   "
+    goto :confirmacao
+
+:sprite_sara
+    set "s1=  _/\_  ┳━┓"
+    set "s2= ( o¬o)┣┃━┛ "
+    set "s3= /^|__^|\_┃ "
+    set "s4=  [__]  ┃  "
+    set "s5=  /  \     "
+    goto :confirmacao
+
+
+:sprite_soso
+    set "s1=      .     "
+    set "s2=     /_\   "
+    set "s3=    (¬_¬)    "
+    set "s4= ━┫╸━}_{━╺┣━"
+    set "s5=    _/ \_    "
     goto :confirmacao
 
 :: ==========================================
 :: TELA DE VALIDACAO FINAL
 :: ==========================================
+
 :confirmacao
-    cls
-    echo.
-    echo ┏━┓┏━╸┏━┓┏━┓┏━┓┏┓╻┏━┓┏━╸┏━╸┏┳┓   ┏━╸┏━┓┏━╸┏━┓╻  ╻ ╻╻╺┳┓┏━┓ 
-    echo ┣━┛┣╸ ┣┳┛┗━┓┃ ┃┃┗┫┣━┫┃╺┓┣╸ ┃┃┃   ┣╸ ┗━┓┃  ┃ ┃┃  ┣━┫┃ ┃┃┃ ┃╹
-    echo ╹  ┗━╸╹┗╸┗━┛┗━┛╹ ╹╹ ╹┗━┛┗━╸╹ ╹   ┗━╸┗━┛┗━╸┗━┛┗━╸╹ ╹╹╺┻┛┗━┛╹
-    echo.
-    :: Integracao das duas variaveis para criar o titulo completo
-    echo  Entidade selecionada: %nome_personagem% - %classe_personagem%
-    echo  Carga de Atributos: %hp_jogador% HP ^| %forca_jogador% FOR
-    echo.
-    echo  [Y] Confirmar Inserção    [N] Retornar a Seleção
-    echo.
+cls
+for /l %%i in (1,1,11) do echo.                           
+echo                                                                                %s1%
+echo                 ┏━┓┏━╸┏━┓┏━┓┏━┓┏┓╻┏━┓┏━╸┏━╸┏┳┓   ┏━╸┏━┓┏━╸┏━┓╻  ╻ ╻╻╺┳┓┏━┓     %s2%
+echo                 ┣━┛┣╸ ┣┳┛┗━┓┃ ┃┃┗┫┣━┫┃╺┓┣╸ ┃┃┃   ┣╸ ┗━┓┃  ┃ ┃┃  ┣━┫┃ ┃┃┃ ┃╹    %s3%
+echo                 ╹  ┗━╸╹┗╸┗━┛┗━┛╹ ╹╹ ╹┗━┛┗━╸╹ ╹   ┗━╸┗━┛┗━╸┗━┛┗━╸╹ ╹╹╺┻┛┗━┛╹    %s4%
+echo                                                                                %s5%
+echo.
+echo                          Entidade selecionada: %nome_personagem% - %classe_personagem%
+echo                            Carga de Atributos: %hp_jogador% HP ^| %forca_jogador% FOR
+echo.
+echo                         [Y] Confirmar Inserção    [N] Retornar a Seleção
+echo.
 
-    choice /c YN /n /m " Pressione a tecla correspondente: "
+choice /c YN /n /m "        Pressione a tecla correspondente: "
 
-    :: O ROTULO DE DESTINO FOI CORRIGIDO
-    if errorlevel 2 goto :tela_selecao_aberto
-    if errorlevel 1 goto :prologo
+if errorlevel 2 goto :tela_selecao_aberto
+if errorlevel 1 goto :prologo
 
 :: ================================================================================================================
 :: INICIO - PRÓLOGO
@@ -292,6 +322,7 @@ goto tela_selecao_aberto
 :prologo
     cls
     color 0A
+    for /l %%i in (1,1,14) do echo.
     echo =============================================================================================
 
     :: Execução do efeito máquina de escrever utilizando o Motor VBScript
@@ -447,7 +478,7 @@ goto tela_selecao_aberto
         echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
         echo.
         echo                                                     (Pressione qualquer tecla para continuar)
-        ping 127.0.0.1 -n 1 -w 300 >nul
+        ping 127.0.0.1 -n 1 -w 00 >nul
         goto frame_b
 
     :frame_b
@@ -486,7 +517,7 @@ goto tela_selecao_aberto
         echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
         echo.
         echo                                                     (Pressione qualquer tecla para continuar)
-        ping 127.0.0.1 -n 1 -w 300 >nul
+        ping 127.0.0.1 -n 1 -w 00 >nul
         goto frame_c
 
     :frame_c
@@ -525,7 +556,7 @@ goto tela_selecao_aberto
         echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
         echo.
         echo                                                     (Pressione qualquer tecla para continuar)
-        ping 127.0.0.1 -n 1 -w 300 >nul
+        ping 127.0.0.1 -n 1 -w 00 >nul
         goto frame_d
 
     :frame_d
@@ -564,7 +595,7 @@ goto tela_selecao_aberto
         echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
         echo.
         echo                                                     (Pressione qualquer tecla para continuar)
-        ping 127.0.0.1 -n 1 -w 300 >nul
+        ping 127.0.0.1 -n 1 -w 00 >nul
         goto frame_a
 
 :: ================================================================================================================
