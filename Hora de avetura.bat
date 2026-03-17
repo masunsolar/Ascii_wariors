@@ -284,6 +284,21 @@ goto tela_selecao_aberto
     ::Dado::
     set /a qd_jogador=atk_mago
     set /a d=dano_mago
+
+    ::Slots de Inventário::
+    set slot[6]
+
+    ::Ataques Especiais::
+        ::Dano de fogo em area que causa 120% da força do jogador e tem 30% de chance de causar queimadura, que causa dano adicional de 10% da força do jogador por 3 turnos.
+    set "atk_especial_1=Bola de Fogo"
+        ::Congela o inimigo por 1 turno e causa dano igual a 100% da força do jogador, mas reduz a agilidade do inimigo em 10% por 2 turnos.
+    set "atk_especial_2=Raio Congelante"
+        ::Causa dano de eletricidade em área igual a 150% da força do jogador, tem 20% de chance de paralisar o inimigo por 1 turno, mas reduz a defesa do jogador em 15% por 3 turnos.
+    set "atk_especial_3=Tempestade de Raios"
+
+    ::Ataque padrão::
+    set "atk_padrao=Ataque com Cajado"
+
     goto :set_sprites
 
 :set_sara
@@ -313,6 +328,21 @@ goto tela_selecao_aberto
     ::Dado::
     set /a qd_jogador=atk_gue
     set /a d=dano_gue
+
+    ::Slots de Inventário::
+    set slot[9]
+
+    ::Ataques Especiais::
+        ::Atordoa o inimigo por 1 turno e causa dano igual a 150% da força do jogador, mas reduz a defesa do jogador em 10% por 2 turnos.
+    set "atk_especial_1=Investida"
+        ::Aumenta a força da equipe no próximo ataque em 30% e tem 20% de chance de atordoar o inimigo por 1 turno.
+    set "atk_especial_2=Grito de Guerra"
+        ::Aumenta a próxima jogada de ataque em 50% e ignora a defesa do inimigo, mas reduz a defesa do jogador em 20% por 3 turnos.
+    set "atk_especial_3=Fúria Desenfreada" 
+
+    ::Ataque padrão::
+    set "atk_padrao=Ataque com Espada"
+    
     goto :set_sprites
 
 :set_soso
@@ -342,6 +372,21 @@ goto tela_selecao_aberto
     ::Dado::
     set /a qd_jogador=atk_ocul
     set /a d=dano_ocul
+
+    ::Slots de Inventário::
+    set slot[12]
+
+    ::Ataques Especiais::
+        ::Causa dano igual a 120% da força do jogador e tem 25% de chance de causar sangramento, que causa dano adicional de 5% da força do jogador por 4 turnos.
+    set "atk_especial_1=Golpe Soturno"
+        ::Causa dano de veneno igual a 100% da força do jogador e tem 30% de chance de envenenar o inimigo, causando dano adicional de 15% da força do jogador por 3 turnos, mas reduz a defesa do jogador em 10% por 2 turnos.
+    set "atk_especial_2=Flecha Sombria"
+        ::Causa dano de maldição igual a 150% da força do jogador e tem 20% de chance de amaldiçoar o inimigo, reduzindo sua força em 20% por 3 turnos, mas reduz a agilidade do jogador em 15% por 2 turnos.
+    set "atk_especial_3=Invocação de Sombra"
+
+    ::Ataque padrão::
+    set "atk_padrao=Ataque com Adaga"
+    
     goto :set_sprites
 
 :: ==========================================
