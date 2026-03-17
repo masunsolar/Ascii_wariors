@@ -4,6 +4,13 @@ Este projeto é um RPG de aventura desenvolvido inteiramente em **Batch Script**
 
 ---
 
+## 👥 Equipe de Desenvolvimento
+* **Natan S. Rodrigues:** Programador e Animador
+* **João A.A. Blanco:** Coescritor e Animador
+* **Geovani Sa. de Brito:** Escritor
+
+---
+
 ## ✅ O que já está feito
 
 ### ⚙️ Motores e Sistema
@@ -48,6 +55,3 @@ Este projeto é um RPG de aventura desenvolvido inteiramente em **Batch Script**
 1. Execute o arquivo `.bat` no Windows.
 2. O sistema abrirá automaticamente o `conhost.exe` para garantir a compatibilidade de redimensionamento.
 3. Certifique-se de que o terminal suporte caracteres `UTF-8` (configurado automaticamente via `chcp 65001`).
-
----
-**Desenvolvido por:** Natan S. Rodrigues, João A.A. Blanco e Geovani Sa. de Brito.
