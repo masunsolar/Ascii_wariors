@@ -33,7 +33,7 @@ Este projeto é um RPG de aventura desenvolvido inteiramente em **Batch Script**
 - [ ] **Habilidades Desbloqueáveis:** Condicionar o acesso a novos ataques baseando-se no nível do jogador.
 
 ### ⚔️ Sistema de Batalha (Inspirado em Pokémon/Retro)
-- [ ] **Menu de Combate:** Opções de [1] Lutar (escolher entre 4 ataques), [2] Mochila (itens), [3] Fugir.
+- [ ] **Menu de Combate:** Opções de [1] Lutar (escolher entre 4 ataques - 1 normal e 3 especiais), [2] Mochila (itens), [3] Fugir.
 - [ ] **Status de Efeitos:** Adicionar condições como "Congelado" ou "Queimado".
 - [ ] **IA de Turnos:** O inimigo deve esperar o jogador agir para realizar sua jogada.
 
