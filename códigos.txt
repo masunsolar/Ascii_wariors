@@ -1,0 +1,82 @@
+sistema de lvl
+
+@echo off
+setlocal enabledelayedexpansion
+
+:: Configurações Iniciais da Soso
+:set_soso
+    set "nome_personagem=Soso"
+    set "classe_personagem=A Ocultista"
+    set /a lvl_jogador=1
+    set /a xp_atual=0
+    set /a xp_proximo_lvl=50
+    set /a hp_jogador=12
+    set /a max_hp=12
+    set /a forca_jogador=10
+    set /a agil_jogador=28
+    set /a def_jogador=15
+    set /a mana_jogador=10
+    set /a max_mana=10
+    goto :menu_principal
+
+:menu_principal
+cls
+echo ===========================================
+echo         STATUS DE %nome_personagem% (%classe_personagem%)
+echo ===========================================
+echo  LVL: %lvl_jogador%  ^|  XP: %xp_atual%/%xp_proximo_lvl%
+echo  HP:  %hp_jogador%/%max_hp%
+echo  MANA: %mana_jogador%/%max_mana%
+echo  FOR: %forca_jogador%  ^|  AGI: %agil_jogador%  ^|  DEF: %def_jogador%
+echo ===========================================
+echo [1] Ganhar XP (Simular Batalha)
+echo [2] Sair
+echo.
+set /p opt="Escolha uma opcao: "
+
+if "%opt%"=="1" goto :ganhar_xp
+if "%opt%"=="2" exit
+goto :menu_principal
+
+:ganhar_xp
+cls
+:: Gera XP aleatório entre 20 e 40
+set /a ganho=%random% %% 21 + 20
+set /a xp_atual+=%ganho%
+echo %nome_personagem% ganhou %ganho% de XP!
+pause
+
+:: Verifica se subiu de nível
+if %xp_atual% geq %xp_proximo_lvl% goto :level_up
+goto :menu_principal
+
+:level_up
+:: Subtrai o XP e aumenta o nível
+set /a xp_atual-=%xp_proximo_lvl%
+set /a lvl_jogador+=1
+:: Aumenta o XP necessário para o próximo nível (Escalonamento)
+set /a xp_proximo_lvl=%xp_proximo_lvl% + 50
+
+echo.
+echo *******************************************
+echo    LEVEL UP! %nome_personagem% alcancou o LVL %lvl_jogador%!
+echo *******************************************
+echo.
+
+:: Melhoria Automática de Atributos (Base da Classe Ocultista)
+set /a max_hp+=5
+set /a hp_jogador=%max_hp%
+set /a max_mana+=8
+set /a mana_jogador=%max_mana%
+set /a forca_jogador+=1
+set /a agil_jogador+=2
+set /a def_jogador+=2
+
+echo Atributos aumentados:
+echo HP +5  ^| Mana +8 ^| Agilidade +2 ^| Defesa +2 ^| Forca +1
+echo.
+pause
+
+:: Se ainda tiver XP suficiente para outro level up, repete o processo
+if %xp_atual% geq %xp_proximo_lvl% goto :level_up
+goto :menu_principal

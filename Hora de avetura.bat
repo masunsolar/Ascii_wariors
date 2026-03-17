@@ -26,49 +26,83 @@ if "%~1" neq "motor_classico" (
     exit
 )
 
+::Configuuração padrão da janela::
 title Adventure time
 chcp 65001 >nul
 mode con: cols=94 lines=35
 
-cls
-color 0B
+:: ========================================================================
+:: LEVEL CHECK
+:: ========================================================================
+:level_check
+    echo ===========================================
+    echo         STATUS DE %nome_personagem% (%classe_personagem%)
+    echo ===========================================
+    echo  LVL: %lvl_jogador%  ^|  XP: %xp_atual%/%xp_proximo_lvl%
+    echo  HP:  %hp_jogador%/%max_hp%
+    echo  MANA: %mana_jogador%/%max_mana%
+    echo  FOR: %forca_jogador%  ^|  AGI: %agil_jogador%  ^|  DEF: %def_jogador%
+    echo ===========================================
 
-for /l %%i in (1,1,8) do echo.
+:: ========================================================================
+:: Dados
+:: ========================================================================
+:combat_engine
+    set /a resultado_jogada=0
+    set /a quantidade_dados=qd_jogador
 
-echo                                                                  ;                           
-echo                 :                                                ED.                   :     
-echo                t#,          .,G:               .          :      E#Wi                 t#,    
-echo   j.          ;##W.        ,WtE#,    :        ;W          Ef     E###G.       t      ;##W.   
-echo   EW,        :#L:WE       i#D.E#t  .GE       f#E GEEEEEEELE#t    E#fD#W;      Ej    :#L:WE   
-echo   E##j      .KG  ,#D     f#f  E#t j#K;     .E#f  ,;;L#K;;.E#t    E#t t##L     E#,  .KG  ,#D  
-echo   E###D.    EE    ;#f  .D#i   E#GK#f      iWW;      t#E   E#t    E#t  .E#K,   E#t  EE    ;#f 
-echo   E#jG#W;  f#.     t#i:KW,    E##D.      L##Lffi    t#E   E#t fi E#t    j##f  E#t f#.     t#i
-echo   E#t t##f :#G     GK t#f     E##Wi     tLLG##L     t#E   E#t L#jE#t    :E#K: E#t :#G     GK 
-echo   E#t  :K#E:;#L   LW.  ;#G    E#jL#D:     ,W#i      t#E   E#t L#LE#t   t##L   E#t  ;#L   LW. 
-echo   E#KDDDD###it#f f#:    :KE.  E#t ,K#j   j#E.       t#E   E#tf#E:E#t .D#W;    E#t   t#f f#:  
-echo   E#f,t#Wi,,, f#D#;      .DW: E#t   jD .D#j         t#E   E###f  E#tiW#G.     E#t    f#D#;   
-echo   E#t  ;#W:    G#t         L#,j#t     ,WK,          t#E   E#K,   E#K##i       E#t     G#t    
-echo   DWi   ,KK:    t           jt ,;     EG.            fE   EL     E##D.        E#t      t     
-echo                                       ,               :   :      E#t          ,;.            
-echo                                                                  L:                          
-echo.
-cscript //nologo "%temp%\motor_texto.vbs" "         [É ROCK STUDIO] A P R E S E N T A   U M   J O G O   F E I T O   P O R..." 30
+    :while_dados
+    if %quantidade_dados% gtr 0 (
+        :: %random% gera de 0 a 32767. O %% d pega o resto da divisão.
+        set /a dado=!random! %% d + 1
+        set /a resultado_jogada+=dado
+        set /a quantidade_dados-=1
+        
+        :: Volta para o teste do 'if' (isso cria o loop)
+        goto while_dados
+    )
+    
 
-timeout /t 3 >nul
-cls
+:abertura
+    cls
+    color 0B
 
-for /l %%i in (1,1,13) do echo.
-cscript //nologo "%temp%\motor_texto.vbs" "==============================================================================================" 1
-echo.
-cscript //nologo "%temp%\motor_texto.vbs" "                                      Natan S. Rodrigues                                      " 10
-cscript //nologo "%temp%\motor_texto.vbs" "                                       João A.A. Blanco                                       " 10
-cscript //nologo "%temp%\motor_texto.vbs" "                                     Geovani Sa. de Brito                                     " 10
-echo.
-cscript //nologo "%temp%\motor_texto.vbs" "==============================================================================================" 1
+    for /l %%i in (1,1,8) do echo.
 
-timeout /t 5 >nul
+    echo                                                                  ;                           
+    echo                 :                                                ED.                   :     
+    echo                t#,          .,G:               .          :      E#Wi                 t#,    
+    echo   j.          ;##W.        ,WtE#,    :        ;W          Ef     E###G.       t      ;##W.   
+    echo   EW,        :#L:WE       i#D.E#t  .GE       f#E GEEEEEEELE#t    E#fD#W;      Ej    :#L:WE   
+    echo   E##j      .KG  ,#D     f#f  E#t j#K;     .E#f  ,;;L#K;;.E#t    E#t t##L     E#,  .KG  ,#D  
+    echo   E###D.    EE    ;#f  .D#i   E#GK#f      iWW;      t#E   E#t    E#t  .E#K,   E#t  EE    ;#f 
+    echo   E#jG#W;  f#.     t#i:KW,    E##D.      L##Lffi    t#E   E#t fi E#t    j##f  E#t f#.     t#i
+    echo   E#t t##f :#G     GK t#f     E##Wi     tLLG##L     t#E   E#t L#jE#t    :E#K: E#t :#G     GK 
+    echo   E#t  :K#E:;#L   LW.  ;#G    E#jL#D:     ,W#i      t#E   E#t L#LE#t   t##L   E#t  ;#L   LW. 
+    echo   E#KDDDD###it#f f#:    :KE.  E#t ,K#j   j#E.       t#E   E#tf#E:E#t .D#W;    E#t   t#f f#:  
+    echo   E#f,t#Wi,,, f#D#;      .DW: E#t   jD .D#j         t#E   E###f  E#tiW#G.     E#t    f#D#;   
+    echo   E#t  ;#W:    G#t         L#,j#t     ,WK,          t#E   E#K,   E#K##i       E#t     G#t    
+    echo   DWi   ,KK:    t           jt ,;     EG.            fE   EL     E##D.        E#t      t     
+    echo                                       ,               :   :      E#t          ,;.            
+    echo                                                                  L:                          
+    echo.
+    cscript //nologo "%temp%\motor_texto.vbs" "         [É ROCK STUDIO] A P R E S E N T A   U M   J O G O   F E I T O   P O R..." 30
 
-color 0F
+    timeout /t 3 >nul
+    cls
+
+    for /l %%i in (1,1,13) do echo.
+    cscript //nologo "%temp%\motor_texto.vbs" "==============================================================================================" 1
+    echo.
+    cscript //nologo "%temp%\motor_texto.vbs" "                                      Natan S. Rodrigues                                      " 10
+    cscript //nologo "%temp%\motor_texto.vbs" "                                       João A.A. Blanco                                       " 10
+    cscript //nologo "%temp%\motor_texto.vbs" "                                     Geovani Sa. de Brito                                     " 10
+    echo.
+    cscript //nologo "%temp%\motor_texto.vbs" "==============================================================================================" 1
+
+    timeout /t 5 >nul
+
+    color 0F
 
 :: ========================================================================
 :: MOTOR DE FLUXO PRINCIPAL (TELA DE TÍTULO ASSÍNCRONA)
@@ -95,15 +129,13 @@ goto tela_selecao_aberto
 :: ========================================================================
 :snow_loop_thread
     :: Inicializar variáveis de linha
-    for /l %%i in (1,1,35) do set "L%%i=          "
+    for /l %%i in (1,1,35) do set "L%%i=                                                                                          "
 
     :snow_loop
         :: O ciclo verifica a integridade do sinal vital. Se destruído, a animação cessa.
         if not exist "%temp%\sinal_neve.tmp" exit
 
         cls
-        echo.
-        echo.
 
         :: 1. GERAR NOVA LINHA (O TOPO)
         set "newLine=     "
@@ -146,9 +178,8 @@ goto tela_selecao_aberto
     goto snow_loop
 
 :: ========================================================================
-:: CONTINUAÇÃO DO PROGRAMA
+:: TELA DE SELEÇÃO DE PERSONAGEM
 :: ========================================================================
-
 :tela_selecao_aberto
     cls
     for /l %%i in (1,1,5) do echo.
@@ -224,36 +255,93 @@ goto tela_selecao_aberto
     if errorlevel 1 goto :set_tulio
 
 :: ==========================================
-:: ALOCACAO DE ATRIBUTOS (INICIALIZACAO)
+:: ALOCACAO DE ATRIBUTOS (VARIAVEIS DE JOGADOR)
 :: ==========================================
 :set_tulio
     set "nome_personagem=Tulio"
     set "classe_personagem=O Mago"
+    set /a lvl_jogador=1
+    set /a xp_atual=0
+    set /a xp_proximo_lvl=50
     set /a hp_jogador=10
+    set /a max_hp=10
     set /a forca_jogador=5
     set /a agil_jogador=15
     set /a def_jogador=15
     set /a mana_jogador=30
+    set /a max_mana=30
+
+    ::Equipamentos::
+    set /a armamento=0
+    set /a escudo=0
+    set /a armadura=0
+
+    ::Itens::
+    set /a pocao_hp=1
+    set /a pocao_mana=1
+    set /a ouro=50
+
+    ::Dado::
+    set /a qd_jogador=atk_mago
+    set /a d=dano_mago
     goto :set_sprites
 
 :set_sara
     set "nome_personagem=Sara"
     set "classe_personagem=A Guerreira"
+    set /a lvl_jogador=1
+    set /a xp_atual=0
+    set /a xp_proximo_lvl=50
     set /a hp_jogador=25
+    set /a max_hp=25
     set /a forca_jogador=25
     set /a agil_jogador=10
     set /a def_jogador=15
     set /a mana_jogador=0
+    set /a max_mana=0
+
+    ::Equipamentos::
+    set /a armamento=0
+    set /a escudo=0
+    set /a armadura=0
+
+    ::Itens::
+    set /a pocao_hp=0
+    set /a pocao_mana=0
+    set /a ouro=50
+
+    ::Dado::
+    set /a qd_jogador=atk_gue
+    set /a d=dano_gue
     goto :set_sprites
 
 :set_soso
     set "nome_personagem=Soso"
     set "classe_personagem=A Ocultista"
+    set /a lvl_jogador=1
+    set /a xp_atual=0
+    set /a xp_proximo_lvl=50
     set /a hp_jogador=12
+    set /a max_hp=12
     set /a forca_jogador=10
     set /a agil_jogador=28
     set /a def_jogador=15
     set /a mana_jogador=10
+    set /a max_mana=10
+
+    ::Equipamentos::
+    set /a armamento=0
+    set /a escudo=0
+    set /a armadura=0
+
+    ::Itens::
+    set /a pocao_hp=0
+    set /a pocao_mana=0
+    set /a ouro=100
+
+    ::Dado::
+    set /a qd_jogador=atk_ocul
+    set /a d=dano_ocul
     goto :set_sprites
 
 :: ==========================================
@@ -261,10 +349,10 @@ goto tela_selecao_aberto
 :: ==========================================
 
 :set_sprites
-if "%nome_personagem%"=="Tulio" goto :sprite_tulio
-if "%nome_personagem%"=="Sara"  goto :sprite_sara
-if "%nome_personagem%"=="Soso"  goto :sprite_soso
-goto :confirmacao
+    if "%nome_personagem%"=="Tulio" goto :sprite_tulio
+    if "%nome_personagem%"=="Sara"  goto :sprite_sara
+    if "%nome_personagem%"=="Soso"  goto :sprite_soso
+    goto :confirmacao
 
 :sprite_tulio
     set "s1=   /\      "
@@ -282,7 +370,6 @@ goto :confirmacao
     set "s5=  /  \     "
     goto :confirmacao
 
-
 :sprite_soso
     set "s1=      .     "
     set "s2=     /_\   "
@@ -292,33 +379,31 @@ goto :confirmacao
     goto :confirmacao
 
 :: ==========================================
-:: TELA DE VALIDACAO FINAL
+:: TELA DE CONFIRMAÇÃO DE PERSONAGEM
 :: ==========================================
-
 :confirmacao
-cls
-for /l %%i in (1,1,11) do echo.                           
-echo                                                                                %s1%
-echo                 ┏━┓┏━╸┏━┓┏━┓┏━┓┏┓╻┏━┓┏━╸┏━╸┏┳┓   ┏━╸┏━┓┏━╸┏━┓╻  ╻ ╻╻╺┳┓┏━┓     %s2%
-echo                 ┣━┛┣╸ ┣┳┛┗━┓┃ ┃┃┗┫┣━┫┃╺┓┣╸ ┃┃┃   ┣╸ ┗━┓┃  ┃ ┃┃  ┣━┫┃ ┃┃┃ ┃╹    %s3%
-echo                 ╹  ┗━╸╹┗╸┗━┛┗━┛╹ ╹╹ ╹┗━┛┗━╸╹ ╹   ┗━╸┗━┛┗━╸┗━┛┗━╸╹ ╹╹╺┻┛┗━┛╹    %s4%
-echo                                                                                %s5%
-echo.
-echo                          Entidade selecionada: %nome_personagem% - %classe_personagem%
-echo                            Carga de Atributos: %hp_jogador% HP ^| %forca_jogador% FOR
-echo.
-echo                         [Y] Confirmar Inserção    [N] Retornar a Seleção
-echo.
+    cls
+    for /l %%i in (1,1,11) do echo.                           
+    echo                                                                                %s1%
+    echo                 ┏━┓┏━╸┏━┓┏━┓┏━┓┏┓╻┏━┓┏━╸┏━╸┏┳┓   ┏━╸┏━┓┏━╸┏━┓╻  ╻ ╻╻╺┳┓┏━┓     %s2%
+    echo                 ┣━┛┣╸ ┣┳┛┗━┓┃ ┃┃┗┫┣━┫┃╺┓┣╸ ┃┃┃   ┣╸ ┗━┓┃  ┃ ┃┃  ┣━┫┃ ┃┃┃ ┃╹    %s3%
+    echo                 ╹  ┗━╸╹┗╸┗━┛┗━┛╹ ╹╹ ╹┗━┛┗━╸╹ ╹   ┗━╸┗━┛┗━╸┗━┛┗━╸╹ ╹╹╺┻┛┗━┛╹    %s4%
+    echo                                                                                %s5%
+    echo.
+    echo                          Entidade selecionada: %nome_personagem% - %classe_personagem%
+    echo                            Carga de Atributos: %hp_jogador% HP ^| %forca_jogador% FOR
+    echo.
+    echo                         [Y] Confirmar Inserção    [N] Retornar a Seleção
+    echo.
 
-choice /c YN /n /m "        Pressione a tecla correspondente: "
+    choice /c YN /n /m " Pressione a tecla correspondente: "
 
-if errorlevel 2 goto :tela_selecao_aberto
-if errorlevel 1 goto :prologo
+    if errorlevel 2 goto :tela_selecao_aberto
+    if errorlevel 1 goto :prologo
 
 :: ================================================================================================================
 :: INICIO - PRÓLOGO
 :: ================================================================================================================
-
 :prologo
     cls
     color 0A
@@ -347,386 +432,387 @@ if errorlevel 1 goto :prologo
     goto capitulo_um
 
 
-:: ================================================================================================================
-:: MOTOR SECUNDÁRIO - RENDERIZAÇÃO DO PRÓLOGO
-:: ================================================================================================================
+    :: ================================================================================================================
+    :: MOTOR SECUNDÁRIO - RENDERIZAÇÃO DE NEVE PRÓLOGO
+    :: ================================================================================================================
+    :neve_prologo_thread
+        color 0B
 
-:neve_prologo_thread
-    color 0B
+        :: Reduzi o céu para 11 linhas para evitar o transbordo (flickering)
+        for /l %%i in (1,1,11) do set "L%%i=                                                                                          "
 
-    :: Reduzi o céu para 11 linhas para evitar o transbordo (flickering)
-    for /l %%i in (1,1,11) do set "L%%i=                                                                                          "
+        :neve_prologo_loop
+            if not exist "%temp%\sinal_prologo.tmp" exit
 
-    :neve_prologo_loop
-    if not exist "%temp%\sinal_prologo.tmp" exit
+            :: O comando CLS é o ponto zero. Não deve haver "echo." acima dele.
+            cls
 
-    :: O comando CLS é o ponto zero. Não deve haver "echo." acima dele.
-    cls
-
-    :: 1. GERAR NOVA LINHA DE NEVE
-    set "newLine=     "
-    for /l %%i in (1,1,17) do (
-        set /a "r=!random! %% 15"
-        if !r! equ 0 (set "newLine=!newLine!  * ") else (
-            if !r! equ 1 (set "newLine=!newLine!  .  ") else (
-                set "newLine=!newLine!     "
+            :: 1. GERAR NOVA LINHA DE NEVE
+            set "newLine=     "
+            for /l %%i in (1,1,17) do (
+                set /a "r=!random! %% 15"
+                if !r! equ 0 (set "newLine=!newLine!  * ") else (
+                    if !r! equ 1 (set "newLine=!newLine!  .  ") else (
+                        set "newLine=!newLine!     "
+                    )
+                )
             )
-        )
-    )
 
-    :: 2. DESLOCAMENTO
-    for /l %%i in (14,-1,2) do (
-        set /a "prev=%%i-1"
-        for %%p in (!prev!) do set "L%%i=!L%%p!"
-    )
-    set "L1=!newLine!"
+            :: 2. DESLOCAMENTO
+            for /l %%i in (14,-1,2) do (
+                set /a "prev=%%i-1"
+                for %%p in (!prev!) do set "L%%i=!L%%p!"
+            )
+            set "L1=!newLine!"
 
-    :: 3. RENDERIZAÇÃO DO CÉU 
-    for /l %%l in (1,1,14) do echo.!L%%l!
+            :: 3. RENDERIZAÇÃO DO CÉU 
+            for /l %%l in (1,1,14) do echo.!L%%l!
 
-    :: 4. RENDERIZAÇÃO DA PAISAGEM
-    echo        * ´ *
-    echo      `  /┃  ´                                        /\
-    echo      ,  \┃  ,                      /\               /  \
-    echo        * . *                      /  \      /\     /\ /V\                    /\
-    echo ~-**-~-...    .-*-./\ .-~-**-~-. /____\-**~/  \***/  V   \~~~~/\.-~-**-~*-~-/  \         ..~~~
-    echo           ``~-**-~/vv\   /\               /____\ /        \  /  \/\ -**-   /____\**-~-~´´
-    echo     /\           /____\ /**\     -~****~-       /          \/___/WV\   _.~~~~._
-    echo    /\/\   .-~-**-~-.   /    \            /\    /            \  /    \            -~****~-
-    echo   /    \              /______\          /VV\  /              \/      \               /\
-    echo  /     .-~-**-~-.       -~****~-       /    \/                \       \             /\/\
-    echo / ,,-~´           `~-,,        ,.-~-**-~-.,,/                  \       \    .-~****~-.  \
-    echo  ´                     ``~_-~´´             `~-.__              \    _.-~´´            ``~-.__
-    echo                  ..-~-==-~-..                                    \..-~-==-~-..
-    echo           _..-~´´            ``~-.._      _.~~~~._        _..-~´´              ``~-.._
-    echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    echo.
-    echo      O inverno chegou como uma sentenca de morte, cobrindo o reino com um manto de neve
-    echo      implacavel e isolando os poucos vilarejos que ousam resistir a sua furia glacial.
-    echo.
-    echo                                                     (Pressione qualquer tecla para continuar)
-
-    :: 6. CONTROLE DE VELOCIDADE
-    pathping -n -q 1 -p 300 localhost >nul
-
-    goto neve_prologo_loop
-
-
-:: ================================================================================================================
-:: PRIMEIRO ATO
-:: ================================================================================================================
-:capitulo_um
-    cls
-    color 0C
-
-    :: Criar o sinal para a animação começar
-    echo executando > "%temp%\sinal_portal.tmp"
-
-    :: DISPARAR A ANIMAÇÃO EM SEGUNDO PLANO
-    start /b "" cmd.exe /c "%~f0" motor_portal
-
-    :: O SCRIPT PRINCIPAL PARA AQUI E ESPERA O JOGADOR
-    pause > nul
-
-    :: QUANDO O JOGADOR APERTA UMA TECLA:
-    :: Deletamos o sinal para parar a animação
-    del "%temp%\sinal_portal.tmp" >nul 2>nul
-
-    :: Limpa a tela e segue para a próxima parte (ex: o encontro com o monstro)
-    cls
-    goto cena_vila_frame1
-
-:: ================================================================================================================
-:: THREAD SECUNDÁRIA - MOTOR DE ANIMAÇÃO DO PORTAL REDONDO NA FLORESTA
-:: ================================================================================================================
-:motor_portal_thread
-    :: Certifique-se de que o comando 'chcp 65001' foi executado no início do script para suportar Unicode.
-
-    :frame_a
-        if not exist "%temp%\sinal_portal.tmp" exit
-        cls
-        echo     *   *                  .          ┃       .           *              +             . /
-        echo   `  /┃   ´   +    *    /\       *   / \         +     /\      +         .         *    / 
-        echo  `  ┃ ┃ - ┃´   .       /  \ .  ┃    /   \   *         /__\  /\    +  /\    /\    +   * /_
-        echo  ,/\ \┃  / \     +    /    \  / \  /     \     . ┃/\  /  \ /__\ *   /  \ */  \     +   /
-        echo  /  \   /   \/\    /\/      \/   \/      _\+ /\ / \ \/    \   /\ /\/    \/    \  +/\* /
-        echo   \  \ /_   _\ \  /  \      /     \ /\  /\\ /  /_ _\ \   /\\ /  \ /_    /_    _\ /  \/
-        echo    \   /     \  \/    \    /_     _\  \/  ┃/   /   \ _\ /  \/_  _\/     /      \/   /_
-        echo     \ /_     _\ /_    _\/\ /       \  /_ / \  /     \ \/_  _\    \  /\ /        \   /
-        echo     _\ /\     \ /      \  /  /\     \ / /   \/_     _\ /    \     \/  \         _\ /
-        echo     \ /  \    _\       _\/_ /  \    _\ /     \       \/_    _\    /_  _\         \/_
-        echo  ____/    \    \        \/ /_  _\    \/_     _\_______/      \____/    \          /
-        echo  ┃┃┃/_    _\   _\  .-----------.\_____/       \┃_┃┃__/________\ ┃/______\        /
-        echo  ┃┃┃/______\   \ .'  *          `. _ /         \ ┃┃__┃___┃┃_┃┃  ┃┃ /┃┃          /_____________
-        echo  ┃┃┃   ┃┃ ┃_____/   .  +  * +     \ /___________\┃┃_\┃   ┃┃ ┃┃  ┃┃/_┃┃______________\  ┃  ┃  ┃
-        echo  ┃┃┃   ┃┃ ┃ ┃┃ ┃   *    *      *   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃   ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃___┃┃ ┃ ┃┃ ┃     *      *   *  ┃ ┃┃  ┃┃__┃┃┃_┃┃  ┃___┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃  * +  ( ┃ )  +  * ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃   *       *   *   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃   *    *      *   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  \   .  +  * +     /  ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃   `.      *      .'   ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃  `-----------'   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃   ┃   ┃┃┃     ┃  ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃    *      v   o  ┃ ┃┃  ┃┃  ┃┃┃/┃┃\ ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃   ┃┃        v              v  /┃┃\ /┃┃\   /┃ ┃\┃┃ ┃┃ /┃┃\ ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo /┃┃\┃┃┃      v    *     o      v    *        ┃┃┃┃  \/    ┃┃    ┃┃┃┃ ┃┃ /┃\/┃┃\/┃\ ┃┃   ┃  ┃ /┃
-        echo ┃┃┃┃    o   *       v         *      v     *      o     /┃┃\       ┃┃┃┃   ┃┃┃┃┃┃┃ ┃┃  ┃┃  ┃┃┃┃ 
-        echo ==============================================================================================
+        :: 4. RENDERIZAÇÃO DA PAISAGEM
+        echo        * ´ *
+        echo      `  /┃  ´                                        /\
+        echo      ,  \┃  ,                      /\               /  \
+        echo        * . *                      /  \      /\     /\ /V\                    /\
+        echo ~-**-~-...    .-*-./\ .-~-**-~-. /____\-**~/  \***/  V   \~~~~/\.-~-**-~*-~-/  \         ..~~~
+        echo           ``~-**-~/vv\   /\               /____\ /        \  /  \/\ -**-   /____\**-~-~´´
+        echo     /\           /____\ /**\     -~****~-       /          \/___/WV\   _.~~~~._
+        echo    /\/\   .-~-**-~-.   /    \            /\    /            \  /    \            -~****~-
+        echo   /    \              /______\          /VV\  /              \/      \               /\
+        echo  /     .-~-**-~-.       -~****~-       /    \/                \       \             /\/\
+        echo / ,,-~´           `~-,,        ,.-~-**-~-.,,/                  \       \    .-~****~-.  \
+        echo  ´                     ``~_-~´´             `~-.__              \    _.-~´´            ``~-.__
+        echo                  ..-~-==-~-..                                    \..-~-==-~-..
+        echo           _..-~´´            ``~-.._      _.~~~~._        _..-~´´              ``~-.._
+        echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         echo.
-        echo             No coração da Floresta Sombria, uma sombra seita está concluindo um 
-        echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
+        echo      O inverno chegou como uma sentenca de morte, cobrindo o reino com um manto de neve
+        echo      implacavel e isolando os poucos vilarejos que ousam resistir a sua furia glacial.
         echo.
         echo                                                     (Pressione qualquer tecla para continuar)
-        ping 127.0.0.1 -n 1 -w 00 >nul
-        goto frame_b
 
-    :frame_b
-        if not exist "%temp%\sinal_portal.tmp" exit
+        :: 6. CONTROLE DE VELOCIDADE
+        pathping -n -q 1 -p 300 localhost >nul
+
+        goto neve_prologo_loop
+
+
+    :: ================================================================================================================
+    :: MOTOR PARA QUE FIQUE EM LOOP ATÉ QUE CLIQUE EM ALGO PARA AVANÇAR A HISTÓRIA (PORTAL REDONDO NA FLORESTA)
+    :: ================================================================================================================
+    :capitulo_um
         cls
-        echo     *   *                  .          ┃       .           *              +             . /
-        echo   `  /┃   ´   +    *    /\       *   / \         +     /\      +         .         +    / 
-        echo  `  ┃ ┃ - ┃´   .       /  \ .  ┃    /   \   *         /__\  /\    +  /\    /\    *   + /_
-        echo  ,/\ \┃  / \     *    /    \  / \  /     \     . ┃/\  /  \ /__\ *   /  \ */  \     +   /
-        echo  /  \   /   \/\    /\/      \/   \/      _\* /\ / \ \/    \   /\ /\/    \/    \  */\* /
-        echo   \  \ /_   _\ \  /  \      /     \ /\  /\\ /  /_ _\ \   /\\ /  \ /_    /_    _\ /  \/
-        echo    \   /     \  \/    \    /_     _\  \/  ┃/   /   \ _\ /  \/_  _\/     /      \/   /_
-        echo     \ /_     _\ /_    _\/\ /       \  /_ / \  /     \ \/_  _\    \  /\ /        \   /
-        echo     _\ /\     \ /      \  /  /\     \ / /   \/_     _\ /    \     \/  \         _\ /
-        echo     \ /  \    _\       _\/_ /  \    _\ /     \       \/_    _\    /_  _\         \/_
-        echo  ____/    \    \        \/ /_  _\    \/_     _\_______/      \____/    \          /
-        echo  ┃┃┃/_    _\   _\  .-----------.\_____/       \┃_┃┃__/________\ ┃/______\        /
-        echo  ┃┃┃/______\   \ .'     *       `. _ /         \ ┃┃__┃___┃┃_┃┃  ┃┃ /┃┃          /_____________
-        echo  ┃┃┃   ┃┃ ┃_____/   .  +     *   *\ /___________\┃┃_\┃   ┃┃ ┃┃  ┃┃/_┃┃______________\  ┃  ┃  ┃
-        echo  ┃┃┃   ┃┃ ┃ ┃┃ ┃      *    *  +    ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃   ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃___┃┃ ┃ ┃┃ ┃     +  *    *     ┃ ┃┃  ┃┃__┃┃┃_┃┃  ┃___┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃  * +  ( / ) + *   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃   *  +   * *    * ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃   *    *      *   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  \   +  * +      * /  ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃   `.      *      .'   ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃  `-----------'   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃   ┃   ┃┃┃     ┃  ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃    *      v   o  ┃ ┃┃  ┃┃  ┃┃┃/┃┃\ ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃   ┃┃        v              v  /┃┃\ /┃┃\   /┃ ┃\┃┃ ┃┃ /┃┃\ ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo /┃┃\┃┃┃      v    *     o      v    *        ┃┃┃┃  \/    ┃┃    ┃┃┃┃ ┃┃ /┃\/┃┃\/┃\ ┃┃   ┃  ┃ /┃
-        echo ┃┃┃┃    o   *       v         *      v     *      o     /┃┃\       ┃┃┃┃   ┃┃┃┃┃┃┃ ┃┃  ┃┃  ┃┃┃┃ 
-        echo ==============================================================================================
-        echo.
-        echo             No coração da Floresta Sombria, uma sombra seita está concluindo um 
-        echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
-        echo.
-        echo                                                     (Pressione qualquer tecla para continuar)
-        ping 127.0.0.1 -n 1 -w 00 >nul
-        goto frame_c
+        color 0C
 
-    :frame_c
-        if not exist "%temp%\sinal_portal.tmp" exit
+        :: Criar o sinal para a animação começar
+        echo executando > "%temp%\sinal_portal.tmp"
+
+        :: DISPARAR A ANIMAÇÃO EM SEGUNDO PLANO
+        start /b "" cmd.exe /c "%~f0" motor_portal
+
+        :: O SCRIPT PRINCIPAL PARA AQUI E ESPERA O JOGADOR
+        pause > nul
+
+        :: QUANDO O JOGADOR APERTA UMA TECLA:
+        :: Deletamos o sinal para parar a animação
+        del "%temp%\sinal_portal.tmp" >nul 2>nul
+
+        :: Limpa a tela e segue para a próxima parte (ex: o encontro com o monstro)
         cls
-        echo     *   *                  .          ┃       .           +              *             . /
-        echo   `  /┃   ´   *    *    /\       *   / \         *     /\      *         .         *    / 
-        echo  `  ┃ ┃ - ┃´   .       /  \ .  ┃    /   \   +         /__\  /\    *  /\    /\    *   * /_
-        echo  ,/\ \┃  / \     +    /    \  / \  /     \     . ┃/\  /  \ /__\ +   /  \ */  \     +   /
-        echo  /  \   /   \/\    /\/      \/   \/      _\+ /\ / \ \/    \   /\ /\/    \/    \  +/\+ /
-        echo   \  \ /_   _\ \  /  \      /     \ /\  /\\ /  /_ _\ \   /\\ /  \ /_    /_    _\ /  \/
-        echo    \   /     \  \/    \    /_     _\  \/  ┃/   /   \ _\ /  \/_  _\/     /      \/   /_
-        echo     \ /_     _\ /_    _\/\ /       \  /_ / \  /     \ \/_  _\    \  /\ /        \   /
-        echo     _\ /\     \ /      \  /  /\     \ / /   \/_     _\ /    \     \/  \         _\ /
-        echo     \ /  \    _\       _\/_ /  \    _\ /     \       \/_    _\    /_  _\         \/_
-        echo  ____/    \    \        \/ /_  _\    \/_     _\_______/      \____/    \          /
-        echo  ┃┃┃/_    _\   _\  .-----------.\_____/       \┃_┃┃__/________\ ┃/______\        /
-        echo  ┃┃┃/______\   \ .'        *    `. _ /         \ ┃┃__┃___┃┃_┃┃  ┃┃ /┃┃          /_____________
-        echo  ┃┃┃   ┃┃ ┃_____/          +      \ /___________\┃┃_\┃   ┃┃ ┃┃  ┃┃/_┃┃______________\  ┃  ┃  ┃
-        echo  ┃┃┃   ┃┃ ┃ ┃┃ ┃    *    * .  +  * ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃   ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃___┃┃ ┃ ┃┃ ┃+    +  *    *     ┃ ┃┃  ┃┃__┃┃┃_┃┃  ┃___┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃    * +( - ) + *   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃ *  +   * *    *   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃   *   *      *    ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  \   + * +    *    /  ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃   `.    *        .'   ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃  `-----------'   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃   ┃   ┃┃┃     ┃  ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃    *      v   o  ┃ ┃┃  ┃┃  ┃┃┃/┃┃\ ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃   ┃┃        v              v  /┃┃\ /┃┃\   /┃ ┃\┃┃ ┃┃ /┃┃\ ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo /┃┃\┃┃┃      v    *     o      v    *        ┃┃┃┃  \/    ┃┃    ┃┃┃┃ ┃┃ /┃\/┃┃\/┃\ ┃┃   ┃  ┃ /┃
-        echo ┃┃┃┃    o   *       v         *      v     *      o     /┃┃\       ┃┃┃┃   ┃┃┃┃┃┃┃ ┃┃  ┃┃  ┃┃┃┃ 
-        echo ==============================================================================================
-        echo.
-        echo             No coração da Floresta Sombria, uma sombra seita está concluindo um 
-        echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
-        echo.
-        echo                                                     (Pressione qualquer tecla para continuar)
-        ping 127.0.0.1 -n 1 -w 00 >nul
-        goto frame_d
-
-    :frame_d
-        if not exist "%temp%\sinal_portal.tmp" exit
-        cls
-        echo     *   *                  .          ┃       .           *              +             . /
-        echo   `  /┃   ´   +    *    /\       *   / \         +     /\      +                   *    / 
-        echo  `  ┃ ┃ - ┃´           /  \    ┃    /   \   *         /__\  /\    +  /\    /\    +   * /_
-        echo  ,/\ \┃  / \     +    /    \  / \  /     \       ┃/\  /  \ /__\ *   /  \ */  \     +   /
-        echo  /  \   /   \/\    /\/      \/   \/      _\+ /\ / \ \/    \   /\ /\/    \/    \  +/\* /
-        echo   \  \ /_   _\ \  /  \      /     \ /\  /\\ /  /_ _\ \   /\\ /  \ /_    /_    _\ /  \/
-        echo    \   /     \  \/    \    /_     _\  \/  ┃/   /   \ _\ /  \/_  _\/     /      \/   /_
-        echo     \ /_     _\ /_    _\/\ /       \  /_ / \  /     \ \/_  _\    \  /\ /        \   /
-        echo     _\ /\     \ /      \  /  /\     \ / /   \/_     _\ /    \     \/  \         _\ /
-        echo     \ /  \    _\       _\/_ /  \    _\ /     \       \/_    _\    /_  _\         \/_
-        echo  ____/    \    \        \/ /_  _\    \/_     _\_______/      \____/    \          /
-        echo  ┃┃┃/_    _\   _\  .-----------.\_____/       \┃_┃┃__/________\ ┃/______\        /
-        echo  ┃┃┃/______\   \ .'        *    `. _ /         \ ┃┃__┃___┃┃_┃┃  ┃┃ /┃┃          /_____________
-        echo  ┃┃┃   ┃┃ ┃_____/     .    +   *  \ /___________\┃┃_\┃   ┃┃ ┃┃  ┃┃/_┃┃______________\  ┃  ┃  ┃
-        echo  ┃┃┃   ┃┃ ┃ ┃┃ ┃    *    *  +    * ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃   ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃___┃┃ ┃ ┃┃ ┃+    +  *    *     ┃ ┃┃  ┃┃__┃┃┃_┃┃  ┃___┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃    *  ( - ) + *   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃ *  +          *   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃       *      *    ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  \   + * +    *    /  ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃   `.    *        .'   ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃  `-----------'   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃   ┃   ┃┃┃     ┃  ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃    *      v   o  ┃ ┃┃  ┃┃  ┃┃┃/┃┃\ ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo  ┃┃┃ ┃ ┃┃   ┃┃        v              v  /┃┃\ /┃┃\   /┃ ┃\┃┃ ┃┃ /┃┃\ ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
-        echo /┃┃\┃┃┃      v    *     o      v    *        ┃┃┃┃  \/    ┃┃    ┃┃┃┃ ┃┃ /┃\/┃┃\/┃\ ┃┃   ┃  ┃ /┃
-        echo ┃┃┃┃    o   *       v         *      v     *      o     /┃┃\       ┃┃┃┃   ┃┃┃┃┃┃┃ ┃┃  ┃┃  ┃┃┃┃ 
-        echo ==============================================================================================
-        echo.
-        echo             No coração da Floresta Sombria, uma sombra seita está concluindo um 
-        echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
-        echo.
-        echo                                                     (Pressione qualquer tecla para continuar)
-        ping 127.0.0.1 -n 1 -w 00 >nul
-        goto frame_a
-
-:: ================================================================================================================
-:: CENA: O DESAPARECIMENTO E O BANQUETE MACABRO
-:: ================================================================================================================
-
-:: Inicializa o contador de ciclos da animacao
-set /a contador_cena=0
-
-:cena_vila_frame1
-    cls
-    echo.
-    echo   _       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
-    echo   u\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
-    echo   ┃ /\// ┃  ______    ┃  ┃┃  _  /\  ┃    ┃  ___  ____ ┃ ┃ ___ _/  \  ┃┃  ┃ ____ _____ ┃ \\ ┃ ┃
-    echo   ┃/  \ ┃┃  ┃ \o/┃    ┃  ┃┃ ┃_┃/__\ ┃    ┃ ┃___┃ ┃  ┃ ┃ ┃ ┃_┃ ┃/__\  ┃┃  ┃ ┃  ┃ ┃ ┃ ┃ ┃┃   ┃ ┃
-    echo  _┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
-    echo  ___┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
-    echo                                         o        \┃/
-    echo           \┃/           \o             /┃\                                 \┃/    
-    echo                          ┃\            / \                        o     \┃/
-    echo                 \o\     / \                         o            /┃\                 o 
-    echo      \┃/         ┃                                 /┃\           / \                /┃\
-    echo                 / \                \┃/             / \                      \┃/     / \
-    echo.
-    echo  =============================================================================================
-    echo.
-    echo   Civis estão desaparecendo, arrancados de suas casas para servirem como o banquete macabro  
-    echo                           que celebrará a conclusão do rito.
-    pathping -n -q 1 -p 300 localhost >nul
-
-:cena_vila_frame2
-    cls
-    echo.
-    echo   _       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
-    echo   u\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
-    echo   ┃ /\// ┃  ______    ┃  ┃┃  _  /\  ┃    ┃  ___  ____ ┃ ┃ ___ _/  \  ┃┃  ┃ ____ _____ ┃ \\ ┃ ┃
-    echo   ┃/  \ ┃┃  ┃ \o/┃    ┃  ┃┃ ┃_┃/__\ ┃    ┃ ┃___┃ ┃  ┃ ┃ ┃ ┃_┃ ┃/__\  ┃┃  ┃ ┃  ┃ ┃ ┃ ┃ ┃┃   ┃ ┃
-    echo  _┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
-    echo  ___┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
-    echo                                       __o__      \┃/
-    echo           \┃/            o/             ┃                                  \┃/    
-    echo                         /┃             / \                        o     \┃/       
-    echo                 /o/     / \                        \o/           /┃\                \o/
-    echo      \┃/         ┃                                  ┃            / \                 ┃
-    echo                 / \                \┃/             / \                      \┃/     / \
-    echo.
-    echo  =============================================================================================
-    echo.
-    echo   Civis estão desaparecendo, arrancados de suas casas para servirem como o banquete macabro  
-    echo                           que celebrará a conclusão do rito.
-    pathping -n -q 1 -p 300 localhost >nul
-
-:cena_vila_frame3
-    cls
-    echo.
-    echo   _       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
-    echo   u\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
-    echo   ┃ /\// ┃  ______    ┃  ┃┃  _  /\  ┃    ┃  ___  ____ ┃ ┃ ___ _/  \  ┃┃  ┃ ____ _____ ┃ \\ ┃ ┃
-    echo   ┃/  \ ┃┃  ┃ \o/┃    ┃  ┃┃ ┃_┃/__\ ┃    ┃ ┃___┃ ┃  ┃ ┃ ┃ ┃_┃ ┃/__\  ┃┃  ┃ ┃  ┃ ┃ ┃ ┃ ┃┃   ┃ ┃
-    echo  _┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
-    echo  ___┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
-    echo                                         o        \┃/
-    echo           \┃/           \o             /┃\                                 \┃/ 
-    echo                          ┃\            / \                       \o/    \┃/
-    echo                 \o\     / \                         o             ┃                  o 
-    echo      \┃/         ┃                                 /┃\           / \                /┃\
-    echo                 / \                \┃/             / \                      \┃/     / \
-    echo.
-    echo  =============================================================================================
-    echo.
-    echo   Civis estão desaparecendo, arrancados de suas casas para servirem como o banquete macabro  
-    echo                           que celebrará a conclusão do rito.
-    pathping -n -q 1 -p 300 localhost >nul
-
-    :: Mecanismo de contagem e verificacao do loop
-    set /a contador_cena+=1
-    if %contador_cena% lss 30 (
         goto cena_vila_frame1
-    ) else (
-        goto cena_vila_temp1
-    )
 
-:cena_vila_temp1
-    cls
-    echo.
-    echo   _       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
-    echo   u\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
-    echo   ┃ /\// ┃  ______    ┃  ┃┃  _  /\  ┃    ┃  ___  ____ ┃ ┃ ___ _/  \  ┃┃  ┃ ____ _____ ┃ \\ ┃ ┃
-    echo   ┃/  \ ┃┃  ┃ \*/┃    ┃  ┃┃ ┃_┃/__\ ┃    ┃ ┃___┃ ┃  ┃ ┃ ┃ ┃_┃ ┃/__\  ┃┃  ┃ ┃  ┃ ┃ ┃ ┃ ┃┃   ┃ ┃
-    echo  _┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
-    echo  ___┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
-    echo                          !             \o/       \┃/
-    echo           \┃/           \o/             ┃                         !        \┃/              
-    echo                  !       ┃             / \          !            \o/    \┃/          !      
-    echo                 \o/     / \                        \o/            ┃                 \o/     
-    echo      \┃/         ┃                                  ┃            / \                 ┃       
-    echo                 / \                \┃/             / \                      \┃/     / \      
-    echo.
-    echo  =============================================================================================
-    echo.
-    echo                [ O vento começa a soprar as primeiras fagulhas de gelo... ]  
-    pathping -n -q 1 -p 300 localhost >nul
-    goto 
+    :: ================================================================================================================
+    :: THREAD SECUNDÁRIA - MOTOR DE ANIMAÇÃO DO PORTAL REDONDO NA FLORESTA
+    :: ================================================================================================================
+    :motor_portal_thread
+        :: Certifique-se de que o comando 'chcp 65001' foi executado no início do script para suportar Unicode.
 
-:banquete_macabro
-    cls
-    echo.
-    echo  ==============================================================================================
-    echo                     (  )   (  )                            (  )   (  )
-    echo                      )(     )(                              )(     )(
-    echo                     (  )   (  )                            (  )   (  )
-    echo                     _┃┃_   _┃┃_                            _┃┃_   _┃┃_
-    echo                    ┃____┃ ┃____┃                          ┃____┃ ┃____┃
-    echo   .......__________┃    ┃_┃    ┃__________......__________┃    ┃_┃    ┃__________.......
-    echo         /          ┃    ┃ ┃    ┃          \    /          ┃    ┃ ┃    ┃          \
-    echo        /           ┃    ┃ ┃    ┃      o    \  /  o     o  ┃    ┃ ┃    ┃           \
-    echo       /            ┃____┃ ┃____┃     ┃┃┃    \/  /┃\   ┃┃┃ ┃____┃ ┃____┃            \
-    echo      /                               / \        / \   / \                           \
-    echo   __/________________________________________________________________________________\__
-    echo    /                                                                                  \
-    echo   /     [====]             [====]               [====]               [====]            \
-    echo   ┃                                                                                    ┃
-    echo   ┃____________________________________________________________________________________┃
-    echo   ┃====================================================================================┃
-    echo   ┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃
-    echo.
-    echo   Civis estão desaparecendo, arrancados de suas casas para servirem como o banquete macabro  
-    echo                           que celebrará a conclusão do rito.
-    echo.
-    echo   Pressione qualquer tecla para prosseguir para o confronto...
-    pause >nul
+        :frame_a
+            if not exist "%temp%\sinal_portal.tmp" exit
+            cls
+            echo     *   *                  .          ┃       .           *              +             . /
+            echo   `  /┃   ´   +    *    /\       *   / \         +     /\      +         .         *    / 
+            echo  `  ┃ ┃ - ┃´   .       /  \ .  ┃    /   \   *         /__\  /\    +  /\    /\    +   * /_
+            echo  ,/\ \┃  / \     +    /    \  / \  /     \     . ┃/\  /  \ /__\ *   /  \ */  \     +   /
+            echo  /  \   /   \/\    /\/      \/   \/      _\+ /\ / \ \/    \   /\ /\/    \/    \  +/\* /
+            echo   \  \ /_   _\ \  /  \      /     \ /\  /\\ /  /_ _\ \   /\\ /  \ /_    /_    _\ /  \/
+            echo    \   /     \  \/    \    /_     _\  \/  ┃/   /   \ _\ /  \/_  _\/     /      \/   /_
+            echo     \ /_     _\ /_    _\/\ /       \  /_ / \  /     \ \/_  _\    \  /\ /        \   /
+            echo     _\ /\     \ /      \  /  /\     \ / /   \/_     _\ /    \     \/  \         _\ /
+            echo     \ /  \    _\       _\/_ /  \    _\ /     \       \/_    _\    /_  _\         \/_
+            echo  ____/    \    \        \/ /_  _\    \/_     _\_______/      \____/    \          /
+            echo  ┃┃┃/_    _\   _\  .-----------.\_____/       \┃_┃┃__/________\ ┃/______\        /
+            echo  ┃┃┃/______\   \ .'  *          `. _ /         \ ┃┃__┃___┃┃_┃┃  ┃┃ /┃┃          /_____________
+            echo  ┃┃┃   ┃┃ ┃_____/   .  +  * +     \ /___________\┃┃_\┃   ┃┃ ┃┃  ┃┃/_┃┃______________\  ┃  ┃  ┃
+            echo  ┃┃┃   ┃┃ ┃ ┃┃ ┃   *    *      *   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃   ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃___┃┃ ┃ ┃┃ ┃     *      *   *  ┃ ┃┃  ┃┃__┃┃┃_┃┃  ┃___┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃  * +  ( ┃ )  +  * ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃   *       *   *   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃   *    *      *   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  \   .  +  * +     /  ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃   `.      *      .'   ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃  `-----------'   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃   ┃   ┃┃┃     ┃  ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃    *      v   o  ┃ ┃┃  ┃┃  ┃┃┃/┃┃\ ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃   ┃┃        v              v  /┃┃\ /┃┃\   /┃ ┃\┃┃ ┃┃ /┃┃\ ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo /┃┃\┃┃┃      v    *     o      v    *        ┃┃┃┃  \/    ┃┃    ┃┃┃┃ ┃┃ /┃\/┃┃\/┃\ ┃┃   ┃  ┃ /┃
+            echo ┃┃┃┃    o   *       v         *      v     *      o     /┃┃\       ┃┃┃┃   ┃┃┃┃┃┃┃ ┃┃  ┃┃  ┃┃┃┃ 
+            echo ==============================================================================================
+            echo.
+            echo             No coração da Floresta Sombria, uma sombra seita está concluindo um 
+            echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
+            echo.
+            echo                                                     (Pressione qualquer tecla para continuar)
+            pathping -n -q 1 -p 100 localhost >nul
+            goto frame_b
+
+        :frame_b
+            if not exist "%temp%\sinal_portal.tmp" exit
+            cls
+            echo     *   *                  .          ┃       .           *              +             . /
+            echo   `  /┃   ´   +    *    /\       *   / \         +     /\      +         .         +    / 
+            echo  `  ┃ ┃ - ┃´   .       /  \ .  ┃    /   \   *         /__\  /\    +  /\    /\    *   + /_
+            echo  ,/\ \┃  / \     *    /    \  / \  /     \     . ┃/\  /  \ /__\ *   /  \ */  \     +   /
+            echo  /  \   /   \/\    /\/      \/   \/      _\* /\ / \ \/    \   /\ /\/    \/    \  */\* /
+            echo   \  \ /_   _\ \  /  \      /     \ /\  /\\ /  /_ _\ \   /\\ /  \ /_    /_    _\ /  \/
+            echo    \   /     \  \/    \    /_     _\  \/  ┃/   /   \ _\ /  \/_  _\/     /      \/   /_
+            echo     \ /_     _\ /_    _\/\ /       \  /_ / \  /     \ \/_  _\    \  /\ /        \   /
+            echo     _\ /\     \ /      \  /  /\     \ / /   \/_     _\ /    \     \/  \         _\ /
+            echo     \ /  \    _\       _\/_ /  \    _\ /     \       \/_    _\    /_  _\         \/_
+            echo  ____/    \    \        \/ /_  _\    \/_     _\_______/      \____/    \          /
+            echo  ┃┃┃/_    _\   _\  .-----------.\_____/       \┃_┃┃__/________\ ┃/______\        /
+            echo  ┃┃┃/______\   \ .'     *       `. _ /         \ ┃┃__┃___┃┃_┃┃  ┃┃ /┃┃          /_____________
+            echo  ┃┃┃   ┃┃ ┃_____/   .  +     *   *\ /___________\┃┃_\┃   ┃┃ ┃┃  ┃┃/_┃┃______________\  ┃  ┃  ┃
+            echo  ┃┃┃   ┃┃ ┃ ┃┃ ┃      *    *  +    ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃   ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃___┃┃ ┃ ┃┃ ┃     +  *    *     ┃ ┃┃  ┃┃__┃┃┃_┃┃  ┃___┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃  * +  ( / ) + *   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃   *  +   * *    * ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃   *    *      *   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  \   +  * +      * /  ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃   `.      *      .'   ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃  `-----------'   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃   ┃   ┃┃┃     ┃  ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃    *      v   o  ┃ ┃┃  ┃┃  ┃┃┃/┃┃\ ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃   ┃┃        v              v  /┃┃\ /┃┃\   /┃ ┃\┃┃ ┃┃ /┃┃\ ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo /┃┃\┃┃┃      v    *     o      v    *        ┃┃┃┃  \/    ┃┃    ┃┃┃┃ ┃┃ /┃\/┃┃\/┃\ ┃┃   ┃  ┃ /┃
+            echo ┃┃┃┃    o   *       v         *      v     *      o     /┃┃\       ┃┃┃┃   ┃┃┃┃┃┃┃ ┃┃  ┃┃  ┃┃┃┃ 
+            echo ==============================================================================================
+            echo.
+            echo             No coração da Floresta Sombria, uma sombra seita está concluindo um 
+            echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
+            echo.
+            echo                                                     (Pressione qualquer tecla para continuar)
+            pathping -n -q 1 -p 100 localhost >nul
+            goto frame_c
+
+        :frame_c
+            if not exist "%temp%\sinal_portal.tmp" exit
+            cls
+            echo     *   *                  .          ┃       .           +              *             . /
+            echo   `  /┃   ´   *    *    /\       *   / \         *     /\      *         .         *    / 
+            echo  `  ┃ ┃ - ┃´   .       /  \ .  ┃    /   \   +         /__\  /\    *  /\    /\    *   * /_
+            echo  ,/\ \┃  / \     +    /    \  / \  /     \     . ┃/\  /  \ /__\ +   /  \ */  \     +   /
+            echo  /  \   /   \/\    /\/      \/   \/      _\+ /\ / \ \/    \   /\ /\/    \/    \  +/\+ /
+            echo   \  \ /_   _\ \  /  \      /     \ /\  /\\ /  /_ _\ \   /\\ /  \ /_    /_    _\ /  \/
+            echo    \   /     \  \/    \    /_     _\  \/  ┃/   /   \ _\ /  \/_  _\/     /      \/   /_
+            echo     \ /_     _\ /_    _\/\ /       \  /_ / \  /     \ \/_  _\    \  /\ /        \   /
+            echo     _\ /\     \ /      \  /  /\     \ / /   \/_     _\ /    \     \/  \         _\ /
+            echo     \ /  \    _\       _\/_ /  \    _\ /     \       \/_    _\    /_  _\         \/_
+            echo  ____/    \    \        \/ /_  _\    \/_     _\_______/      \____/    \          /
+            echo  ┃┃┃/_    _\   _\  .-----------.\_____/       \┃_┃┃__/________\ ┃/______\        /
+            echo  ┃┃┃/______\   \ .'        *    `. _ /         \ ┃┃__┃___┃┃_┃┃  ┃┃ /┃┃          /_____________
+            echo  ┃┃┃   ┃┃ ┃_____/          +      \ /___________\┃┃_\┃   ┃┃ ┃┃  ┃┃/_┃┃______________\  ┃  ┃  ┃
+            echo  ┃┃┃   ┃┃ ┃ ┃┃ ┃    *    * .  +  * ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃   ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃___┃┃ ┃ ┃┃ ┃+    +  *    *     ┃ ┃┃  ┃┃__┃┃┃_┃┃  ┃___┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃    * +( - ) + *   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃ *  +   * *    *   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃   *   *      *    ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  \   + * +    *    /  ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃   `.    *        .'   ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃  `-----------'   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃   ┃   ┃┃┃     ┃  ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃    *      v   o  ┃ ┃┃  ┃┃  ┃┃┃/┃┃\ ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃   ┃┃        v              v  /┃┃\ /┃┃\   /┃ ┃\┃┃ ┃┃ /┃┃\ ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo /┃┃\┃┃┃      v    *     o      v    *        ┃┃┃┃  \/    ┃┃    ┃┃┃┃ ┃┃ /┃\/┃┃\/┃\ ┃┃   ┃  ┃ /┃
+            echo ┃┃┃┃    o   *       v         *      v     *      o     /┃┃\       ┃┃┃┃   ┃┃┃┃┃┃┃ ┃┃  ┃┃  ┃┃┃┃ 
+            echo ==============================================================================================
+            echo.
+            echo             No coração da Floresta Sombria, uma sombra seita está concluindo um 
+            echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
+            echo.
+            echo                                                     (Pressione qualquer tecla para continuar)
+            pathping -n -q 1 -p 100 localhost >nul
+            goto frame_d
+
+        :frame_d
+            if not exist "%temp%\sinal_portal.tmp" exit
+            cls
+            echo     *   *                  .          ┃       .           *              +             . /
+            echo   `  /┃   ´   +    *    /\       *   / \         +     /\      +                   *    / 
+            echo  `  ┃ ┃ - ┃´           /  \    ┃    /   \   *         /__\  /\    +  /\    /\    +   * /_
+            echo  ,/\ \┃  / \     +    /    \  / \  /     \       ┃/\  /  \ /__\ *   /  \ */  \     +   /
+            echo  /  \   /   \/\    /\/      \/   \/      _\+ /\ / \ \/    \   /\ /\/    \/    \  +/\* /
+            echo   \  \ /_   _\ \  /  \      /     \ /\  /\\ /  /_ _\ \   /\\ /  \ /_    /_    _\ /  \/
+            echo    \   /     \  \/    \    /_     _\  \/  ┃/   /   \ _\ /  \/_  _\/     /      \/   /_
+            echo     \ /_     _\ /_    _\/\ /       \  /_ / \  /     \ \/_  _\    \  /\ /        \   /
+            echo     _\ /\     \ /      \  /  /\     \ / /   \/_     _\ /    \     \/  \         _\ /
+            echo     \ /  \    _\       _\/_ /  \    _\ /     \       \/_    _\    /_  _\         \/_
+            echo  ____/    \    \        \/ /_  _\    \/_     _\_______/      \____/    \          /
+            echo  ┃┃┃/_    _\   _\  .-----------.\_____/       \┃_┃┃__/________\ ┃/______\        /
+            echo  ┃┃┃/______\   \ .'        *    `. _ /         \ ┃┃__┃___┃┃_┃┃  ┃┃ /┃┃          /_____________
+            echo  ┃┃┃   ┃┃ ┃_____/     .    +   *  \ /___________\┃┃_\┃   ┃┃ ┃┃  ┃┃/_┃┃______________\  ┃  ┃  ┃
+            echo  ┃┃┃   ┃┃ ┃ ┃┃ ┃    *    *  +    * ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃   ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃___┃┃ ┃ ┃┃ ┃+    +  *    *     ┃ ┃┃  ┃┃__┃┃┃_┃┃  ┃___┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃    *  ( - ) + *   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃ *  +          *   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃ ┃       *      *    ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  \   + * +    *    /  ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃   `.    *        .'   ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃  `-----------'   ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃   ┃   ┃┃┃     ┃  ┃ ┃┃  ┃┃  ┃┃┃ ┃┃  ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃ ┃ ┃┃  ┃    *      v   o  ┃ ┃┃  ┃┃  ┃┃┃/┃┃\ ┃ ┃ ┃┃ ┃┃  ┃┃  ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo  ┃┃┃ ┃ ┃┃   ┃┃        v              v  /┃┃\ /┃┃\   /┃ ┃\┃┃ ┃┃ /┃┃\ ┃┃  ┃  ┃┃  ┃  ┃┃   ┃  ┃  ┃
+            echo /┃┃\┃┃┃      v    *     o      v    *        ┃┃┃┃  \/    ┃┃    ┃┃┃┃ ┃┃ /┃\/┃┃\/┃\ ┃┃   ┃  ┃ /┃
+            echo ┃┃┃┃    o   *       v         *      v     *      o     /┃┃\       ┃┃┃┃   ┃┃┃┃┃┃┃ ┃┃  ┃┃  ┃┃┃┃ 
+            echo ==============================================================================================
+            echo.
+            echo             No coração da Floresta Sombria, uma sombra seita está concluindo um 
+            echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
+            echo.
+            echo                                                     (Pressione qualquer tecla para continuar)
+            pathping -n -q 1 -p 100 localhost >nul
+            goto frame_a
+
+    :: ================================================================================================================
+    :: CENA: O DESAPARECIMENTO E O BANQUETE MACABRO
+    :: ================================================================================================================
+
+    :: Inicializa o contador de ciclos da animacao
+    set /a contador_cena=0
+
+    :cena_vila_frame1
+        cls
+        echo.
+        echo   _       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
+        echo   u\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
+        echo   ┃ /\// ┃  ______    ┃  ┃┃  _  /\  ┃    ┃  ___  ____ ┃ ┃ ___ _/  \  ┃┃  ┃ ____ _____ ┃ \\ ┃ ┃
+        echo   ┃/  \ ┃┃  ┃ \o/┃    ┃  ┃┃ ┃_┃/__\ ┃    ┃ ┃___┃ ┃  ┃ ┃ ┃ ┃_┃ ┃/__\  ┃┃  ┃ ┃  ┃ ┃ ┃ ┃ ┃┃   ┃ ┃
+        echo  _┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
+        echo  ___┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
+        echo                                         o        \┃/
+        echo           \┃/           \o             /┃\                                 \┃/    
+        echo                          ┃\            / \                        o     \┃/
+        echo                 \o\     / \                         o            /┃\                 o 
+        echo      \┃/         ┃                                 /┃\           / \                /┃\
+        echo                 / \                \┃/             / \                      \┃/     / \
+        echo.
+        echo  =============================================================================================
+        echo.
+        echo   Civis estão desaparecendo, arrancados de suas casas para servirem como o banquete macabro  
+        echo                           que celebrará a conclusão do rito.
+        pathping -n -q 1 -p 300 localhost >nul
+
+    :cena_vila_frame2
+        cls
+        echo.
+        echo   _       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
+        echo   u\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
+        echo   ┃ /\// ┃  ______    ┃  ┃┃  _  /\  ┃    ┃  ___  ____ ┃ ┃ ___ _/  \  ┃┃  ┃ ____ _____ ┃ \\ ┃ ┃
+        echo   ┃/  \ ┃┃  ┃ \o/┃    ┃  ┃┃ ┃_┃/__\ ┃    ┃ ┃___┃ ┃  ┃ ┃ ┃ ┃_┃ ┃/__\  ┃┃  ┃ ┃  ┃ ┃ ┃ ┃ ┃┃   ┃ ┃
+        echo  _┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
+        echo  ___┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
+        echo                                       __o__      \┃/
+        echo           \┃/            o/             ┃                                  \┃/    
+        echo                         /┃             / \                        o     \┃/       
+        echo                 /o/     / \                        \o/           /┃\                \o/
+        echo      \┃/         ┃                                  ┃            / \                 ┃
+        echo                 / \                \┃/             / \                      \┃/     / \
+        echo.
+        echo  =============================================================================================
+        echo.
+        echo   Civis estão desaparecendo, arrancados de suas casas para servirem como o banquete macabro  
+        echo                           que celebrará a conclusão do rito.
+        pathping -n -q 1 -p 300 localhost >nul
+
+    :cena_vila_frame3
+        cls
+        echo.
+        echo   _       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
+        echo   u\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
+        echo   ┃ /\// ┃  ______    ┃  ┃┃  _  /\  ┃    ┃  ___  ____ ┃ ┃ ___ _/  \  ┃┃  ┃ ____ _____ ┃ \\ ┃ ┃
+        echo   ┃/  \ ┃┃  ┃ \o/┃    ┃  ┃┃ ┃_┃/__\ ┃    ┃ ┃___┃ ┃  ┃ ┃ ┃ ┃_┃ ┃/__\  ┃┃  ┃ ┃  ┃ ┃ ┃ ┃ ┃┃   ┃ ┃
+        echo  _┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
+        echo  ___┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
+        echo                                         o        \┃/
+        echo           \┃/           \o             /┃\                                 \┃/ 
+        echo                          ┃\            / \                       \o/    \┃/
+        echo                 \o\     / \                         o             ┃                  o 
+        echo      \┃/         ┃                                 /┃\           / \                /┃\
+        echo                 / \                \┃/             / \                      \┃/     / \
+        echo.
+        echo  =============================================================================================
+        echo.
+        echo   Civis estão desaparecendo, arrancados de suas casas para servirem como o banquete macabro  
+        echo                           que celebrará a conclusão do rito.
+        pathping -n -q 1 -p 300 localhost >nul
+
+        :: Mecanismo de contagem e verificacao do loop
+        set /a contador_cena+=1
+        if %contador_cena% lss 25 (
+            goto cena_vila_frame1
+        ) else (
+            goto cena_vila_temp1
+        )
+
+    :cena_vila_temp1
+        cls
+        echo.
+        echo   _       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
+        echo   u\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
+        echo   ┃ /\// ┃  ______    ┃  ┃┃  _  /\  ┃    ┃  ___  ____ ┃ ┃ ___ _/  \  ┃┃  ┃ ____ _____ ┃ \\ ┃ ┃
+        echo   ┃/  \ ┃┃  ┃ \*/┃    ┃  ┃┃ ┃_┃/__\ ┃    ┃ ┃___┃ ┃  ┃ ┃ ┃ ┃_┃ ┃/__\  ┃┃  ┃ ┃  ┃ ┃ ┃ ┃ ┃┃   ┃ ┃
+        echo  _┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
+        echo  ___┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
+        echo                          !             \o/       \┃/
+        echo           \┃/           \o/             ┃                         !        \┃/              
+        echo                  !       ┃             / \          !            \o/    \┃/          !      
+        echo                 \o/     / \                        \o/            ┃                 \o/     
+        echo      \┃/         ┃                                  ┃            / \                 ┃       
+        echo                 / \                \┃/             / \                      \┃/     / \      
+        echo.
+        echo  =============================================================================================
+        echo.
+        echo                [ O vento começa a soprar as primeiras fagulhas de gelo... ]  
+        pathping -n -q 1 -p 300 localhost >nul
+        goto banquete_macabro
+
+    :banquete_macabro
+        cls
+        echo.
+        echo  ==============================================================================================
+        echo                     (  )   (  )                            (  )   (  )
+        echo                      )(     )(                              )(     )(
+        echo                     (  )   (  )                            (  )   (  )
+        echo                     _┃┃_   _┃┃_                            _┃┃_   _┃┃_
+        echo                    ┃____┃ ┃____┃                          ┃____┃ ┃____┃
+        echo   .......__________┃    ┃_┃    ┃__________......__________┃    ┃_┃    ┃__________.......
+        echo         /          ┃    ┃ ┃    ┃          \    /          ┃    ┃ ┃    ┃          \
+        echo        /           ┃    ┃ ┃    ┃      o    \  /  o     o  ┃    ┃ ┃    ┃           \
+        echo       /            ┃____┃ ┃____┃     ┃┃┃    \/  /┃\   ┃┃┃ ┃____┃ ┃____┃            \
+        echo      /                               / \        / \   / \                           \
+        echo   __/________________________________________________________________________________\__
+        echo    /                                                                                  \
+        echo   /     [====]             [====]               [====]               [====]            \
+        echo   ┃                                                                                    ┃
+        echo   ┃____________________________________________________________________________________┃
+        echo   ┃====================================================================================┃
+        echo   ┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃┃
+        echo.
+        echo   Civis estão desaparecendo, arrancados de suas casas para servirem como o banquete macabro  
+        echo                           que celebrará a conclusão do rito.
+        echo.
+        echo   Pressione qualquer tecla para prosseguir para o confronto...
+        pause >nul
+
+
 
 exit
