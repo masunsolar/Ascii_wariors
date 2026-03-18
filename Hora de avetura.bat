@@ -68,20 +68,21 @@ mode con: cols=94 lines=35
 :loja_armas_mago
     cls
     echo =====================================================
-    echo                MERCADO NEGRO DA VILA
+    echo                 MERCADO NEGRO DA VILA
     echo =====================================================
     echo  Seu Ouro atual: %ouro% moedas
     echo  Arma Equipada: %nome_arma% (Dados: %qd_jogador%d%d%)
+    echo  Espaco na Mochila: %qtd_itens% de %slot% slots
     echo =====================================================
     echo.
     echo  [1] Cajado de Carvalho (Rola 1 dado de 8)                 - 30  Ouro
     echo  [2] Tomo do Abismo     (Rola 2 dados de 6)                - 70  Ouro
     echo  [3] Foice da Morte     (Rola 1 dado de 20)                - 120 Ouro
-    echo  [4] Manto Celeste      (+ Regeneração de mana 100% mana)  - 200 Ouro
+    echo  [4] Manto Celeste      (+ Regeneracao de mana 100%%)      - 200 Ouro
     echo  [5] Sair do Mercado
     echo.
 
-    choice /c 1234 /n /m " Fale logo o que vc quer e suma daqui: "
+    choice /c 12345 /n /m " Fale logo o que vc quer e suma daqui: "
 
     if errorlevel 5 goto local
     if errorlevel 4 goto compra_manto
@@ -91,14 +92,21 @@ mode con: cols=94 lines=35
 
     :: Lógica de Compra e Buff nos Dados
     :compra_cajado
-        if %ouro% lss 30 (
+        if %qtd_itens% geq %slot% (
             echo.
-            echo  Tá achando que sou banco? Ouro insuficiente!
+            echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
             pause >nul
             goto loja_armas_mago
         )
-        :: Desconta o ouro e altera a arma
+        if %ouro% lss 30 (
+            echo.
+            echo  Ta achando que sou banco? Ouro insuficiente!
+            pause >nul
+            goto loja_armas_mago
+        )
+        :: Desconta o ouro, ocupa 1 slot e altera a arma
         set /a ouro-=30
+        set /a qtd_itens+=1
         set "nome_arma=Cajado de Carvalho"
         set /a qd_jogador=1
         set /a d=8
@@ -108,13 +116,20 @@ mode con: cols=94 lines=35
     goto loja_armas_mago
 
     :compra_tomo
+        if %qtd_itens% geq %slot% (
+            echo.
+            echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
+            pause >nul
+            goto loja_armas_mago
+        )
         if %ouro% lss 70 (
             echo.
-            echo  Falta moeda aí, guerreiro!
+            echo  Falta moeda ai, guerreiro!
             pause >nul
             goto loja_armas_mago
         )
         set /a ouro-=70
+        set /a qtd_itens+=1
         set "nome_arma=Tomo do Abismo"
         set /a qd_jogador=2
         set /a d=6
@@ -124,13 +139,20 @@ mode con: cols=94 lines=35
     goto loja_armas_mago
 
     :compra_foice
+        if %qtd_itens% geq %slot% (
+            echo.
+            echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
+            pause >nul
+            goto loja_armas_mago
+        )
         if %ouro% lss 120 (
             echo.
-            echo  Você é muito pobre para olhar para esta foice!
+            echo  Voce e muito pobre para olhar para esta foice!
             pause >nul
             goto loja_armas_mago
         )
         set /a ouro-=120
+        set /a qtd_itens+=1
         set "nome_arma=Foice da Morte"
         set /a qd_jogador=1
         set /a d=20
@@ -140,18 +162,25 @@ mode con: cols=94 lines=35
     goto loja_armas_mago
 
     :compra_manto
+        if %qtd_itens% geq %slot% (
+            echo.
+            echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
+            pause >nul
+            goto loja_armas_mago
+        )
         if %ouro% lss 200 (
             echo.
-            echo Você é muito pobre pra comprar esse manto
+            echo  Voce e muito pobre pra comprar esse manto
             pause >nul
             goto loja_armas_mago
         )
         set /a ouro-=200
+        set /a qtd_itens+=1
         set "roupa=Manto Celeste"
         set /a mana+=40
         set /a recu=12
         echo.
-        echo  Equipamento %nome_arma% adquirido! Agora você tem +12 de recuperação de mana.
+        echo  Equipamento %roupa% adquirido! Agora voce tem +12 de recuperacao de mana.
         pause >nul
     goto loja_armas_mago
 
@@ -167,18 +196,20 @@ mode con: cols=94 lines=35
     echo  Arma Equipada: %nome_arma% (Dados: %qd_jogador%d%d%)
     echo =====================================================
     echo.
-    echo  [1] espada super longa   (Rola 2 dado de 20)                - 30  Ouro
-    echo  [2] maça de espinhos     (Rola 3 dados de 6)                - 25  Ouro
-    echo  [3] peitoral de espinhos (15 def, + 10% dano no inimigo)    - 40  Ouro
-    echo  [4] armadura pesada      (25 def, - 30% agilidade mana)     - 60  Ouro
-    echo  [5] escudo anulador      (10 def, 5% chance parry + stun 1 round)   - 25  Ouro
-    echo  [6] escudo 
+    echo  [1] Espada super longa   (Rola 2 dado de 20)                - 30  Ouro
+    echo  [2] Maça de espinhos     (Rola 3 dados de 6)                - 25  Ouro
+    echo  [3] Peitoral de espinhos (15 def, + 10% dano no inimigo)    - 40  Ouro
+    echo  [4] Armadura pesada      (25 def, - 30% agilidade mana)     - 60  Ouro
+    echo  [5] Escudo anulador      (10 def, 5% chance parry + stun 1 round)   - 25  Ouro
+    echo  [6] Escudo 
     echo  [7] Sair do Mercado
     echo.
 
-    choice /c 1234 /n /m " Fale logo o que vc quer e suma daqui: "
+    choice /c 1234567 /n /m " Fale logo o que vc quer e suma daqui: "
 
-    if errorlevel 5 goto local
+    if errorlevel 7 goto local
+    if errorlevel 6 goto compra_escudo2
+    if errorlevel 5 goto compra_escudo1
     if errorlevel 4 goto compra_manto
     if errorlevel 3 goto compra_foice
     if errorlevel 2 goto compra_tomo
@@ -186,14 +217,21 @@ mode con: cols=94 lines=35
 
     :: Lógica de Compra e Buff nos Dados
     :compra_cajado
-        if %ouro% lss 30 (
+        if %qtd_itens% geq %slot% (
             echo.
-            echo  Tá achando que sou banco? Ouro insuficiente!
+            echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
             pause >nul
             goto loja_armas_mago
         )
-        :: Desconta o ouro e altera a arma
+        if %ouro% lss 30 (
+            echo.
+            echo  Ta achando que sou banco? Ouro insuficiente!
+            pause >nul
+            goto loja_armas_mago
+        )
+        :: Desconta o ouro, ocupa 1 slot e altera a arma
         set /a ouro-=30
+        set /a qtd_itens+=1
         set "nome_arma=Cajado de Carvalho"
         set /a qd_jogador=1
         set /a d=8
@@ -203,13 +241,20 @@ mode con: cols=94 lines=35
     goto loja_armas_mago
 
     :compra_tomo
+        if %qtd_itens% geq %slot% (
+            echo.
+            echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
+            pause >nul
+            goto loja_armas_mago
+        )
         if %ouro% lss 70 (
             echo.
-            echo  Falta moeda aí, guerreiro!
+            echo  Falta moeda ai, guerreiro!
             pause >nul
             goto loja_armas_mago
         )
         set /a ouro-=70
+        set /a qtd_itens+=1
         set "nome_arma=Tomo do Abismo"
         set /a qd_jogador=2
         set /a d=6
@@ -219,13 +264,20 @@ mode con: cols=94 lines=35
     goto loja_armas_mago
 
     :compra_foice
+        if %qtd_itens% geq %slot% (
+            echo.
+            echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
+            pause >nul
+            goto loja_armas_mago
+        )
         if %ouro% lss 120 (
             echo.
-            echo  Você é muito pobre para olhar para esta foice!
+            echo  Voce e muito pobre para olhar para esta foice!
             pause >nul
             goto loja_armas_mago
         )
         set /a ouro-=120
+        set /a qtd_itens+=1
         set "nome_arma=Foice da Morte"
         set /a qd_jogador=1
         set /a d=20
@@ -235,18 +287,25 @@ mode con: cols=94 lines=35
     goto loja_armas_mago
 
     :compra_manto
+        if %qtd_itens% geq %slot% (
+            echo.
+            echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
+            pause >nul
+            goto loja_armas_mago
+        )
         if %ouro% lss 200 (
             echo.
-            echo Você é muito pobre pra comprar esse manto
+            echo  Voce e muito pobre pra comprar esse manto
             pause >nul
             goto loja_armas_mago
         )
         set /a ouro-=200
+        set /a qtd_itens+=1
         set "roupa=Manto Celeste"
         set /a mana+=40
         set /a recu=12
         echo.
-        echo  Equipamento %nome_arma% adquirido! Agora você tem +12 de recuperação de mana.
+        echo  Equipamento %roupa% adquirido! Agora voce tem +12 de recuperacao de mana.
         pause >nul
     goto loja_armas_mago
 
@@ -269,7 +328,7 @@ mode con: cols=94 lines=35
     echo  [5] Sair do Mercado
     echo.
 
-    choice /c 1234 /n /m " Fale logo o que vc quer e suma daqui: "
+    choice /c 12345 /n /m " Fale logo o que vc quer e suma daqui: "
 
     if errorlevel 5 goto local
     if errorlevel 4 goto compra_manto
@@ -279,14 +338,21 @@ mode con: cols=94 lines=35
 
     :: Lógica de Compra e Buff nos Dados
     :compra_cajado
-        if %ouro% lss 30 (
+        if %qtd_itens% geq %slot% (
             echo.
-            echo  Tá achando que sou banco? Ouro insuficiente!
+            echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
             pause >nul
             goto loja_armas_mago
         )
-        :: Desconta o ouro e altera a arma
+        if %ouro% lss 30 (
+            echo.
+            echo  Ta achando que sou banco? Ouro insuficiente!
+            pause >nul
+            goto loja_armas_mago
+        )
+        :: Desconta o ouro, ocupa 1 slot e altera a arma
         set /a ouro-=30
+        set /a qtd_itens+=1
         set "nome_arma=Cajado de Carvalho"
         set /a qd_jogador=1
         set /a d=8
@@ -296,13 +362,20 @@ mode con: cols=94 lines=35
     goto loja_armas_mago
 
     :compra_tomo
+        if %qtd_itens% geq %slot% (
+            echo.
+            echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
+            pause >nul
+            goto loja_armas_mago
+        )
         if %ouro% lss 70 (
             echo.
-            echo  Falta moeda aí, guerreiro!
+            echo  Falta moeda ai, guerreiro!
             pause >nul
             goto loja_armas_mago
         )
         set /a ouro-=70
+        set /a qtd_itens+=1
         set "nome_arma=Tomo do Abismo"
         set /a qd_jogador=2
         set /a d=6
@@ -312,13 +385,20 @@ mode con: cols=94 lines=35
     goto loja_armas_mago
 
     :compra_foice
+        if %qtd_itens% geq %slot% (
+            echo.
+            echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
+            pause >nul
+            goto loja_armas_mago
+        )
         if %ouro% lss 120 (
             echo.
-            echo  Você é muito pobre para olhar para esta foice!
+            echo  Voce e muito pobre para olhar para esta foice!
             pause >nul
             goto loja_armas_mago
         )
         set /a ouro-=120
+        set /a qtd_itens+=1
         set "nome_arma=Foice da Morte"
         set /a qd_jogador=1
         set /a d=20
@@ -328,20 +408,165 @@ mode con: cols=94 lines=35
     goto loja_armas_mago
 
     :compra_manto
+        if %qtd_itens% geq %slot% (
+            echo.
+            echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
+            pause >nul
+            goto loja_armas_mago
+        )
         if %ouro% lss 200 (
             echo.
-            echo Você é muito pobre pra comprar esse manto
+            echo  Voce e muito pobre pra comprar esse manto
             pause >nul
             goto loja_armas_mago
         )
         set /a ouro-=200
+        set /a qtd_itens+=1
         set "roupa=Manto Celeste"
         set /a mana+=40
         set /a recu=12
         echo.
-        echo  Equipamento %nome_arma% adquirido! Agora você tem +12 de recuperação de mana.
+        echo  Equipamento %roupa% adquirido! Agora voce tem +12 de recuperacao de mana.
         pause >nul
     goto loja_armas_mago
+
+:: ========================================================================
+:: TABERNA
+:: ========================================================================
+:taberna_cidade
+    ::desenho da taberna aqui
+    echo.
+    echo  Você entra na taberna da vila, um local de descanso e socialização para os aventureiros. 
+    echo       O ambiente é acolhedor, com uma lareira crepitante e mesas de madeira rústica. 
+    echo                O aroma de comida caseira e cerveja artesanal preenche o ar, 
+    echo        convidando os visitantes a relaxar e compartilhar histórias de suas jornadas.
+    echo.
+    echo                                                     (Pressione qualquer tecla para continuar)
+    pause >nul
+    cls
+    ::desenho do taberneiro aqui
+    echo.
+    echo                    O taberneiro, um homem robusto com um sorriso amigável, 
+    echo                cumprimenta você e oferece uma variedade de bebidas e refeições.
+    echo                                                     (Pressione qualquer tecla para continuar)
+    pause >nul
+
+    :menu_taberna
+        cls
+        echo ==========================================================================================
+        echo                                    Menu da Taberna
+        echo ==========================================================================================
+        echo  Seu Ouro atual: %ouro% moedas.
+        echo  Quantidade de poções: %pocao_hp%  poção(ões) de HP, %pocao_mana% poção(ões) de Mana.
+        echo  Quantidade de refeições: %refeicao% refeição(ões).
+        echo ==========================================================================================
+        echo.
+        echo  [1] Poção de HP       (Recupera 10 de HP)            - 30  Ouro
+        echo  [2] Poção de Mana     (Recupera 10 de Mana)          - 40  Ouro
+        echo  [3] Refeição          (Recupera 20 de HP)            - 20  Ouro
+        echo  [4] Sair do Mercado
+        echo.
+
+        choice /c 1234 /n /m " Fale logo o que vc quer e suma daqui: "
+
+        if errorlevel 4 goto local
+        if errorlevel 3 goto compra_refeicao
+        if errorlevel 2 goto compra_mana
+        if errorlevel 1 goto compra_hp
+
+        :: Lógica de Compra e Buff nos Dados
+        :compra_cajado
+            if %qtd_itens% geq %slot% (
+                echo.
+                echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
+                pause >nul
+                goto loja_armas_mago
+            )
+            if %ouro% lss 30 (
+                echo.
+                echo  Ta achando que sou banco? Ouro insuficiente!
+                pause >nul
+                goto loja_armas_mago
+            )
+            :: Desconta o ouro, ocupa 1 slot e altera a arma
+            set /a ouro-=30
+            set /a qtd_itens+=1
+            set "nome_arma=Cajado de Carvalho"
+            set /a qd_jogador=1
+            set /a d=8
+            echo.
+            echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
+            pause >nul
+        goto loja_armas_mago
+
+        :compra_tomo
+            if %qtd_itens% geq %slot% (
+                echo.
+                echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
+                pause >nul
+                goto loja_armas_mago
+            )
+            if %ouro% lss 70 (
+                echo.
+                echo  Falta moeda ai, guerreiro!
+                pause >nul
+                goto loja_armas_mago
+            )
+            set /a ouro-=70
+            set /a qtd_itens+=1
+            set "nome_arma=Tomo do Abismo"
+            set /a qd_jogador=2
+            set /a d=6
+            echo.
+            echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
+            pause >nul
+        goto loja_armas_mago
+
+        :compra_foice
+            if %qtd_itens% geq %slot% (
+                echo.
+                echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
+                pause >nul
+                goto loja_armas_mago
+            )
+            if %ouro% lss 120 (
+                echo.
+                echo  Voce e muito pobre para olhar para esta foice!
+                pause >nul
+                goto loja_armas_mago
+            )
+            set /a ouro-=120
+            set /a qtd_itens+=1
+            set "nome_arma=Foice da Morte"
+            set /a qd_jogador=1
+            set /a d=20
+            echo.
+            echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
+            pause >nul
+        goto loja_armas_mago
+
+        :compra_manto
+            if %qtd_itens% geq %slot% (
+                echo.
+                echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
+                pause >nul
+                goto loja_armas_mago
+            )
+            if %ouro% lss 200 (
+                echo.
+                echo  Voce e muito pobre pra comprar esse manto
+                pause >nul
+                goto loja_armas_mago
+            )
+            set /a ouro-=200
+            set /a qtd_itens+=1
+            set "roupa=Manto Celeste"
+            set /a mana+=40
+            set /a recu=12
+            echo.
+            echo  Equipamento %roupa% adquirido! Agora voce tem +12 de recuperacao de mana.
+            pause >nul
+        goto loja_armas_mago
 
 :abertura
     cls
@@ -562,6 +787,7 @@ goto tela_selecao_aberto
     ::Itens::
     set /a pocao_hp=1
     set /a pocao_mana=1
+    set /a refeicao=0
     set /a ouro=50
 
     ::Dado::
@@ -569,7 +795,8 @@ goto tela_selecao_aberto
     set /a d=dano_mago
 
     ::Slots de Inventário::
-    set slot[6]
+    set /a slot=6
+    set /a qtd_itens=2
 
     ::Ataques Especiais::
         ::Dano de fogo em area que causa 120% da força do jogador e tem 30% de chance de causar queimadura, que causa dano adicional de 10% da força do jogador por 3 turnos.
@@ -608,6 +835,7 @@ goto tela_selecao_aberto
     ::Itens::
     set /a pocao_hp=0
     set /a pocao_mana=0
+    set /a refeicao=0
     set /a ouro=50
 
     ::Dado::
@@ -615,7 +843,8 @@ goto tela_selecao_aberto
     set /a d=dano_gue
 
     ::Slots de Inventário::
-    set slot[9]
+    set /a slot=10
+    set /a qtd_itens=0
 
     ::Ataques Especiais::
         ::Atordoa o inimigo por 1 turno e causa dano igual a 150% da força do jogador, mas reduz a defesa do jogador em 10% por 2 turnos.
@@ -654,6 +883,7 @@ goto tela_selecao_aberto
     ::Itens::
     set /a pocao_hp=0
     set /a pocao_mana=0
+    set /a refeicao=0
     set /a ouro=100
 
     ::Dado::
@@ -661,7 +891,8 @@ goto tela_selecao_aberto
     set /a d=dano_ocul
 
     ::Slots de Inventário::
-    set slot[12]
+    set /a slot=16
+    set /a qtd_itens=0
 
     ::Ataques Especiais::
         ::Causa dano igual a 120% da força do jogador e tem 25% de chance de causar sangramento, que causa dano adicional de 5% da força do jogador por 4 turnos.
