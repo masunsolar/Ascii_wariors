@@ -62,6 +62,286 @@ mode con: cols=94 lines=35
         goto while_dados
     )
     
+:: ========================================================================
+:: SISTEMA DE MERCADO MAGO
+:: ========================================================================
+:loja_armas_mago
+    cls
+    echo =====================================================
+    echo                MERCADO NEGRO DA VILA
+    echo =====================================================
+    echo  Seu Ouro atual: %ouro% moedas
+    echo  Arma Equipada: %nome_arma% (Dados: %qd_jogador%d%d%)
+    echo =====================================================
+    echo.
+    echo  [1] Cajado de Carvalho (Rola 1 dado de 8)                 - 30  Ouro
+    echo  [2] Tomo do Abismo     (Rola 2 dados de 6)                - 70  Ouro
+    echo  [3] Foice da Morte     (Rola 1 dado de 20)                - 120 Ouro
+    echo  [4] Manto Celeste      (+ Regeneração de mana 100% mana)  - 200 Ouro
+    echo  [5] Sair do Mercado
+    echo.
+
+    choice /c 1234 /n /m " Fale logo o que vc quer e suma daqui: "
+
+    if errorlevel 5 goto local
+    if errorlevel 4 goto compra_manto
+    if errorlevel 3 goto compra_foice
+    if errorlevel 2 goto compra_tomo
+    if errorlevel 1 goto compra_cajado
+
+    :: Lógica de Compra e Buff nos Dados
+    :compra_cajado
+        if %ouro% lss 30 (
+            echo.
+            echo  Tá achando que sou banco? Ouro insuficiente!
+            pause >nul
+            goto loja_armas_mago
+        )
+        :: Desconta o ouro e altera a arma
+        set /a ouro-=30
+        set "nome_arma=Cajado de Carvalho"
+        set /a qd_jogador=1
+        set /a d=8
+        echo.
+        echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
+        pause >nul
+    goto loja_armas_mago
+
+    :compra_tomo
+        if %ouro% lss 70 (
+            echo.
+            echo  Falta moeda aí, guerreiro!
+            pause >nul
+            goto loja_armas_mago
+        )
+        set /a ouro-=70
+        set "nome_arma=Tomo do Abismo"
+        set /a qd_jogador=2
+        set /a d=6
+        echo.
+        echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
+        pause >nul
+    goto loja_armas_mago
+
+    :compra_foice
+        if %ouro% lss 120 (
+            echo.
+            echo  Você é muito pobre para olhar para esta foice!
+            pause >nul
+            goto loja_armas_mago
+        )
+        set /a ouro-=120
+        set "nome_arma=Foice da Morte"
+        set /a qd_jogador=1
+        set /a d=20
+        echo.
+        echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
+        pause >nul
+    goto loja_armas_mago
+
+    :compra_manto
+        if %ouro% lss 200 (
+            echo.
+            echo Você é muito pobre pra comprar esse manto
+            pause >nul
+            goto loja_armas_mago
+        )
+        set /a ouro-=200
+        set "roupa=Manto Celeste"
+        set /a mana+=40
+        set /a recu=12
+        echo.
+        echo  Equipamento %nome_arma% adquirido! Agora você tem +12 de recuperação de mana.
+        pause >nul
+    goto loja_armas_mago
+
+:: ========================================================================
+:: SISTEMA DE MERCADO GUERREIRO
+:: ========================================================================
+:loja_armas_mago
+    cls
+    echo =====================================================
+    echo                MERCADO NEGRO DA VILA
+    echo =====================================================
+    echo  Seu Ouro atual: %ouro% moedas
+    echo  Arma Equipada: %nome_arma% (Dados: %qd_jogador%d%d%)
+    echo =====================================================
+    echo.
+    echo  [1] espada super longa   (Rola 2 dado de 20)                - 30  Ouro
+    echo  [2] maça de espinhos     (Rola 3 dados de 6)                - 25  Ouro
+    echo  [3] peitoral de espinhos (15 def, + 10% dano no inimigo)    - 40  Ouro
+    echo  [4] armadura pesada      (25 def, - 30% agilidade mana)     - 60  Ouro
+    echo  [5] escudo anulador      (10 def, 5% chance parry + stun 1 round)   - 25  Ouro
+    echo  [6] escudo 
+    echo  [7] Sair do Mercado
+    echo.
+
+    choice /c 1234 /n /m " Fale logo o que vc quer e suma daqui: "
+
+    if errorlevel 5 goto local
+    if errorlevel 4 goto compra_manto
+    if errorlevel 3 goto compra_foice
+    if errorlevel 2 goto compra_tomo
+    if errorlevel 1 goto compra_cajado
+
+    :: Lógica de Compra e Buff nos Dados
+    :compra_cajado
+        if %ouro% lss 30 (
+            echo.
+            echo  Tá achando que sou banco? Ouro insuficiente!
+            pause >nul
+            goto loja_armas_mago
+        )
+        :: Desconta o ouro e altera a arma
+        set /a ouro-=30
+        set "nome_arma=Cajado de Carvalho"
+        set /a qd_jogador=1
+        set /a d=8
+        echo.
+        echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
+        pause >nul
+    goto loja_armas_mago
+
+    :compra_tomo
+        if %ouro% lss 70 (
+            echo.
+            echo  Falta moeda aí, guerreiro!
+            pause >nul
+            goto loja_armas_mago
+        )
+        set /a ouro-=70
+        set "nome_arma=Tomo do Abismo"
+        set /a qd_jogador=2
+        set /a d=6
+        echo.
+        echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
+        pause >nul
+    goto loja_armas_mago
+
+    :compra_foice
+        if %ouro% lss 120 (
+            echo.
+            echo  Você é muito pobre para olhar para esta foice!
+            pause >nul
+            goto loja_armas_mago
+        )
+        set /a ouro-=120
+        set "nome_arma=Foice da Morte"
+        set /a qd_jogador=1
+        set /a d=20
+        echo.
+        echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
+        pause >nul
+    goto loja_armas_mago
+
+    :compra_manto
+        if %ouro% lss 200 (
+            echo.
+            echo Você é muito pobre pra comprar esse manto
+            pause >nul
+            goto loja_armas_mago
+        )
+        set /a ouro-=200
+        set "roupa=Manto Celeste"
+        set /a mana+=40
+        set /a recu=12
+        echo.
+        echo  Equipamento %nome_arma% adquirido! Agora você tem +12 de recuperação de mana.
+        pause >nul
+    goto loja_armas_mago
+
+:: ========================================================================
+:: SISTEMA DE MERCADO OCULTISTA
+:: ========================================================================
+:loja_armas_mago
+    cls
+    echo =====================================================
+    echo                MERCADO NEGRO DA VILA
+    echo =====================================================
+    echo  Seu Ouro atual: %ouro% moedas
+    echo  Arma Equipada: %nome_arma% (Dados: %qd_jogador%d%d%)
+    echo =====================================================
+    echo.
+    echo  [1] Cajado de Carvalho (Rola 1 dado de 8)                 - 30  Ouro
+    echo  [2] Tomo do Abismo     (Rola 2 dados de 6)                - 70  Ouro
+    echo  [3] Foice da Morte     (Rola 1 dado de 20)                - 120 Ouro
+    echo  [4] Manto Celeste      (+ Regeneração de mana 100% mana)  - 200 Ouro
+    echo  [5] Sair do Mercado
+    echo.
+
+    choice /c 1234 /n /m " Fale logo o que vc quer e suma daqui: "
+
+    if errorlevel 5 goto local
+    if errorlevel 4 goto compra_manto
+    if errorlevel 3 goto compra_foice
+    if errorlevel 2 goto compra_tomo
+    if errorlevel 1 goto compra_cajado
+
+    :: Lógica de Compra e Buff nos Dados
+    :compra_cajado
+        if %ouro% lss 30 (
+            echo.
+            echo  Tá achando que sou banco? Ouro insuficiente!
+            pause >nul
+            goto loja_armas_mago
+        )
+        :: Desconta o ouro e altera a arma
+        set /a ouro-=30
+        set "nome_arma=Cajado de Carvalho"
+        set /a qd_jogador=1
+        set /a d=8
+        echo.
+        echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
+        pause >nul
+    goto loja_armas_mago
+
+    :compra_tomo
+        if %ouro% lss 70 (
+            echo.
+            echo  Falta moeda aí, guerreiro!
+            pause >nul
+            goto loja_armas_mago
+        )
+        set /a ouro-=70
+        set "nome_arma=Tomo do Abismo"
+        set /a qd_jogador=2
+        set /a d=6
+        echo.
+        echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
+        pause >nul
+    goto loja_armas_mago
+
+    :compra_foice
+        if %ouro% lss 120 (
+            echo.
+            echo  Você é muito pobre para olhar para esta foice!
+            pause >nul
+            goto loja_armas_mago
+        )
+        set /a ouro-=120
+        set "nome_arma=Foice da Morte"
+        set /a qd_jogador=1
+        set /a d=20
+        echo.
+        echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
+        pause >nul
+    goto loja_armas_mago
+
+    :compra_manto
+        if %ouro% lss 200 (
+            echo.
+            echo Você é muito pobre pra comprar esse manto
+            pause >nul
+            goto loja_armas_mago
+        )
+        set /a ouro-=200
+        set "roupa=Manto Celeste"
+        set /a mana+=40
+        set /a recu=12
+        echo.
+        echo  Equipamento %nome_arma% adquirido! Agora você tem +12 de recuperação de mana.
+        pause >nul
+    goto loja_armas_mago
 
 :abertura
     cls
@@ -197,7 +477,7 @@ goto tela_selecao_aberto
     echo          /(__)/┃                           [__]  ┃                    ━┫╸━}_{━╺┣━
     echo           /  \ ┃                           /  \                          _/ \_ 
     echo.
-    echo    [1] Tulio - O Mago             [2] Sara - A Guerreira         [3] Soso - A Ladina
+    echo    [1] Tulio - O Mago             [2] Sara - A Guerreira         [3] Soso - A Ocultista
     echo.
     echo =============================================================================================
     echo.
@@ -234,7 +514,7 @@ goto tela_selecao_aberto
     echo          /(__)/┃                           [__]  ┃                    ━┫╸━}_{━╺┣━
     echo           /  \ ┃                           /  \                          _/ \_ 
     echo.
-    echo    [1] Tulio - O Mago             [2] Sara - A Guerreira         [3] Soso - A Ladina
+    echo    [1] Tulio - O Mago             [2] Sara - A Guerreira         [3] Soso - A Ocultista
     echo.
     echo =============================================================================================
     echo.
@@ -275,6 +555,9 @@ goto tela_selecao_aberto
     set /a armamento=0
     set /a escudo=0
     set /a armadura=0
+
+    set "nome_arma= Graveto"
+    set "roupa="
 
     ::Itens::
     set /a pocao_hp=1
@@ -320,6 +603,8 @@ goto tela_selecao_aberto
     set /a escudo=0
     set /a armadura=0
 
+    set "nome_arma= Graveto"
+
     ::Itens::
     set /a pocao_hp=0
     set /a pocao_mana=0
@@ -363,6 +648,8 @@ goto tela_selecao_aberto
     set /a armamento=0
     set /a escudo=0
     set /a armadura=0
+
+    set "nome_arma= Graveto"
 
     ::Itens::
     set /a pocao_hp=0
