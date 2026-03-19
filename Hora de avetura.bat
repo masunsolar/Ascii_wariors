@@ -362,7 +362,7 @@ goto :eof
 :: ========================================================================
 :: SISTEMA DE MERCADO OCULTISTA
 :: ========================================================================
-:loja_armas_mago
+:loja_armas_ocult
     cls
     echo =====================================================
     echo                MERCADO NEGRO DA VILA
@@ -371,10 +371,10 @@ goto :eof
     echo  Arma Equipada: %nome_arma% (Dados: %qd_jogador%d%d%)
     echo =====================================================
     echo.
-    echo  [1] Cajado de Carvalho (Rola 1 dado de 8)                 - 30  Ouro
-    echo  [2] Tomo do Abismo     (Rola 2 dados de 6)                - 70  Ouro
-    echo  [3] Foice da Morte     (Rola 1 dado de 20)                - 120 Ouro
-    echo  [4] Manto Celeste      (+ Regeneração de mana 100% mana)  - 200 Ouro
+    echo  [1] Adaga Vampirica    (Rola 3 dado de 6, regenera 10% dano como vida) - 65  Ouro
+    echo  [2] Foice da Morte     (Rola 2 dado de 20)                             - 120 Ouro
+    echo  [3] amuleto de escaravelho (+10 defesa, +5 def quando 100% de vida)    - 70  Ouro
+    echo  [4] Manto da intangibilidade (15% chance de anular o dano tomado)      - 80  Ouro
     echo  [5] Sair do Mercado
     echo.
 
@@ -382,53 +382,31 @@ goto :eof
 
     if errorlevel 5 goto local
     if errorlevel 4 goto compra_manto
-    if errorlevel 3 goto compra_foice
-    if errorlevel 2 goto compra_tomo
-    if errorlevel 1 goto compra_cajado
+    if errorlevel 3 goto compra_amuleto
+    if errorlevel 2 goto compra_foice
+    if errorlevel 1 goto compra_adaga
 
     :: Lógica de Compra e Buff nos Dados
-    :compra_cajado
+    :compra_adaga
         if %qtd_itens% geq %slot% (
             echo.
             echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
             pause >nul
             goto loja_armas_mago
         )
-        if %ouro% lss 30 (
+        if %ouro% lss 65 (
             echo.
             echo  Ta achando que sou banco? Ouro insuficiente!
             pause >nul
             goto loja_armas_mago
         )
         :: Desconta o ouro, ocupa 1 slot e altera a arma
-        set /a ouro-=30
+        set /a ouro-=65
         set /a qtd_itens+=1
-        set "nome_arma=Cajado de Carvalho"
-        set /a qd_jogador=1
-        set /a d=8
-        echo.
-        echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
-        pause >nul
-    goto loja_armas_mago
-
-    :compra_tomo
-        if %qtd_itens% geq %slot% (
-            echo.
-            echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
-            pause >nul
-            goto loja_armas_mago
-        )
-        if %ouro% lss 70 (
-            echo.
-            echo  Falta moeda ai, guerreiro!
-            pause >nul
-            goto loja_armas_mago
-        )
-        set /a ouro-=70
-        set /a qtd_itens+=1
-        set "nome_arma=Tomo do Abismo"
-        set /a qd_jogador=2
+        set "nome_arma=Adaga Vampirica"
+        set /a qd_jogador=3
         set /a d=6
+        set /a roubo_vida=10 & :: porcentagem do roubo de vida
         echo.
         echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
         pause >nul
@@ -457,6 +435,29 @@ goto :eof
         pause >nul
     goto loja_armas_mago
 
+    :compra_amuleto
+        if %qtd_itens% geq %slot% (
+            echo.
+            echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
+            pause >nul
+            goto loja_armas_mago
+        )
+        if %ouro% lss 70 (
+            echo.
+            echo  Falta moeda ai, guerreiro!
+            pause >nul
+            goto loja_armas_mago
+        )
+        set /a ouro-=70
+        set /a qtd_itens+=1
+        set "amuleto=Amuleto de Escaravelho"
+        set /a def+=10
+        set /a full_def+=15
+        echo.
+        echo  Equipamento %amuleto% adquirido! Agora voce tem +10 de defesa, e +15 quando vida cheia.
+        pause >nul
+    goto loja_armas_mago
+
     :compra_manto
         if %qtd_itens% geq %slot% (
             echo.
@@ -464,19 +465,18 @@ goto :eof
             pause >nul
             goto loja_armas_mago
         )
-        if %ouro% lss 200 (
+        if %ouro% lss 80 (
             echo.
             echo  Voce e muito pobre pra comprar esse manto
             pause >nul
             goto loja_armas_mago
         )
-        set /a ouro-=200
+        set /a ouro-=80
         set /a qtd_itens+=1
-        set "roupa=Manto Celeste"
-        set /a mana+=40
-        set /a recu=12
+        set "roupa=Manto da Intangibilidade"
+        set /a anular_dano=15 & :: probabilidade em % de anular um atk
         echo.
-        echo  Equipamento %roupa% adquirido! Agora voce tem +12 de recuperacao de mana.
+        echo  Equipamento %roupa% adquirido! Agora voce tem 15% de chance de anular ataques.
         pause >nul
     goto loja_armas_mago
 
