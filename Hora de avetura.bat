@@ -71,7 +71,7 @@ goto :eof
 :loja_armas_mago
     cls
     echo =====================================================
-    echo                 MERCADO NEGRO DA VILA
+    echo                  Ferreiro da vila
     echo =====================================================
     echo  Seu Ouro atual: %ouro% moedas
     echo  Arma Equipada: %nome_arma% (Dados: %qd_jogador%d%d%)
@@ -87,11 +87,11 @@ goto :eof
 
     choice /c 12345 /n /m " Fale logo o que vc quer e suma daqui: "
 
-    if errorlevel 5 goto local
-    if errorlevel 4 goto compra_manto
-    if errorlevel 3 goto compra_foice
-    if errorlevel 2 goto compra_tomo
-    if errorlevel 1 goto compra_cajado
+    if %errorlevel% 5 goto local
+    if %errorlevel% 4 goto compra_manto
+    if %errorlevel% 3 goto compra_foice
+    if %errorlevel% 2 goto compra_tomo
+    if %errorlevel% 1 goto compra_cajado
 
     :: Lógica de Compra e Buff nos Dados
     :compra_cajado
@@ -193,7 +193,7 @@ goto :eof
 :loja_armas_guerra
     cls
     echo =====================================================
-    echo                MERCADO NEGRO DA VILA
+    echo                 Ferreiro da vila
     echo =====================================================
     echo  Seu Ouro atual: %ouro% moedas
     echo  Arma Equipada: %nome_arma% (Dados: %qd_jogador%d%d%)
@@ -210,13 +210,13 @@ goto :eof
 
     choice /c 1234567 /n /m " Fale logo o que vc quer e suma daqui: "
 
-    if errorlevel 7 goto local
-    if errorlevel 6 goto compra_escudo2
-    if errorlevel 5 goto compra_escudo1
-    if errorlevel 4 goto compra_armadura2
-    if errorlevel 3 goto compra_armadura1
-    if errorlevel 2 goto compra_maça
-    if errorlevel 1 goto compra_espada
+    if %errorlevel% 7 goto local
+    if %errorlevel% 6 goto compra_escudo2
+    if %errorlevel% 5 goto compra_escudo1
+    if %errorlevel% 4 goto compra_armadura2
+    if %errorlevel% 3 goto compra_armadura1
+    if %errorlevel% 2 goto compra_maça
+    if %errorlevel% 1 goto compra_espada
 
     :: Lógica de Compra e Buff nos Dados
     :compra_espada
@@ -365,7 +365,7 @@ goto :eof
 :loja_armas_ocult
     cls
     echo =====================================================
-    echo                MERCADO NEGRO DA VILA
+    echo                 Ferreiro da vila
     echo =====================================================
     echo  Seu Ouro atual: %ouro% moedas
     echo  Arma Equipada: %nome_arma% (Dados: %qd_jogador%d%d%)
@@ -380,11 +380,11 @@ goto :eof
 
     choice /c 12345 /n /m " Fale logo o que vc quer e suma daqui: "
 
-    if errorlevel 5 goto local
-    if errorlevel 4 goto compra_manto
-    if errorlevel 3 goto compra_amuleto
-    if errorlevel 2 goto compra_foice
-    if errorlevel 1 goto compra_adaga
+    if %errorlevel% 5 goto local
+    if %errorlevel% 4 goto compra_manto
+    if %errorlevel% 3 goto compra_amuleto
+    if %errorlevel% 2 goto compra_foice
+    if %errorlevel% 1 goto compra_adaga
 
     :: Lógica de Compra e Buff nos Dados
     :compra_adaga
@@ -481,142 +481,61 @@ goto :eof
     goto loja_armas_mago
 
 :: ========================================================================
-:: TABERNA
+:: TABERNA - MERCADO DE CONSUMIVEIS
 :: ========================================================================
-:taberna_cidade
-    ::desenho da taberna aqui
-    echo.
-    echo  Você entra na taberna da vila, um local de descanso e socialização para os aventureiros. 
-    echo       O ambiente é acolhedor, com uma lareira crepitante e mesas de madeira rústica. 
-    echo                O aroma de comida caseira e cerveja artesanal preenche o ar, 
-    echo        convidando os visitantes a relaxar e compartilhar histórias de suas jornadas.
-    echo.
-    echo                                                     (Pressione qualquer tecla para continuar)
-    pause >nul
+:menu_taberna
     cls
-    ::desenho do taberneiro aqui
+    echo ==========================================================================================
+    echo                                     Menu da Taberna
+    echo ==========================================================================================
+    echo  Seu Ouro atual: %ouro% moedas.
+    echo  Inventario: %qtd_itens%/%slot% slots.
+    echo  Itens: %pocao_hp% Pocao HP | %pocao_mana% Pocao Mana | %refeicao% Refeicoes
+    echo ==========================================================================================
     echo.
-    echo                    O taberneiro, um homem robusto com um sorriso amigável, 
-    echo                cumprimenta você e oferece uma variedade de bebidas e refeições.
-    echo                                                     (Pressione qualquer tecla para continuar)
-    pause >nul
+    echo  [1] Pocao de HP       (Recupera 10 de HP)            - 30  Ouro
+    echo  [2] Pocao de Mana     (Recupera 10 de Mana)          - 40  Ouro
+    echo  [3] Refeicao          (Recupera 20 de HP)            - 20  Ouro
+    echo  [4] Sair para a Taverna
+    echo.
 
-    :menu_taberna
-        cls
-        echo ==========================================================================================
-        echo                                    Menu da Taberna
-        echo ==========================================================================================
-        echo  Seu Ouro atual: %ouro% moedas.
-        echo  Quantidade de poções: %pocao_hp%  poção(ões) de HP, %pocao_mana% poção(ões) de Mana.
-        echo  Quantidade de refeições: %refeicao% refeição(ões).
-        echo ==========================================================================================
-        echo.
-        echo  [1] Poção de HP       (Recupera 10 de HP)            - 30  Ouro
-        echo  [2] Poção de Mana     (Recupera 10 de Mana)          - 40  Ouro
-        echo  [3] Refeição          (Recupera 20 de HP)            - 20  Ouro
-        echo  [4] Sair do Mercado
-        echo.
+    choice /c 1234 /n /m " Escolha sua compra: "
 
-        choice /c 1234 /n /m " Fale logo o que vc quer e suma daqui: "
+    if %errorlevel% equ 4 goto taverna_padrao
+    if %errorlevel% equ 3 goto tab_compra_refeicao
+    if %errorlevel% equ 2 goto tab_compra_mana
+    if %errorlevel% equ 1 goto tab_compra_hp
+    goto menu_taberna
 
-        if errorlevel 4 goto local
-        if errorlevel 3 goto compra_refeicao
-        if errorlevel 2 goto compra_mana
-        if errorlevel 1 goto compra_hp
+    :tab_compra_hp
+        if %qtd_itens% geq %slot% (echo. & echo Mochila cheia! & pause >nul & goto menu_taberna)
+        if %ouro% lss 30 (echo. & echo Ouro insuficiente! & pause >nul & goto menu_taberna)
+        set /a ouro-=30
+        set /a pocao_hp+=1
+        set /a qtd_itens+=1
+        echo. & echo Voce comprou uma Pocao de HP!
+        pause >nul
+    goto menu_taberna
 
-        :: Lógica de Compra e Buff nos Dados
-        :compra_cajado
-            if %qtd_itens% geq %slot% (
-                echo.
-                echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
-                pause >nul
-                goto loja_armas_mago
-            )
-            if %ouro% lss 30 (
-                echo.
-                echo  Ta achando que sou banco? Ouro insuficiente!
-                pause >nul
-                goto loja_armas_mago
-            )
-            :: Desconta o ouro, ocupa 1 slot e altera a arma
-            set /a ouro-=30
-            set /a qtd_itens+=1
-            set "nome_arma=Cajado de Carvalho"
-            set /a qd_jogador=1
-            set /a d=8
-            echo.
-            echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
-            pause >nul
-        goto loja_armas_mago
+    :tab_compra_mana
+        if %qtd_itens% geq %slot% (echo. & echo Mochila cheia! & pause >nul & goto menu_taberna)
+        if %ouro% lss 40 (echo. & echo Ouro insuficiente! & pause >nul & goto menu_taberna)
+        set /a ouro-=40
+        set /a pocao_mana+=1
+        set /a qtd_itens+=1
+        echo. & echo Voce comprou uma Pocao de Mana!
+        pause >nul
+    goto menu_taberna
 
-        :compra_tomo
-            if %qtd_itens% geq %slot% (
-                echo.
-                echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
-                pause >nul
-                goto loja_armas_mago
-            )
-            if %ouro% lss 70 (
-                echo.
-                echo  Falta moeda ai, guerreiro!
-                pause >nul
-                goto loja_armas_mago
-            )
-            set /a ouro-=70
-            set /a qtd_itens+=1
-            set "nome_arma=Tomo do Abismo"
-            set /a qd_jogador=2
-            set /a d=6
-            echo.
-            echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
-            pause >nul
-        goto loja_armas_mago
-
-        :compra_foice
-            if %qtd_itens% geq %slot% (
-                echo.
-                echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
-                pause >nul
-                goto loja_armas_mago
-            )
-            if %ouro% lss 120 (
-                echo.
-                echo  Voce e muito pobre para olhar para esta foice!
-                pause >nul
-                goto loja_armas_mago
-            )
-            set /a ouro-=120
-            set /a qtd_itens+=1
-            set "nome_arma=Foice da Morte"
-            set /a qd_jogador=1
-            set /a d=20
-            echo.
-            echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
-            pause >nul
-        goto loja_armas_mago
-
-        :compra_manto
-            if %qtd_itens% geq %slot% (
-                echo.
-                echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
-                pause >nul
-                goto loja_armas_mago
-            )
-            if %ouro% lss 200 (
-                echo.
-                echo  Voce e muito pobre pra comprar esse manto
-                pause >nul
-                goto loja_armas_mago
-            )
-            set /a ouro-=200
-            set /a qtd_itens+=1
-            set "roupa=Manto Celeste"
-            set /a mana+=40
-            set /a recu=12
-            echo.
-            echo  Equipamento %roupa% adquirido! Agora voce tem +12 de recuperacao de mana.
-            pause >nul
-        goto loja_armas_mago
+    :tab_compra_refeicao
+        if %qtd_itens% geq %slot% (echo. & echo Mochila cheia! & pause >nul & goto menu_taberna)
+        if %ouro% lss 20 (echo. & echo Ouro insuficiente! & pause >nul & goto menu_taberna)
+        set /a ouro-=20
+        set /a refeicao+=1
+        set /a qtd_itens+=1
+        echo. & echo Voce comprou uma Refeicao!
+        pause >nul
+    goto menu_taberna
 
 :abertura
     cls
@@ -767,10 +686,10 @@ goto tela_selecao_aberto
     choice /c 1230 /n /t 2 /d 0 /m " Pressione o dígito correspondente: "
 
     :: A LINHA ABAIXO FOI RESTAURADA PARA GARANTIR O CICLO
-    if errorlevel 4 goto :tela_selecao_fechado
-    if errorlevel 3 goto :set_soso
-    if errorlevel 2 goto :set_sara
-    if errorlevel 1 goto :set_tulio
+    if %errorlevel% 4 goto :tela_selecao_fechado
+    if %errorlevel% 3 goto :set_soso
+    if %errorlevel% 2 goto :set_sara
+    if %errorlevel% 1 goto :set_tulio
 
 :tela_selecao_fechado
     cls
@@ -804,10 +723,10 @@ goto tela_selecao_aberto
     choice /c 1230 /n /t 1 /d 0 /m " Pressione o dígito correspondente: "
 
     :: A LINHA ABAIXO FOI RESTAURADA PARA GARANTIR O CICLO
-    if errorlevel 4 goto :tela_selecao_aberto
-    if errorlevel 3 goto :set_soso
-    if errorlevel 2 goto :set_sara
-    if errorlevel 1 goto :set_tulio
+    if %errorlevel% 4 goto :tela_selecao_aberto
+    if %errorlevel% 3 goto :set_soso
+    if %errorlevel% 2 goto :set_sara
+    if %errorlevel% 1 goto :set_tulio
 
 :: ==========================================
 :: ALOCACAO DE ATRIBUTOS (VARIAVEIS DE JOGADOR)
@@ -841,8 +760,8 @@ goto tela_selecao_aberto
     set /a ouro=50
 
     ::Dado::
-    set /a qd_jogador=atk_mago
-    set /a d=dano_mago
+    set /a qd_jogador=0
+    set /a d=0
 
     ::Slots de Inventário::
     set /a slot=6
@@ -889,8 +808,8 @@ goto tela_selecao_aberto
     set /a ouro=50
 
     ::Dado::
-    set /a qd_jogador=atk_gue
-    set /a d=dano_gue
+    set /a qd_jogador=0
+    set /a d=0
 
     ::Slots de Inventário::
     set /a slot=10
@@ -937,8 +856,8 @@ goto tela_selecao_aberto
     set /a ouro=100
 
     ::Dado::
-    set /a qd_jogador=atk_ocul
-    set /a d=dano_ocul
+    set /a qd_jogador=0
+    set /a d=0
 
     ::Slots de Inventário::
     set /a slot=16
@@ -1011,8 +930,8 @@ goto tela_selecao_aberto
 
     choice /c YN /n /m " Pressione a tecla correspondente: "
 
-    if errorlevel 2 goto :tela_selecao_aberto
-    if errorlevel 1 goto :prologo
+    if %errorlevel% 2 goto :tela_selecao_aberto
+    if %errorlevel% 1 goto :prologo
 
 :: ================================================================================================================
 :: INICIO - PRÓLOGO
@@ -1175,7 +1094,7 @@ goto tela_selecao_aberto
             echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
             echo.
             echo                                                     (Pressione qualquer tecla para continuar)
-            pathping -n -q 1 -p 100 localhost >nul
+            pathping -n -q 1 -p 80 localhost >nul
             goto frame_b
 
         :frame_b
@@ -1214,7 +1133,7 @@ goto tela_selecao_aberto
             echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
             echo.
             echo                                                     (Pressione qualquer tecla para continuar)
-            pathping -n -q 1 -p 100 localhost >nul
+            pathping -n -q 1 -p 80 localhost >nul
             goto frame_c
 
         :frame_c
@@ -1253,7 +1172,7 @@ goto tela_selecao_aberto
             echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
             echo.
             echo                                                     (Pressione qualquer tecla para continuar)
-            pathping -n -q 1 -p 100 localhost >nul
+            pathping -n -q 1 -p 80 localhost >nul
             goto frame_d
 
         :frame_d
@@ -1292,7 +1211,7 @@ goto tela_selecao_aberto
             echo           portal profano para liberar o caos do abismo sobre o mundo dos mortais.
             echo.
             echo                                                     (Pressione qualquer tecla para continuar)
-            pathping -n -q 1 -p 100 localhost >nul
+            pathping -n -q 1 -p 80 localhost >nul
             goto frame_a
 
     :: ================================================================================================================
@@ -1370,7 +1289,7 @@ goto tela_selecao_aberto
 
         :: Mecanismo de contagem e verificacao do loop
         set /a contador_cena+=1
-        if %contador_cena% lss 25 (
+        if %contador_cena% lss 20 (
             goto cena_vila_frame1
         ) else (
             goto cena_vila_temp1
@@ -1401,7 +1320,7 @@ goto tela_selecao_aberto
     :banquete_macabro
         cls
         echo.
-        echo  ==============================================================================================
+        echo  =============================================================================================
         echo                     (  )   (  )                            (  )   (  )
         echo                      )(     )(                              )(     )(
         echo                     (  )   (  )                            (  )   (  )
@@ -1423,9 +1342,106 @@ goto tela_selecao_aberto
         echo   Civis estão desaparecendo, arrancados de suas casas para servirem como o banquete macabro  
         echo                           que celebrará a conclusão do rito.
         echo.
-        echo   Pressione qualquer tecla para prosseguir para o confronto...
+        echo   Pressione qualquer tecla para continuar...
+        pause >nul
+    goto taverna_cidade
+
+    :taverna_cidade
+        cls
+        set local=taverna_cidade
+        ::desenho da taberna aqui
+        echo.
+        echo  Você entra na taberna da vila, um local de descanso e socialização para os aventureiros. 
+        echo       O ambiente é acolhedor, com uma lareira crepitante e mesas de madeira rústica. 
+        echo                O aroma de comida caseira e cerveja artesanal preenche o ar, 
+        echo        convidando os visitantes a relaxar e compartilhar histórias de suas jornadas.
+        echo.
+        echo                                                     (Pressione qualquer tecla para continuar)
+        pause >nul
+        cls
+        ::desenho do taberneiro aqui
+        echo.
+        echo                    O taberneiro, um homem robusto com um sorriso amigável, 
+        echo                cumprimenta você e oferece uma variedade de bebidas e refeições.
+        echo                                                     (Pressione qualquer tecla para continuar)
         pause >nul
 
+    goto menu_taberna
 
+    :taverna_padrao
+        cls
+        set local=taverna_cidade
+        ::desenho da taberna aqui
+        echo.
+        echo  O que você quer fazer?
+        echo.
+        echo  [1] Falar com o taberneiro
+        echo  [2] Comprar itens
+        echo  [3] Buscar informações sobre a floresta
+        echo  [4] Investigar os desaparecimentos
+        echo  [5] Buscar missões
+        echo  [6] Sair da taberna
+        echo.
+
+        choice /c 123456 /n /m " Fale logo o que vc quer e suma daqui: "
+
+        if %errorlevel% 6 goto local
+        if %errorlevel% 5 goto missao
+        if %errorlevel% 4 goto investigacao
+        if %errorlevel% 3 goto informacao
+        if %errorlevel% 2 goto menu_taberna
+        if %errorlevel% 1 goto taberna_conversa
+        
+        :missao
+            echo Em breve...
+            pause
+        goto taverna_padrao
+
+        :investigacao
+            echo Voce olha em volta... nada ainda.
+            pause
+        goto taverna_padrao
+
+        :informacao
+            cls
+            ::desenho de uma mesa com um cara sentado aqui
+            echo.
+            echo  Você se aproxima de uma mesa onde um homem idoso está sentado, parecendo ser um frequentador regular da taberna.
+            echo  Ele tem uma expressão cansada, mas seus olhos brilham com um conhecimento profundo sobre a floresta sombria e os eventos recentes na vila.
+            echo  Você se senta e começa a conversar com ele, buscando informações sobre os desaparecimentos misteriosos e os rumores de uma seita sombria na floresta.
+            echo.
+            echo                                                    (Pressione qualquer tecla para continuar)
+            cls
+            ::o mesmo desenho da mesa
+            echo.
+            echo O homem idoso compartilha histórias de desaparecimentos misteriosos, sussurros sobre uma seita sombria e rumores de um portal profano sendo construído na floresta.
+            echo Ele menciona que os civis estão sendo levados para um banquete macabro, onde serão sacrificados para completar um ritual sombrio.
+            echo.
+            echo                                                     (Pressione qualquer tecla para continuar)
+            pause >nul
+            cls
+            ::desenho da taberna aqui
+            echo.
+            echo Você agradece ao homem idoso pelas informações e se levanta para explorar outras áreas da taberna.
+            echo.
+            echo                                                    (Pressione qualquer tecla para continuar)
+            pause >nul
+            goto taverna_padrao
+
+        goto 
+
+        :taverna_conversa
+            cls
+            set local=taverna_conversa
+            echo.
+            echo  Você se senta em uma mesa e começa a conversar com o taberneiro, buscando informações sobre a floresta sombria e os eventos recentes na vila. 
+            echo  O taberneiro compartilha histórias de desaparecimentos misteriosos, sussurros sobre uma seita sombria e rumores de um portal profano sendo construído na floresta.
+            echo.
+            echo  Ele menciona que os civis estão sendo levados para um banquete macabro, onde serão sacrificados para completar um ritual sombrio. 
+            echo  O taberneiro expressa preocupação com a segurança da vila e sugere que você investigue a floresta para descobrir a verdade por trás desses eventos.
+            echo.
+            echo                                                     (Pressione qualquer tecla para continuar)
+            pause >nul
+        goto taverna_padrao
 
 exit
