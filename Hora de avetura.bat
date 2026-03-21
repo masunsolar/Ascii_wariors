@@ -31,7 +31,7 @@ title Adventure time
 chcp 65001 >nul
 mode con: cols=94 lines=35
 
-goto abertura
+goto :abertura
 goto :eof
 
 :: ========================================================================
@@ -62,7 +62,7 @@ goto :eof
         set /a quantidade_dados-=1
         
         :: Volta para o teste do 'if' (isso cria o loop)
-        goto while_dados
+        goto :while_dados
     )
     
 :: ========================================================================
@@ -87,11 +87,11 @@ goto :eof
 
     choice /c 12345 /n /m " Fale logo o que vc quer e suma daqui: "
 
-    if %errorlevel% 5 goto local
-    if %errorlevel% 4 goto compra_manto
-    if %errorlevel% 3 goto compra_foice
-    if %errorlevel% 2 goto compra_tomo
-    if %errorlevel% 1 goto compra_cajado
+    if errorlevel 5 goto :local
+    if errorlevel 4 goto :compra_manto
+    if errorlevel 3 goto :compra_foice
+    if errorlevel 2 goto :compra_tomo
+    if errorlevel 1 goto :compra_cajado
 
     :: Lógica de Compra e Buff nos Dados
     :compra_cajado
@@ -99,13 +99,13 @@ goto :eof
             echo.
             echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
             pause >nul
-            goto loja_armas_mago
+            goto :loja_armas_mago
         )
         if %ouro% lss 30 (
             echo.
             echo  Ta achando que sou banco? Ouro insuficiente!
             pause >nul
-            goto loja_armas_mago
+            goto :loja_armas_mago
         )
         :: Desconta o ouro, ocupa 1 slot e altera a arma
         set /a ouro-=30
@@ -116,20 +116,20 @@ goto :eof
         echo.
         echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
         pause >nul
-    goto loja_armas_mago
+    goto :loja_armas_mago
 
     :compra_tomo
         if %qtd_itens% geq %slot% (
             echo.
             echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
             pause >nul
-            goto loja_armas_mago
+            goto :loja_armas_mago
         )
         if %ouro% lss 70 (
             echo.
             echo  Falta moeda ai, guerreiro!
             pause >nul
-            goto loja_armas_mago
+            goto :loja_armas_mago
         )
         set /a ouro-=70
         set /a qtd_itens+=1
@@ -139,20 +139,20 @@ goto :eof
         echo.
         echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
         pause >nul
-    goto loja_armas_mago
+    goto :loja_armas_mago
 
     :compra_foice
         if %qtd_itens% geq %slot% (
             echo.
             echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
             pause >nul
-            goto loja_armas_mago
+            goto :loja_armas_mago
         )
         if %ouro% lss 120 (
             echo.
             echo  Voce e muito pobre para olhar para esta foice!
             pause >nul
-            goto loja_armas_mago
+            goto :loja_armas_mago
         )
         set /a ouro-=120
         set /a qtd_itens+=1
@@ -162,20 +162,20 @@ goto :eof
         echo.
         echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
         pause >nul
-    goto loja_armas_mago
+    goto :loja_armas_mago
 
     :compra_manto
         if %qtd_itens% geq %slot% (
             echo.
             echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
             pause >nul
-            goto loja_armas_mago
+            goto :loja_armas_mago
         )
         if %ouro% lss 200 (
             echo.
             echo  Voce e muito pobre pra comprar esse manto
             pause >nul
-            goto loja_armas_mago
+            goto :loja_armas_mago
         )
         set /a ouro-=200
         set /a qtd_itens+=1
@@ -185,7 +185,7 @@ goto :eof
         echo.
         echo  Equipamento %roupa% adquirido! Agora voce tem +12 de recuperacao de mana.
         pause >nul
-    goto loja_armas_mago
+    goto :loja_armas_mago
 
 :: ========================================================================
 :: SISTEMA DE MERCADO GUERREIRO
@@ -210,13 +210,13 @@ goto :eof
 
     choice /c 1234567 /n /m " Fale logo o que vc quer e suma daqui: "
 
-    if %errorlevel% 7 goto local
-    if %errorlevel% 6 goto compra_escudo2
-    if %errorlevel% 5 goto compra_escudo1
-    if %errorlevel% 4 goto compra_armadura2
-    if %errorlevel% 3 goto compra_armadura1
-    if %errorlevel% 2 goto compra_maça
-    if %errorlevel% 1 goto compra_espada
+    if errorlevel 7 goto :local
+    if errorlevel 6 goto :compra_escudo2
+    if errorlevel 5 goto :compra_escudo1
+    if errorlevel 4 goto :compra_armadura2
+    if errorlevel 3 goto :compra_armadura1
+    if errorlevel 2 goto :compra_maça
+    if errorlevel 1 goto :compra_espada
 
     :: Lógica de Compra e Buff nos Dados
     :compra_espada
@@ -224,13 +224,13 @@ goto :eof
             echo.
             echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
             pause >nul
-            goto loja_armas_guerra
+            goto :loja_armas_guerra
         )
         if %ouro% lss 30 (
             echo.
             echo  Ta achando que sou banco? Ouro insuficiente!
             pause >nul
-            goto loja_armas_guerra
+            goto :loja_armas_guerra
         )
         :: Desconta o ouro, ocupa 1 slot e altera a arma
         set /a ouro-=30
@@ -241,20 +241,20 @@ goto :eof
         echo.
         echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador% d%d%.
         pause >nul
-    goto loja_armas_guerra
+    goto :loja_armas_guerra
 
     :compra_maça
         if %qtd_itens% geq %slot% (
             echo.
             echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
             pause >nul
-            goto loja_armas_guerra
+            goto :loja_armas_guerra
         )
         if %ouro% lss 25 (
             echo.
             echo  Falta moeda ai, guerreiro!
             pause >nul
-            goto loja_armas_guerra
+            goto :loja_armas_guerra
         )
         set /a ouro-=25
         set /a qtd_itens+=1
@@ -264,20 +264,20 @@ goto :eof
         echo.
         echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
         pause >nul
-    goto loja_armas_guerra
+    goto :loja_armas_guerra
 
     :compra_armadura1
         if %qtd_itens% geq %slot% (
             echo.
             echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
             pause >nul
-            goto loja_armas_guerra
+            goto :loja_armas_guerra
         )
         if %ouro% lss 40 (
             echo.
             echo  Voce e muito pobre para olhar para esta armadura!
             pause >nul
-            goto loja_armas_guerra
+            goto :loja_armas_guerra
         )
         set /a ouro-=40
         set /a qtd_itens+=1
@@ -287,20 +287,20 @@ goto :eof
         echo.
         echo  Equipamento %roupa% adquirido! Agora voce tem +15 de defesa.
         pause >nul
-    goto loja_armas_guerra
+    goto :loja_armas_guerra
 
     :compra_armadura2
         if %qtd_itens% geq %slot% (
             echo.
             echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
             pause >nul
-            goto loja_armas_guerra
+            goto :loja_armas_guerra
         )
         if %ouro% lss 60 (
             echo.
             echo  Voce e muito pobre para olhar para esta armadura!
             pause >nul
-            goto loja_armas_guerra
+            goto :loja_armas_guerra
         )
         set /a ouro-=60
         set /a qtd_itens+=1
@@ -310,20 +310,20 @@ goto :eof
         echo.
         echo  Equipamento %roupa% adquirido! Agora voce tem +25 de defesa.
         pause >nul
-    goto loja_armas_guerra
+    goto :loja_armas_guerra
 
     :compra_escudo1
         if %qtd_itens% geq %slot% (
             echo.
             echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
             pause >nul
-            goto loja_armas_guerra
+            goto :loja_armas_guerra
         )
         if %ouro% lss 25 (
             echo.
             echo  Lhe falta dinheiro para ter para este escudo!
             pause >nul
-            goto loja_armas_guerra
+            goto :loja_armas_guerra
         )
         set /a ouro-=25
         set /a qtd_itens+=1
@@ -333,20 +333,20 @@ goto :eof
         echo.
         echo  Equipamento %escudo% adquirido! Agora voce tem +10 de defesa.
         pause >nul
-    goto loja_armas_guerra
+    goto :loja_armas_guerra
 
     :compra_escudo2
         if %qtd_itens% geq %slot% (
             echo.
             echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
             pause >nul
-            goto loja_armas_mago
+            goto :loja_armas_mago
         )
         if %ouro% lss 60 (
             echo.
             echo  Voce e muito pobre pra comprar esse escudo
             pause >nul
-            goto loja_armas_mago
+            goto :loja_armas_mago
         )
         set /a ouro-=60
         set /a qtd_itens+=1
@@ -357,7 +357,7 @@ goto :eof
         echo.
         echo  Equipamento %escudo% adquirido! Agora voce tem +20 de defesa e %qd_regen%d%d% Regeneração vital.
         pause >nul
-    goto loja_armas_mago
+    goto :loja_armas_mago
 
 :: ========================================================================
 :: SISTEMA DE MERCADO OCULTISTA
@@ -380,11 +380,11 @@ goto :eof
 
     choice /c 12345 /n /m " Fale logo o que vc quer e suma daqui: "
 
-    if %errorlevel% 5 goto local
-    if %errorlevel% 4 goto compra_manto
-    if %errorlevel% 3 goto compra_amuleto
-    if %errorlevel% 2 goto compra_foice
-    if %errorlevel% 1 goto compra_adaga
+    if errorlevel 5 goto :local
+    if errorlevel 4 goto :compra_manto
+    if errorlevel 3 goto :compra_amuleto
+    if errorlevel 2 goto :compra_foice
+    if errorlevel 1 goto :compra_adaga
 
     :: Lógica de Compra e Buff nos Dados
     :compra_adaga
@@ -392,13 +392,13 @@ goto :eof
             echo.
             echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
             pause >nul
-            goto loja_armas_mago
+            goto :loja_armas_mago
         )
         if %ouro% lss 65 (
             echo.
             echo  Ta achando que sou banco? Ouro insuficiente!
             pause >nul
-            goto loja_armas_mago
+            goto :loja_armas_mago
         )
         :: Desconta o ouro, ocupa 1 slot e altera a arma
         set /a ouro-=65
@@ -410,20 +410,20 @@ goto :eof
         echo.
         echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
         pause >nul
-    goto loja_armas_mago
+    goto :loja_armas_mago
 
     :compra_foice
         if %qtd_itens% geq %slot% (
             echo.
             echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
             pause >nul
-            goto loja_armas_mago
+            goto :loja_armas_mago
         )
         if %ouro% lss 120 (
             echo.
             echo  Voce e muito pobre para olhar para esta foice!
             pause >nul
-            goto loja_armas_mago
+            goto :loja_armas_mago
         )
         set /a ouro-=120
         set /a qtd_itens+=1
@@ -433,20 +433,20 @@ goto :eof
         echo.
         echo  Equipamento %nome_arma% adquirido! Seus ataques agora rolam %qd_jogador%d%d%.
         pause >nul
-    goto loja_armas_mago
+    goto :loja_armas_mago
 
     :compra_amuleto
         if %qtd_itens% geq %slot% (
             echo.
             echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
             pause >nul
-            goto loja_armas_mago
+            goto :loja_armas_mago
         )
         if %ouro% lss 70 (
             echo.
             echo  Falta moeda ai, guerreiro!
             pause >nul
-            goto loja_armas_mago
+            goto :loja_armas_mago
         )
         set /a ouro-=70
         set /a qtd_itens+=1
@@ -456,20 +456,20 @@ goto :eof
         echo.
         echo  Equipamento %amuleto% adquirido! Agora voce tem +10 de defesa, e +15 quando vida cheia.
         pause >nul
-    goto loja_armas_mago
+    goto :loja_armas_mago
 
     :compra_manto
         if %qtd_itens% geq %slot% (
             echo.
             echo  Sua mochila esta cheia! Voce nao tem espaco para isso.
             pause >nul
-            goto loja_armas_mago
+            goto :loja_armas_mago
         )
         if %ouro% lss 80 (
             echo.
             echo  Voce e muito pobre pra comprar esse manto
             pause >nul
-            goto loja_armas_mago
+            goto :loja_armas_mago
         )
         set /a ouro-=80
         set /a qtd_itens+=1
@@ -478,7 +478,7 @@ goto :eof
         echo.
         echo  Equipamento %roupa% adquirido! Agora voce tem 15% de chance de anular ataques.
         pause >nul
-    goto loja_armas_mago
+    goto :loja_armas_mago
 
 :: ========================================================================
 :: TABERNA - MERCADO DE CONSUMIVEIS
@@ -501,41 +501,41 @@ goto :eof
 
     choice /c 1234 /n /m " Escolha sua compra: "
 
-    if %errorlevel% equ 4 goto taverna_padrao
-    if %errorlevel% equ 3 goto tab_compra_refeicao
-    if %errorlevel% equ 2 goto tab_compra_mana
-    if %errorlevel% equ 1 goto tab_compra_hp
-    goto menu_taberna
+    if errorlevel 4 goto :taverna_padrao
+    if errorlevel 3 goto :tab_compra_refeicao
+    if errorlevel 2 goto :tab_compra_mana
+    if errorlevel 1 goto :tab_compra_hp
+    goto :menu_taberna
 
     :tab_compra_hp
-        if %qtd_itens% geq %slot% (echo. & echo Mochila cheia! & pause >nul & goto menu_taberna)
-        if %ouro% lss 30 (echo. & echo Ouro insuficiente! & pause >nul & goto menu_taberna)
+        if %qtd_itens% geq %slot% (echo. & echo Mochila cheia! & pause >nul & goto :menu_taberna)
+        if %ouro% lss 30 (echo. & echo Ouro insuficiente! & pause >nul & goto :menu_taberna)
         set /a ouro-=30
         set /a pocao_hp+=1
         set /a qtd_itens+=1
         echo. & echo Voce comprou uma Pocao de HP!
         pause >nul
-    goto menu_taberna
+    goto :menu_taberna
 
     :tab_compra_mana
-        if %qtd_itens% geq %slot% (echo. & echo Mochila cheia! & pause >nul & goto menu_taberna)
-        if %ouro% lss 40 (echo. & echo Ouro insuficiente! & pause >nul & goto menu_taberna)
+        if %qtd_itens% geq %slot% (echo. & echo Mochila cheia! & pause >nul & goto :menu_taberna)
+        if %ouro% lss 40 (echo. & echo Ouro insuficiente! & pause >nul & goto :menu_taberna)
         set /a ouro-=40
         set /a pocao_mana+=1
         set /a qtd_itens+=1
         echo. & echo Voce comprou uma Pocao de Mana!
         pause >nul
-    goto menu_taberna
+    goto :menu_taberna
 
     :tab_compra_refeicao
-        if %qtd_itens% geq %slot% (echo. & echo Mochila cheia! & pause >nul & goto menu_taberna)
-        if %ouro% lss 20 (echo. & echo Ouro insuficiente! & pause >nul & goto menu_taberna)
+        if %qtd_itens% geq %slot% (echo. & echo Mochila cheia! & pause >nul & goto :menu_taberna)
+        if %ouro% lss 20 (echo. & echo Ouro insuficiente! & pause >nul & goto :menu_taberna)
         set /a ouro-=20
         set /a refeicao+=1
         set /a qtd_itens+=1
         echo. & echo Voce comprou uma Refeicao!
         pause >nul
-    goto menu_taberna
+    goto :menu_taberna
 
 :abertura
     cls
@@ -544,19 +544,19 @@ goto :eof
     for /l %%i in (1,1,8) do echo.
 
     echo                                                                  ;                           
-    echo                 :                                                ED.                   :     
-    echo                t#,          .,G:               .          :      E#Wi                 t#,    
-    echo   j.          ;##W.        ,WtE#,    :        ;W          Ef     E###G.       t      ;##W.   
-    echo   EW,        :#L:WE       i#D.E#t  .GE       f#E GEEEEEEELE#t    E#fD#W;      Ej    :#L:WE   
-    echo   E##j      .KG  ,#D     f#f  E#t j#K;     .E#f  ,;;L#K;;.E#t    E#t t##L     E#,  .KG  ,#D  
-    echo   E###D.    EE    ;#f  .D#i   E#GK#f      iWW;      t#E   E#t    E#t  .E#K,   E#t  EE    ;#f 
-    echo   E#jG#W;  f#.     t#i:KW,    E##D.      L##Lffi    t#E   E#t fi E#t    j##f  E#t f#.     t#i
-    echo   E#t t##f :#G     GK t#f     E##Wi     tLLG##L     t#E   E#t L#jE#t    :E#K: E#t :#G     GK 
-    echo   E#t  :K#E:;#L   LW.  ;#G    E#jL#D:     ,W#i      t#E   E#t L#LE#t   t##L   E#t  ;#L   LW. 
-    echo   E#KDDDD###it#f f#:    :KE.  E#t ,K#j   j#E.       t#E   E#tf#E:E#t .D#W;    E#t   t#f f#:  
-    echo   E#f,t#Wi,,, f#D#;      .DW: E#t   jD .D#j         t#E   E###f  E#tiW#G.     E#t    f#D#;   
-    echo   E#t  ;#W:    G#t         L#,j#t     ,WK,          t#E   E#K,   E#K##i       E#t     G#t    
-    echo   DWi   ,KK:    t           jt ,;     EG.            fE   EL     E##D.        E#t      t     
+    echo                 :                                                 ED.                   :     
+    echo                t#,          .,G:                .          :      E#Wi                 t#,    
+    echo  j.          ;##W.        ,WtE#,    :         ;W          Ef     E###G.       t      ;##W.   
+    echo  EW,        :#L:WE       i#D.E#t  .GE        f#E GEEEEEEELE#t    E#fD#W;      Ej    :#L:WE   
+    echo  E##j      .KG  ,#D     f#f  E#t j#K;      .E#f  ,;;L#K;;.E#t    E#t t##L     E#,  .KG  ,#D  
+    echo  E###D.    EE    ;#f  .D#i   E#GK#f       iWW;      t#E   E#t    E#t  .E#K,   E#t  EE    ;#f 
+    echo  E#jG#W;  f#.     t#i:KW,    E##D.       L##Lffi    t#E   E#t fi E#t    j##f  E#t f#.     t#i
+    echo  E#t t##f :#G     GK t#f     E##Wi      tLLG##L     t#E   E#t L#jE#t    :E#K: E#t :#G     GK 
+    echo  E#t  :K#E:;#L   LW.  ;#G    E#jL#D:      ,W#i      t#E   E#t L#LE#t   t##L   E#t  ;#L   LW. 
+    echo  E#KDDDD###it#f f#:    :KE.  E#t ,K#j    j#E.       t#E   E#tf#E:E#t .D#W;    E#t   t#f f#:  
+    echo  E#f,t#Wi,,, f#D#;      .DW: E#t   jD  .D#j         t#E   E###f  E#tiW#G.     E#t    f#D#;   
+    echo  E#t  ;#W:    G#t         L#,j#t      ,WK,          t#E   E#K,   E#K##i       E#t     G#t    
+    echo  DWi   ,KK:    t           jt ,;      EG.            fE   EL     E##D.        E#t      t     
     echo                                       ,               :   :      E#t          ,;.            
     echo                                                                  L:                          
     echo.
@@ -595,7 +595,7 @@ pause > nul
 del "%temp%\sinal_neve.tmp" >nul 2>nul
 
 :: Avançar diretamente para o menu de heróis.
-goto tela_selecao_aberto
+goto :tela_selecao_aberto
 
 
 :: ========================================================================
@@ -649,7 +649,7 @@ goto tela_selecao_aberto
         :: 5. CONTROLE DE VELOCIDADE
         pathping -n -q 1 -p 500 localhost >nul
 
-    goto snow_loop
+    goto :snow_loop
 
 :: ========================================================================
 :: TELA DE SELEÇÃO DE PERSONAGEM
@@ -686,10 +686,10 @@ goto tela_selecao_aberto
     choice /c 1230 /n /t 2 /d 0 /m " Pressione o dígito correspondente: "
 
     :: A LINHA ABAIXO FOI RESTAURADA PARA GARANTIR O CICLO
-    if %errorlevel% 4 goto :tela_selecao_fechado
-    if %errorlevel% 3 goto :set_soso
-    if %errorlevel% 2 goto :set_sara
-    if %errorlevel% 1 goto :set_tulio
+    if errorlevel 4 goto :tela_selecao_fechado
+    if errorlevel 3 goto :set_soso
+    if errorlevel 2 goto :set_sara
+    if errorlevel 1 goto :set_tulio
 
 :tela_selecao_fechado
     cls
@@ -723,10 +723,10 @@ goto tela_selecao_aberto
     choice /c 1230 /n /t 1 /d 0 /m " Pressione o dígito correspondente: "
 
     :: A LINHA ABAIXO FOI RESTAURADA PARA GARANTIR O CICLO
-    if %errorlevel% 4 goto :tela_selecao_aberto
-    if %errorlevel% 3 goto :set_soso
-    if %errorlevel% 2 goto :set_sara
-    if %errorlevel% 1 goto :set_tulio
+    if errorlevel 4 goto :tela_selecao_aberto
+    if errorlevel 3 goto :set_soso
+    if errorlevel 2 goto :set_sara
+    if errorlevel 1 goto :set_tulio
 
 :: ==========================================
 :: ALOCACAO DE ATRIBUTOS (VARIAVEIS DE JOGADOR)
@@ -930,8 +930,8 @@ goto tela_selecao_aberto
 
     choice /c YN /n /m " Pressione a tecla correspondente: "
 
-    if %errorlevel% 2 goto :tela_selecao_aberto
-    if %errorlevel% 1 goto :prologo
+    if errorlevel 2 goto :tela_selecao_aberto
+    if errorlevel 1 goto :prologo
 
 :: ================================================================================================================
 :: INICIO - PRÓLOGO
@@ -961,7 +961,7 @@ goto tela_selecao_aberto
     pause > nul
     del "%temp%\sinal_prologo.tmp" >nul 2>nul
 
-    goto capitulo_um
+    goto :capitulo_um
 
 
     :: ================================================================================================================
@@ -1025,7 +1025,7 @@ goto tela_selecao_aberto
         :: 6. CONTROLE DE VELOCIDADE
         pathping -n -q 1 -p 300 localhost >nul
 
-        goto neve_prologo_loop
+        goto :neve_prologo_loop
 
 
     :: ================================================================================================================
@@ -1050,7 +1050,7 @@ goto tela_selecao_aberto
 
         :: Limpa a tela e segue para a próxima parte (ex: o encontro com o monstro)
         cls
-        goto cena_vila_frame1
+        goto :cena_vila_frame1
 
     :: ================================================================================================================
     :: THREAD SECUNDÁRIA - MOTOR DE ANIMAÇÃO DO PORTAL REDONDO NA FLORESTA
@@ -1066,12 +1066,12 @@ goto tela_selecao_aberto
             echo  `  ┃ ┃ - ┃´   .       /  \ .  ┃    /   \   *         /__\  /\    +  /\    /\    +   * /_
             echo  ,/\ \┃  / \     +    /    \  / \  /     \     . ┃/\  /  \ /__\ *   /  \ */  \     +   /
             echo  /  \   /   \/\    /\/      \/   \/      _\+ /\ / \ \/    \   /\ /\/    \/    \  +/\* /
-            echo   \  \ /_   _\ \  /  \      /     \ /\  /\\ /  /_ _\ \   /\\ /  \ /_    /_    _\ /  \/
+            echo / \  \ /_   _\ \  /  \      /     \ /\  /\\ /  /_ _\ \   /\\ /  \ /_    /_    _\ /  \/
             echo    \   /     \  \/    \    /_     _\  \/  ┃/   /   \ _\ /  \/_  _\/     /      \/   /_
             echo     \ /_     _\ /_    _\/\ /       \  /_ / \  /     \ \/_  _\    \  /\ /        \   /
             echo     _\ /\     \ /      \  /  /\     \ / /   \/_     _\ /    \     \/  \         _\ /
             echo     \ /  \    _\       _\/_ /  \    _\ /     \       \/_    _\    /_  _\         \/_
-            echo  ____/    \    \        \/ /_  _\    \/_     _\_______/      \____/    \          /
+            echo _____/    \    \        \/ /_  _\    \/_     _\_______/      \____/    \          /
             echo  ┃┃┃/_    _\   _\  .-----------.\_____/       \┃_┃┃__/________\ ┃/______\        /
             echo  ┃┃┃/______\   \ .'  *          `. _ /         \ ┃┃__┃___┃┃_┃┃  ┃┃ /┃┃          /_____________
             echo  ┃┃┃   ┃┃ ┃_____/   .  +  * +     \ /___________\┃┃_\┃   ┃┃ ┃┃  ┃┃/_┃┃______________\  ┃  ┃  ┃
@@ -1095,7 +1095,7 @@ goto tela_selecao_aberto
             echo.
             echo                                                     (Pressione qualquer tecla para continuar)
             pathping -n -q 1 -p 80 localhost >nul
-            goto frame_b
+            goto :frame_b
 
         :frame_b
             if not exist "%temp%\sinal_portal.tmp" exit
@@ -1105,12 +1105,12 @@ goto tela_selecao_aberto
             echo  `  ┃ ┃ - ┃´   .       /  \ .  ┃    /   \   *         /__\  /\    +  /\    /\    *   + /_
             echo  ,/\ \┃  / \     *    /    \  / \  /     \     . ┃/\  /  \ /__\ *   /  \ */  \     +   /
             echo  /  \   /   \/\    /\/      \/   \/      _\* /\ / \ \/    \   /\ /\/    \/    \  */\* /
-            echo   \  \ /_   _\ \  /  \      /     \ /\  /\\ /  /_ _\ \   /\\ /  \ /_    /_    _\ /  \/
+            echo / \  \ /_   _\ \  /  \      /     \ /\  /\\ /  /_ _\ \   /\\ /  \ /_    /_    _\ /  \/
             echo    \   /     \  \/    \    /_     _\  \/  ┃/   /   \ _\ /  \/_  _\/     /      \/   /_
             echo     \ /_     _\ /_    _\/\ /       \  /_ / \  /     \ \/_  _\    \  /\ /        \   /
             echo     _\ /\     \ /      \  /  /\     \ / /   \/_     _\ /    \     \/  \         _\ /
             echo     \ /  \    _\       _\/_ /  \    _\ /     \       \/_    _\    /_  _\         \/_
-            echo  ____/    \    \        \/ /_  _\    \/_     _\_______/      \____/    \          /
+            echo _____/    \    \        \/ /_  _\    \/_     _\_______/      \____/    \          /
             echo  ┃┃┃/_    _\   _\  .-----------.\_____/       \┃_┃┃__/________\ ┃/______\        /
             echo  ┃┃┃/______\   \ .'     *       `. _ /         \ ┃┃__┃___┃┃_┃┃  ┃┃ /┃┃          /_____________
             echo  ┃┃┃   ┃┃ ┃_____/   .  +     *   *\ /___________\┃┃_\┃   ┃┃ ┃┃  ┃┃/_┃┃______________\  ┃  ┃  ┃
@@ -1134,7 +1134,7 @@ goto tela_selecao_aberto
             echo.
             echo                                                     (Pressione qualquer tecla para continuar)
             pathping -n -q 1 -p 80 localhost >nul
-            goto frame_c
+            goto :frame_c
 
         :frame_c
             if not exist "%temp%\sinal_portal.tmp" exit
@@ -1144,12 +1144,12 @@ goto tela_selecao_aberto
             echo  `  ┃ ┃ - ┃´   .       /  \ .  ┃    /   \   +         /__\  /\    *  /\    /\    *   * /_
             echo  ,/\ \┃  / \     +    /    \  / \  /     \     . ┃/\  /  \ /__\ +   /  \ */  \     +   /
             echo  /  \   /   \/\    /\/      \/   \/      _\+ /\ / \ \/    \   /\ /\/    \/    \  +/\+ /
-            echo   \  \ /_   _\ \  /  \      /     \ /\  /\\ /  /_ _\ \   /\\ /  \ /_    /_    _\ /  \/
+            echo / \  \ /_   _\ \  /  \      /     \ /\  /\\ /  /_ _\ \   /\\ /  \ /_    /_    _\ /  \/
             echo    \   /     \  \/    \    /_     _\  \/  ┃/   /   \ _\ /  \/_  _\/     /      \/   /_
             echo     \ /_     _\ /_    _\/\ /       \  /_ / \  /     \ \/_  _\    \  /\ /        \   /
             echo     _\ /\     \ /      \  /  /\     \ / /   \/_     _\ /    \     \/  \         _\ /
             echo     \ /  \    _\       _\/_ /  \    _\ /     \       \/_    _\    /_  _\         \/_
-            echo  ____/    \    \        \/ /_  _\    \/_     _\_______/      \____/    \          /
+            echo _____/    \    \        \/ /_  _\    \/_     _\_______/      \____/    \          /
             echo  ┃┃┃/_    _\   _\  .-----------.\_____/       \┃_┃┃__/________\ ┃/______\        /
             echo  ┃┃┃/______\   \ .'        *    `. _ /         \ ┃┃__┃___┃┃_┃┃  ┃┃ /┃┃          /_____________
             echo  ┃┃┃   ┃┃ ┃_____/          +      \ /___________\┃┃_\┃   ┃┃ ┃┃  ┃┃/_┃┃______________\  ┃  ┃  ┃
@@ -1173,7 +1173,7 @@ goto tela_selecao_aberto
             echo.
             echo                                                     (Pressione qualquer tecla para continuar)
             pathping -n -q 1 -p 80 localhost >nul
-            goto frame_d
+            goto :frame_d
 
         :frame_d
             if not exist "%temp%\sinal_portal.tmp" exit
@@ -1183,12 +1183,12 @@ goto tela_selecao_aberto
             echo  `  ┃ ┃ - ┃´           /  \    ┃    /   \   *         /__\  /\    +  /\    /\    +   * /_
             echo  ,/\ \┃  / \     +    /    \  / \  /     \       ┃/\  /  \ /__\ *   /  \ */  \     +   /
             echo  /  \   /   \/\    /\/      \/   \/      _\+ /\ / \ \/    \   /\ /\/    \/    \  +/\* /
-            echo   \  \ /_   _\ \  /  \      /     \ /\  /\\ /  /_ _\ \   /\\ /  \ /_    /_    _\ /  \/
+            echo / \  \ /_   _\ \  /  \      /     \ /\  /\\ /  /_ _\ \   /\\ /  \ /_    /_    _\ /  \/
             echo    \   /     \  \/    \    /_     _\  \/  ┃/   /   \ _\ /  \/_  _\/     /      \/   /_
             echo     \ /_     _\ /_    _\/\ /       \  /_ / \  /     \ \/_  _\    \  /\ /        \   /
             echo     _\ /\     \ /      \  /  /\     \ / /   \/_     _\ /    \     \/  \         _\ /
             echo     \ /  \    _\       _\/_ /  \    _\ /     \       \/_    _\    /_  _\         \/_
-            echo  ____/    \    \        \/ /_  _\    \/_     _\_______/      \____/    \          /
+            echo _____/    \    \        \/ /_  _\    \/_     _\_______/      \____/    \          /
             echo  ┃┃┃/_    _\   _\  .-----------.\_____/       \┃_┃┃__/________\ ┃/______\        /
             echo  ┃┃┃/______\   \ .'        *    `. _ /         \ ┃┃__┃___┃┃_┃┃  ┃┃ /┃┃          /_____________
             echo  ┃┃┃   ┃┃ ┃_____/     .    +   *  \ /___________\┃┃_\┃   ┃┃ ┃┃  ┃┃/_┃┃______________\  ┃  ┃  ┃
@@ -1212,7 +1212,7 @@ goto tela_selecao_aberto
             echo.
             echo                                                     (Pressione qualquer tecla para continuar)
             pathping -n -q 1 -p 80 localhost >nul
-            goto frame_a
+            goto :frame_a
 
     :: ================================================================================================================
     :: CENA: O DESAPARECIMENTO E O BANQUETE MACABRO
@@ -1290,20 +1290,20 @@ goto tela_selecao_aberto
         :: Mecanismo de contagem e verificacao do loop
         set /a contador_cena+=1
         if %contador_cena% lss 20 (
-            goto cena_vila_frame1
+            goto :cena_vila_frame1
         ) else (
-            goto cena_vila_temp1
+            goto :cena_vila_temp1
         )
 
     :cena_vila_temp1
         cls
         echo.
-        echo   _       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
-        echo   u\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
+        echo ___       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
+        echo uuu\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
         echo   ┃ /\// ┃  ______    ┃  ┃┃  _  /\  ┃    ┃  ___  ____ ┃ ┃ ___ _/  \  ┃┃  ┃ ____ _____ ┃ \\ ┃ ┃
         echo   ┃/  \ ┃┃  ┃ \*/┃    ┃  ┃┃ ┃_┃/__\ ┃    ┃ ┃___┃ ┃  ┃ ┃ ┃ ┃_┃ ┃/__\  ┃┃  ┃ ┃  ┃ ┃ ┃ ┃ ┃┃   ┃ ┃
-        echo  _┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
-        echo  ___┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
+        echo __┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
+        echo ____┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
         echo                          !             \o/       \┃/
         echo           \┃/           \o/             ┃                         !        \┃/              
         echo                  !       ┃             / \          !            \o/    \┃/          !      
@@ -1311,27 +1311,27 @@ goto tela_selecao_aberto
         echo      \┃/         ┃                                  ┃            / \                 ┃       
         echo                 / \                \┃/             / \                      \┃/     / \      
         echo.
-        echo  =============================================================================================
+        echo ==============================================================================================
         echo.
         echo                [ O vento começa a soprar as primeiras fagulhas de gelo... ]  
         pathping -n -q 1 -p 300 localhost >nul
-        goto banquete_macabro
+        goto :banquete_macabro
 
     :banquete_macabro
         cls
         echo.
-        echo  =============================================================================================
+        echo ==============================================================================================
         echo                     (  )   (  )                            (  )   (  )
         echo                      )(     )(                              )(     )(
         echo                     (  )   (  )                            (  )   (  )
         echo                     _┃┃_   _┃┃_                            _┃┃_   _┃┃_
         echo                    ┃____┃ ┃____┃                          ┃____┃ ┃____┃
-        echo   .......__________┃    ┃_┃    ┃__________......__________┃    ┃_┃    ┃__________.......
+        echo .........__________┃    ┃_┃    ┃__________......__________┃    ┃_┃    ┃__________.......
         echo         /          ┃    ┃ ┃    ┃          \    /          ┃    ┃ ┃    ┃          \
         echo        /           ┃    ┃ ┃    ┃      o    \  /  o     o  ┃    ┃ ┃    ┃           \
         echo       /            ┃____┃ ┃____┃     ┃┃┃    \/  /┃\   ┃┃┃ ┃____┃ ┃____┃            \
         echo      /                               / \        / \   / \                           \
-        echo   __/________________________________________________________________________________\__
+        echo ____/________________________________________________________________________________\__
         echo    /                                                                                  \
         echo   /     [====]             [====]               [====]               [====]            \
         echo   ┃                                                                                    ┃
@@ -1344,7 +1344,7 @@ goto tela_selecao_aberto
         echo.
         echo   Pressione qualquer tecla para continuar...
         pause >nul
-    goto taverna_cidade
+    goto :taverna_cidade
 
     :taverna_cidade
         cls
@@ -1365,8 +1365,7 @@ goto tela_selecao_aberto
         echo                cumprimenta você e oferece uma variedade de bebidas e refeições.
         echo                                                     (Pressione qualquer tecla para continuar)
         pause >nul
-
-    goto menu_taberna
+        goto :menu_taberna
 
     :taverna_padrao
         cls
@@ -1385,22 +1384,22 @@ goto tela_selecao_aberto
 
         choice /c 123456 /n /m " Fale logo o que vc quer e suma daqui: "
 
-        if %errorlevel% 6 goto local
-        if %errorlevel% 5 goto missao
-        if %errorlevel% 4 goto investigacao
-        if %errorlevel% 3 goto informacao
-        if %errorlevel% 2 goto menu_taberna
-        if %errorlevel% 1 goto taberna_conversa
+        if errorlevel 6 goto :local
+        if errorlevel 5 goto :missao
+        if errorlevel 4 goto :investigacao
+        if errorlevel 3 goto :informacao
+        if errorlevel 2 goto :menu_taberna
+        if errorlevel 1 goto :taberna_conversa
         
         :missao
             echo Em breve...
             pause
-        goto taverna_padrao
+            goto :taverna_padrao
 
         :investigacao
             echo Voce olha em volta... nada ainda.
             pause
-        goto taverna_padrao
+            goto :taverna_padrao
 
         :informacao
             cls
@@ -1426,9 +1425,7 @@ goto tela_selecao_aberto
             echo.
             echo                                                    (Pressione qualquer tecla para continuar)
             pause >nul
-            goto taverna_padrao
-
-        goto 
+            goto :taverna_padrao
 
         :taverna_conversa
             cls
@@ -1442,6 +1439,6 @@ goto tela_selecao_aberto
             echo.
             echo                                                     (Pressione qualquer tecla para continuar)
             pause >nul
-        goto taverna_padrao
+            goto :taverna_padrao
 
 exit
