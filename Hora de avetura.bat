@@ -505,7 +505,6 @@ goto :eof
     if errorlevel 3 goto :tab_compra_refeicao
     if errorlevel 2 goto :tab_compra_mana
     if errorlevel 1 goto :tab_compra_hp
-    goto :menu_taberna
 
     :tab_compra_hp
         if %qtd_itens% geq %slot% (echo. & echo Mochila cheia! & pause >nul & goto :menu_taberna)
