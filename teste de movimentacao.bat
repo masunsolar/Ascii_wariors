@@ -16,7 +16,9 @@ set /a pos_y = 1
 
 :tela_jogo
     :: 0. VERIFICA EVENTOS DE POSIÇÃO (As portas do seu mapa)
-    if "%pos_x%-%pos_y%" equ "15-2" goto :dentro_da_taberna
+    :: Visualmente, a Taberna está na altura do X=27 ou 29, e Y=1
+    if "%pos_x%-%pos_y%" equ "27-1" goto :dentro_da_taberna
+    if "%pos_x%-%pos_y%" equ "29-1" goto :dentro_da_taberna
     if "%pos_x%-%pos_y%" equ "0-1" goto :fim_jogo
 
     cls
@@ -24,11 +26,14 @@ set /a pos_y = 1
     :: 1. DESENHA O TETO E O CENÁRIO DE FUNDO
     echo =================================================================
     echo  Use [W] Cima, [S] Baixo, [A] Esquerda, [D] Direita ou [X] Sair
+    :: DICA DE OURO: Este rastreador no HUD vai te ajudar a mapear as portas!
+    echo  Posicao Atual: X=!pos_x! ^| Y=!pos_y!
     echo =================================================================
     echo.
     echo        /\                 _^\^|/_
     echo       /  \      /\         / \
-    echo      /____\    /  \        (15, 2)
+    :: Atualizei a plaquinha para a nova coordenada
+    echo      /____\    /  \        (29, 1)
     echo      ^|    ^|   /____\     Taberna [ ] 
     echo =================================================================
 
@@ -45,7 +50,7 @@ set /a pos_y = 1
         )
     )
 
-    :: 4. DESENHA O PERSONAGEM (Agora 100% imune a quebras de caracteres especiais)
+    :: 4. DESENHA O PERSONAGEM (Agora 100% imune a quebras)
     echo !espacos!   !s1!
     echo !espacos!   !s2!
     echo !espacos!   !s3!
@@ -92,15 +97,14 @@ set /a pos_y = 1
     echo Voce entrou na Taberna! O cheiro de ensopado preenche o ar.
     echo =================================================================
     echo.
-    echo [6] Falar com Taberneiro
-    echo [7] Sair da Taberna (Voltar para o mapa)
+    echo [1] Falar com Taberneiro
+    echo [2] Sair da Taberna (Voltar para o mapa)
     echo.
     choice /c 12 /n /m "Escolha: "
     if errorlevel 2 (
-        :: Se ele quiser sair, precisamos redefinir a posicao dele para fora da porta
-        :: Sendo assim, o empurramos um pouco para a esquerda para que ele nao 
-        :: fique preso em um "loop infinito" de entrar na porta assim que o mapa recarregar.
-        set /a pos_x = 13
+        :: CORREÇÃO: Colocamos ele saindo no Y=2 para ele estar 1 passo 
+        :: abaixo da porta, caso contrário ele entraria em loop!
+        set /a pos_x = 29
         set /a pos_y = 2
         goto :tela_jogo
     )
@@ -109,9 +113,3 @@ set /a pos_y = 1
         pause >nul
         goto :dentro_da_taberna
     )
-
-:fim_jogo
-    cls
-    echo Fim da demonstracao.
-    pause >nul
-    exit
