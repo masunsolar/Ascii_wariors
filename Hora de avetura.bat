@@ -3,6 +3,10 @@ setlocal enabledelayedexpansion
 
 for /F %%a in ('echo prompt $E ^| cmd') do set "ESC=%%a"
 
+:: Variáveis de controle do personagem
+set /a pos_x = 5
+set /a pos_y = 1
+
 :: ========================================================================
 :: MOTOR DE TEXTO HÍBRIDO (VBScript) - Geração do Arquivo
 :: ========================================================================
@@ -1414,7 +1418,8 @@ goto :tela_selecao_aberto
             echo  Ele tem uma expressão cansada, mas seus olhos brilham com um conhecimento profundo sobre a floresta sombria e os eventos recentes na vila.
             echo  Você se senta e começa a conversar com ele, buscando informações sobre os desaparecimentos misteriosos e os rumores de uma seita sombria na floresta.
             echo.
-            echo                                                    (Pressione qualquer tecla para continuar)
+            echo                                                     (Pressione qualquer tecla para continuar)
+            pause >nul
             cls
             ::o mesmo desenho da mesa
             echo.
@@ -1428,16 +1433,21 @@ goto :tela_selecao_aberto
             echo.
             echo Você agradece ao homem idoso pelas informações e se levanta para explorar outras áreas da taberna.
             echo.
-            echo                                                    (Pressione qualquer tecla para continuar)
+            echo                                                     (Pressione qualquer tecla para continuar)
             pause >nul
             goto :taverna_padrao
 
         :taverna_conversa
             cls
+            ::desenho de uma mesa com um cara sentado aqui
             echo.
             echo  Você se senta em uma mesa e começa a conversar com o taberneiro, buscando informações sobre a floresta sombria e os eventos recentes na vila. 
             echo  O taberneiro compartilha histórias de desaparecimentos misteriosos, sussurros sobre uma seita sombria e rumores de um portal profano sendo construído na floresta.
             echo.
+            echo                                                     (Pressione qualquer tecla para continuar)
+            pause >nul
+            cls
+            ::desenho do taberneiro
             echo  Ele menciona que os civis estão sendo levados para um banquete macabro, onde serão sacrificados para completar um ritual sombrio. 
             echo  O taberneiro expressa preocupação com a segurança da vila e sugere que você investigue a floresta para descobrir a verdade por trás desses eventos.
             echo.
@@ -1445,4 +1455,95 @@ goto :tela_selecao_aberto
             pause >nul
             goto :taverna_padrao
 
+    :cidade
+        cls
+        ::desenho da cidade aqui
+        echo.
+        echo  Você chega à cidade, um local pacífico cercado por uma floresta densa e misteriosa. 
+        echo  As ruas estão tranquilas até demais, devido aos desaparecimentos está tudo meio vazio. 
+        echo  Os moradores que restaram parecem preocupados e evitam falar sobre o assunto, 
+        echo  mas você pode sentir que algo sinistro está acontecendo.
+        echo.
+        echo                                                     (Pressione qualquer tecla para continuar)
+        pause >nul
+    goto :
+
+    :tela_jogo
+        cls
+        
+        :: 1. DESENHA O TETO E O CENÁRIO DE FUNDO (ESTÁTICO)
+        :: Lembre-se que o caractere especial | (pipe) precisa ser escapado com ^ para virar ^| [3]
+        echo =================================================================
+        echo  Use [W] Cima, [S] Baixo, [A] Esquerda, [D] Direita
+        echo =================================================================
+        echo.
+        :: O cenário pode ser desenhado aqui, usando caracteres ASCII para criar o ambiente.
+        :: cenário precisa conter os cantos que o personagem não pode ultrapassar, como árvores, rochas, etc.
+        :: e os cantos que ele pode ir/entrar
+
+        :: 2. GERA AS LINHAS EM BRANCO (EIXO Y)
+        :: Isso empurra o personagem para baixo, afastando-o do cenário
+        if %pos_y% GTR 0 (
+            :: O laço numérico for /l itera pelo intervalo para criar o espaço em Y [4]
+            for /l %%i in (1,1,%pos_y%) do echo.
+        )
+
+        :: 3. GERA OS ESPAÇOS EM BRANCO (EIXO X)
+        set "espacos="
+        if %pos_x% GTR 0 (
+            for /l %%i in (1,1,%pos_x%) do (
+                set "espacos=!espacos! "
+            )
+        )
+
+        :: 4. DESENHA O PERSONAGEM
+        :: O uso de ^ antes do | previne o erro de sintaxe do redirecionamento [3]
+        echo %espacos%   %s1%
+        echo %espacos%   %s2% 
+        echo %espacos%   %s3%
+        echo %espacos%   %s4%
+        echo %espacos%   %s5%
+        
+        :: 5. DESENHA O CHÃO INFERIOR (Fixo no final da tela livre)
+        :: Vamos calcular quantas linhas faltam para manter o chão sempre na mesma altura.
+        :: Digamos que a área de andar tem 6 linhas de altura máxima.
+        set /a chao = 6 - pos_y
+        if !chao! GTR 0 (
+            for /l %%i in (1,1,!chao!) do echo.
+        )
+        echo =================================================================
+        
+        :: 6. AGUARDA O INPUT DO JOGADOR
+        :: O comando choice cria um menu interativo aguardando uma tecla [5]
+        choice /c WASD /n /m " Acao: "
+
+        :: 7. LÓGICA DE MOVIMENTAÇÃO (Da maior opção para a menor)
+        if errorlevel 4 goto :mover_direita
+        if errorlevel 3 goto :mover_baixo
+        if errorlevel 2 goto :mover_esquerda
+        if errorlevel 1 goto :mover_cima
+
+    :: ==============================================
+    :: LÓGICA DE LIMITES E MOVIMENTO
+    :: ==============================================
+
+    :mover_cima
+        :: Limite do teto do cenário
+        if %pos_y% GTR 0 set /a pos_y -= 1
+        goto :tela_jogo
+
+    :mover_baixo
+        :: O lss verifica se o valor é "Menor Que" (Less Than) o limite [2]
+        if %pos_y% LSS 5 set /a pos_y += 1
+        goto :tela_jogo
+
+    :mover_direita
+        :: Impede de ultrapassar o lado direito da tela
+        if %pos_x% LSS 50 set /a pos_x += 2
+        goto :tela_jogo
+
+    :mover_esquerda
+        :: Impede de ultrapassar o lado esquerdo
+        if %pos_x% GTR 0 set /a pos_x -= 2
+        goto :tela_jogo
 exit
