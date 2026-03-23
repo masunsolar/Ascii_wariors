@@ -490,7 +490,7 @@ goto :eof
     echo ==========================================================================================
     echo  Seu Ouro atual: %ouro% moedas.
     echo  Inventario: %qtd_itens%/%slot% slots.
-    echo  Itens: %pocao_hp% Pocao HP | %pocao_mana% Pocao Mana | %refeicao% Refeicoes
+    echo  Itens: %pocao_hp% Pocao HP ^| %pocao_mana% Pocao Mana ^| %refeicao% Refeicoes
     echo ==========================================================================================
     echo.
     echo  [1] Pocao de HP       (Recupera 10 de HP)            - 30  Ouro
@@ -508,8 +508,9 @@ goto :eof
     goto :menu_taberna
 
     :tab_compra_hp
+        cls
         if %qtd_itens% geq %slot% (echo. & echo Mochila cheia! & pause >nul & goto :menu_taberna)
-        if %ouro% lss 30 (echo. & echo Ouro insuficiente! & pause >nul & goto :menu_taberna)
+        if %ouro% lss 30 (echo. & echo Até parece, você precisa de muito mais ouro pra isso parceiro! & pause >nul & goto :menu_taberna)
         set /a ouro-=30
         set /a pocao_hp+=1
         set /a qtd_itens+=1
@@ -518,8 +519,9 @@ goto :eof
     goto :menu_taberna
 
     :tab_compra_mana
+        cls
         if %qtd_itens% geq %slot% (echo. & echo Mochila cheia! & pause >nul & goto :menu_taberna)
-        if %ouro% lss 40 (echo. & echo Ouro insuficiente! & pause >nul & goto :menu_taberna)
+        if %ouro% lss 40 (echo. & echo Só nos seus sonhos! Volte quando tiver dinheiro o suficiente! & pause >nul & goto :menu_taberna)
         set /a ouro-=40
         set /a pocao_mana+=1
         set /a qtd_itens+=1
@@ -528,8 +530,9 @@ goto :eof
     goto :menu_taberna
 
     :tab_compra_refeicao
-        if %qtd_itens% geq %slot% (echo. & echo Mochila cheia! & pause >nul & goto :menu_taberna)
-        if %ouro% lss 20 (echo. & echo Ouro insuficiente! & pause >nul & goto :menu_taberna)
+        cls
+        if %qtd_itens% geq %slot% (echo. & echo Cara, acho que não consigo carregar mais nada! & pause >nul & goto :menu_taberna)
+        if %ouro% lss 20 (echo. & echo Ta me achando com cara de banco? Volte quando tiver mais grana! & pause >nul & goto :menu_taberna)
         set /a ouro-=20
         set /a refeicao+=1
         set /a qtd_itens+=1
@@ -537,6 +540,9 @@ goto :eof
         pause >nul
     goto :menu_taberna
 
+:: =====================================================================================================
+:: TELA DE ABERTURA
+:: =====================================================================================================
 :abertura
     cls
     color 0B
@@ -1348,7 +1354,6 @@ goto :tela_selecao_aberto
 
     :taverna_cidade
         cls
-        set local=taverna_cidade
         ::desenho da taberna aqui
         echo.
         echo  Você entra na taberna da vila, um local de descanso e socialização para os aventureiros. 
@@ -1369,7 +1374,6 @@ goto :tela_selecao_aberto
 
     :taverna_padrao
         cls
-        set local=taverna_cidade
         ::desenho da taberna aqui
         echo.
         echo  O que você quer fazer?
@@ -1384,12 +1388,13 @@ goto :tela_selecao_aberto
 
         choice /c 123456 /n /m " Fale logo o que vc quer e suma daqui: "
 
-        if errorlevel 6 goto :local
+        if errorlevel 6 goto :%local%
         if errorlevel 5 goto :missao
         if errorlevel 4 goto :investigacao
         if errorlevel 3 goto :informacao
         if errorlevel 2 goto :menu_taberna
-        if errorlevel 1 goto :taberna_conversa
+        if errorlevel 1 goto :taverna_conversa
+        goto :taverna_padrao
         
         :missao
             echo Em breve...
@@ -1429,7 +1434,6 @@ goto :tela_selecao_aberto
 
         :taverna_conversa
             cls
-            set local=taverna_conversa
             echo.
             echo  Você se senta em uma mesa e começa a conversar com o taberneiro, buscando informações sobre a floresta sombria e os eventos recentes na vila. 
             echo  O taberneiro compartilha histórias de desaparecimentos misteriosos, sussurros sobre uma seita sombria e rumores de um portal profano sendo construído na floresta.
