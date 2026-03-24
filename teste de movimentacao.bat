@@ -13,36 +13,61 @@ set "s5=  /  \ ┃   "
 :: Posição inicial do personagem
 set /a pos_x = 5
 set /a pos_y = 1
+set /a cidade_atual=1
 
-:tela_jogo
-    :: 0. VERIFICA EVENTOS DE POSIÇÃO (As portas do seu mapa)
-    :: Visualmente, a Taberna está na altura do X=27 ou 29, e Y=1
-    if "%pos_x%-%pos_y%" equ "27-1" goto :dentro_da_taberna
-    if "%pos_x%-%pos_y%" equ "29-1" goto :dentro_da_taberna
-    if "%pos_x%-%pos_y%" equ "0-1" goto :fim_jogo
+:: =======================================================================
+:: LOOP PRINCIPAL DO JOGO
+:: =======================================================================
+:tela_cidade
+    :: 0. VERIFICA EVENTOS E TRANSIÇÕES DE MAPA
+    if "%cidade_atual%" equ "2" (
+        if "%pos_x%-%pos_y%" equ "25-0" goto :taverna_padrao
+        if "%pos_x%-%pos_y%" equ "26-0" goto :taverna_padrao
+    )
+    if "%cidade_atual%" equ "4" (
+        if "%pos_x%-%pos_y%" equ "25-0" goto :ferreiro
+        if "%pos_x%-%pos_y%" equ "26-0" goto :ferreiro
+    )
+    if "%cidade_atual%" equ "6" (
+    )
 
-    cls
-    
-    :: 1. DESENHA O TETO E O CENÁRIO DE FUNDO
+    :: IR PARA A PRÓXIMA CIDADE 
+    if %pos_x% equ 51 (
+        if %pos_y% geq 1 if %pos_y% leq 5 (
+            set /a cidade_atual += 1
+            set /a pos_x = 1
+            goto :tela_cidade
+        )
+    )
+
+    :: VOLTAR PARA A CIDADE ANTERIOR 
+    if %pos_x% equ 0 (
+        if %cidade_atual% gtr 1 (
+            if %pos_y% geq 1 if %pos_y% leq 5 (
+                set /a cidade_atual -= 1
+                set /a pos_x = 50
+                goto :tela_cidade
+            )
+        )
+    )
+
+    :: =======================================================================
+    :: RENDERIZAÇÃO DA TELA
+    :: =======================================================================
+    cls    
     echo =================================================================
-    echo  Use [W] Cima, [S] Baixo, [A] Esquerda, [D] Direita ou [X] Sair
-    :: DICA DE OURO: Este rastreador no HUD vai te ajudar a mapear as portas!
-    echo  Posicao Atual: X=!pos_x! ^| Y=!pos_y!
+    echo  Use [W] Cima, [S] Baixo, [A] Esquerda, [D] Direita
+    echo  [ HUD ] Local: Cidade !cidade_atual!  ^|  X:!pos_x! Y:!pos_y!
     echo =================================================================
     echo.
-    echo        /\                 _^\^|/_
-    echo       /  \      /\         / \
-    :: Atualizei a plaquinha para a nova coordenada
-    echo      /____\    /  \        (29, 1)
-    echo      ^|    ^|   /____\     Taberna [ ] 
-    echo =================================================================
+    
+    :: A MÁGICA ACONTECE AQUI: Ele vai lá no fundo do código, desenha e volta!
+    call :desenho_cidade_!cidade_atual!
 
-    :: 2. GERA AS LINHAS EM BRANCO (EIXO Y)
     if %pos_y% GTR 0 (
         for /l %%i in (1,1,%pos_y%) do echo.
     )
 
-    :: 3. GERA OS ESPAÇOS EM BRANCO (EIXO X)
     set "espacos="
     if %pos_x% GTR 0 (
         for /l %%i in (1,1,%pos_x%) do (
@@ -50,66 +75,59 @@ set /a pos_y = 1
         )
     )
 
-    :: 4. DESENHA O PERSONAGEM (Agora 100% imune a quebras)
     echo !espacos!   !s1!
-    echo !espacos!   !s2!
+    echo !espacos!   !s2! 
     echo !espacos!   !s3!
     echo !espacos!   !s4!
     echo !espacos!   !s5!
-    
-    :: 5. DESENHA O CHÃO INFERIOR
+
     set /a chao = 6 - pos_y
     if !chao! GTR 0 (
         for /l %%i in (1,1,!chao!) do echo.
     )
     echo =================================================================
-    
-    :: 6. AGUARDA O INPUT DO JOGADOR
-    choice /c WASDX /n /m " Acao: "
+    choice /c WASD /n /m " Acao: "
 
-    :: 7. LÓGICA DE MOVIMENTAÇÃO
-    if errorlevel 5 goto :fim_jogo
     if errorlevel 4 goto :mover_direita
     if errorlevel 3 goto :mover_baixo
     if errorlevel 2 goto :mover_esquerda
     if errorlevel 1 goto :mover_cima
 
-:: (Rotinas de Mover permanecem iguais aqui...)
+:: (Rotinas de movimento)
 :mover_cima
     if %pos_y% GTR 0 set /a pos_y -= 1
-    goto :tela_jogo
+goto :tela_cidade
+
 :mover_baixo
     if %pos_y% LSS 5 set /a pos_y += 1
-    goto :tela_jogo
+goto :tela_cidade
+
 :mover_direita
-    if %pos_x% LSS 50 set /a pos_x += 2
-    goto :tela_jogo
+    if %pos_x% LSS 51 set /a pos_x += 1
+goto :tela_cidade
+
 :mover_esquerda
-    if %pos_x% GTR 0 set /a pos_x -= 2
-    goto :tela_jogo
+    if %pos_x% GTR 0 set /a pos_x -= 1
+goto :tela_cidade
+
+exit
 
 :: ==============================================
-:: NOVOS CENÁRIOS
+:: BANCO DE CENÁRIOS DAS CIDADES (SEMPRE NO FINAL DO ARQUIVO)
 :: ==============================================
-:dentro_da_taberna
-    cls
-    echo =================================================================
-    echo Voce entrou na Taberna! O cheiro de ensopado preenche o ar.
-    echo =================================================================
-    echo.
-    echo [1] Falar com Taberneiro
-    echo [2] Sair da Taberna (Voltar para o mapa)
-    echo.
-    choice /c 12 /n /m "Escolha: "
-    if errorlevel 2 (
-        :: CORREÇÃO: Colocamos ele saindo no Y=2 para ele estar 1 passo 
-        :: abaixo da porta, caso contrário ele entraria em loop!
-        set /a pos_x = 29
-        set /a pos_y = 2
-        goto :tela_jogo
-    )
-    if errorlevel 1 (
-        echo O Taberneiro te ignora por enquanto.
-        pause >nul
-        goto :dentro_da_taberna
-    )
+
+:desenho_cidade_1
+    :: O desenho da primeira cidade (Vila Inicial)
+    echo        /\                 _^\^|/_
+    echo       /  \      /\         / \
+    echo      /____\    /  \        (25, 0)
+    echo      ^|    ^|   /____\     Taberna [ ] 
+    goto :eof
+
+:desenho_cidade_2
+    :: O desenho da segunda cidade (Capital)
+    echo     /\/\/\                 _^\^|/_
+    echo    /      \      /\         / \
+    echo   /        \    /  \      (25, 0)
+    echo  /__________\  /____\   Ferreiro [ ]
+    goto :eof

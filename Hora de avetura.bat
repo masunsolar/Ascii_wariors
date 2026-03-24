@@ -500,7 +500,7 @@ goto :eof
     echo  [1] Pocao de HP       (Recupera 10 de HP)            - 30  Ouro
     echo  [2] Pocao de Mana     (Recupera 10 de Mana)          - 40  Ouro
     echo  [3] Refeicao          (Recupera 20 de HP)            - 20  Ouro
-    echo  [4] Sair para a Taverna
+    echo  [4] Sair do balcão
     echo.
 
     choice /c 1234 /n /m " Escolha sua compra: "
@@ -591,7 +591,6 @@ goto :eof
 :: ========================================================================
 :: MOTOR DE FLUXO PRINCIPAL (TELA DE TÍTULO ASSÍNCRONA)
 :: ========================================================================
-
 :: Criar um arquivo temporário que servirá como sinal para a neve.
 echo executando > "%temp%\sinal_neve.tmp"
 
@@ -606,7 +605,6 @@ del "%temp%\sinal_neve.tmp" >nul 2>nul
 
 :: Avançar diretamente para o menu de heróis.
 goto :tela_selecao_aberto
-
 
 :: ========================================================================
 :: MOTOR DE NEVE (LINHA SECUNDÁRIA)
@@ -889,7 +887,6 @@ goto :tela_selecao_aberto
 :: ==========================================
 :: DEFINIÇÃO DOS SPRITES
 :: ==========================================
-
 :set_sprites
     if "%nome_personagem%"=="Tulio" goto :sprite_tulio
     if "%nome_personagem%"=="Sara"  goto :sprite_sara
@@ -1036,8 +1033,6 @@ goto :tela_selecao_aberto
         pathping -n -q 1 -p 300 localhost >nul
 
         goto :neve_prologo_loop
-
-
     :: ================================================================================================================
     :: MOTOR PARA QUE FIQUE EM LOOP ATÉ QUE CLIQUE EM ALGO PARA AVANÇAR A HISTÓRIA (PORTAL REDONDO NA FLORESTA)
     :: ================================================================================================================
@@ -1061,7 +1056,6 @@ goto :tela_selecao_aberto
         :: Limpa a tela e segue para a próxima parte (ex: o encontro com o monstro)
         cls
         goto :cena_vila_frame1
-
     :: ================================================================================================================
     :: THREAD SECUNDÁRIA - MOTOR DE ANIMAÇÃO DO PORTAL REDONDO NA FLORESTA
     :: ================================================================================================================
@@ -1105,7 +1099,7 @@ goto :tela_selecao_aberto
             echo.
             echo                                                     (Pressione qualquer tecla para continuar)
             pathping -n -q 1 -p 80 localhost >nul
-            goto :frame_b
+        goto :frame_b
 
         :frame_b
             if not exist "%temp%\sinal_portal.tmp" exit
@@ -1144,7 +1138,7 @@ goto :tela_selecao_aberto
             echo.
             echo                                                     (Pressione qualquer tecla para continuar)
             pathping -n -q 1 -p 80 localhost >nul
-            goto :frame_c
+        goto :frame_c
 
         :frame_c
             if not exist "%temp%\sinal_portal.tmp" exit
@@ -1183,7 +1177,7 @@ goto :tela_selecao_aberto
             echo.
             echo                                                     (Pressione qualquer tecla para continuar)
             pathping -n -q 1 -p 80 localhost >nul
-            goto :frame_d
+        goto :frame_d
 
         :frame_d
             if not exist "%temp%\sinal_portal.tmp" exit
@@ -1222,7 +1216,7 @@ goto :tela_selecao_aberto
             echo.
             echo                                                     (Pressione qualquer tecla para continuar)
             pathping -n -q 1 -p 80 localhost >nul
-            goto :frame_a
+        goto :frame_a
 
     :: ================================================================================================================
     :: CENA: O DESAPARECIMENTO E O BANQUETE MACABRO
@@ -1468,82 +1462,178 @@ goto :tela_selecao_aberto
         pause >nul
     goto :
 
-    :tela_jogo
-        cls
-        
-        :: 1. DESENHA O TETO E O CENÁRIO DE FUNDO (ESTÁTICO)
-        :: Lembre-se que o caractere especial | (pipe) precisa ser escapado com ^ para virar ^| [3]
-        echo =================================================================
-        echo  Use [W] Cima, [S] Baixo, [A] Esquerda, [D] Direita
-        echo =================================================================
-        echo.
-        :: O cenário pode ser desenhado aqui, usando caracteres ASCII para criar o ambiente.
-        :: cenário precisa conter os cantos que o personagem não pode ultrapassar, como árvores, rochas, etc.
-        :: e os cantos que ele pode ir/entrar
+:tela_cidade1
+    :: 0. VERIFICA EVENTOS DE POSIÇÃO (As portas do seu mapa)
+    :: Visualmente, a Taberna está na altura do X=27 ou 29, e Y=1
+    if "%pos_x%-%pos_y%" equ "25-0" goto :taverna_padrao
+    if "%pos_x%-%pos_y%" equ "26-0" goto :taverna_padrao
+    if "%pos_x%-%pos_y%" equ "51-1" goto :tela_cidade2
+    if "%pos_x%-%pos_y%" equ "51-2" goto :tela_cidade2
+    if "%pos_x%-%pos_y%" equ "51-3" goto :tela_cidade2
+    if "%pos_x%-%pos_y%" equ "51-4" goto :tela_cidade2
+    if "%pos_x%-%pos_y%" equ "51-5" goto :tela_cidade2
 
-        :: 2. GERA AS LINHAS EM BRANCO (EIXO Y)
-        :: Isso empurra o personagem para baixo, afastando-o do cenário
-        if %pos_y% GTR 0 (
-            :: O laço numérico for /l itera pelo intervalo para criar o espaço em Y [4]
-            for /l %%i in (1,1,%pos_y%) do echo.
+    cls    
+    :: 1. DESENHA O TETO E O CENÁRIO DE FUNDO (ESTÁTICO)
+    :: Lembre-se que o caractere especial | (pipe) precisa ser escapado com ^ para virar ^| [3]
+    echo =================================================================
+    echo  Use [W] Cima, [S] Baixo, [A] Esquerda, [D] Direita
+    echo =================================================================
+    echo.
+    :: O cenário pode ser desenhado aqui, usando caracteres ASCII para criar o ambiente.
+    :: cenário precisa conter os cantos que o personagem não pode ultrapassar, como árvores, rochas, etc.
+    :: e os cantos que ele pode ir/entrar
+
+    :: 2. GERA AS LINHAS EM BRANCO (EIXO Y)
+    :: Isso empurra o personagem para baixo, afastando-o do cenário
+    if %pos_y% GTR 0 (
+        :: O laço numérico for /l itera pelo intervalo para criar o espaço em Y [4]
+        for /l %%i in (1,1,%pos_y%) do echo.
+    )
+
+    :: 3. GERA OS ESPAÇOS EM BRANCO (EIXO X)
+    set "espacos="
+    if %pos_x% GTR 0 (
+        for /l %%i in (1,1,%pos_x%) do (
+            set "espacos=!espacos! "
         )
+    )
 
-        :: 3. GERA OS ESPAÇOS EM BRANCO (EIXO X)
-        set "espacos="
-        if %pos_x% GTR 0 (
-            for /l %%i in (1,1,%pos_x%) do (
-                set "espacos=!espacos! "
-            )
-        )
-
-        :: 4. DESENHA O PERSONAGEM
-        :: O uso de ^ antes do | previne o erro de sintaxe do redirecionamento [3]
-        echo %espacos%   %s1%
-        echo %espacos%   %s2% 
-        echo %espacos%   %s3%
-        echo %espacos%   %s4%
-        echo %espacos%   %s5%
+    :: 4. DESENHA O PERSONAGEM
+    :: O uso de ^ antes do | previne o erro de sintaxe do redirecionamento [3]
+    echo %espacos%   %s1%
+    echo %espacos%   %s2% 
+    echo %espacos%   %s3%
+    echo %espacos%   %s4%
+    echo %espacos%   %s5%
         
-        :: 5. DESENHA O CHÃO INFERIOR (Fixo no final da tela livre)
-        :: Vamos calcular quantas linhas faltam para manter o chão sempre na mesma altura.
-        :: Digamos que a área de andar tem 6 linhas de altura máxima.
-        set /a chao = 6 - pos_y
-        if !chao! GTR 0 (
-            for /l %%i in (1,1,!chao!) do echo.
-        )
-        echo =================================================================
+    :: 5. DESENHA O CHÃO INFERIOR (Fixo no final da tela livre)
+    :: Vamos calcular quantas linhas faltam para manter o chão sempre na mesma altura.
+    :: Digamos que a área de andar tem 6 linhas de altura máxima.
+    set /a chao = 6 - pos_y
+    if !chao! GTR 0 (
+        for /l %%i in (1,1,!chao!) do echo.
+    )
+    echo =================================================================
         
-        :: 6. AGUARDA O INPUT DO JOGADOR
-        :: O comando choice cria um menu interativo aguardando uma tecla [5]
-        choice /c WASD /n /m " Acao: "
+    :: 6. AGUARDA O INPUT DO JOGADOR
+    :: O comando choice cria um menu interativo aguardando uma tecla [5]
+    choice /c WASD /n /m " Acao: "
 
-        :: 7. LÓGICA DE MOVIMENTAÇÃO (Da maior opção para a menor)
-        if errorlevel 4 goto :mover_direita
-        if errorlevel 3 goto :mover_baixo
-        if errorlevel 2 goto :mover_esquerda
-        if errorlevel 1 goto :mover_cima
+    :: 7. LÓGICA DE MOVIMENTAÇÃO (Da maior opção para a menor)
+    if errorlevel 4 goto :mover_direita
+    if errorlevel 3 goto :mover_baixo
+    if errorlevel 2 goto :mover_esquerda
+    if errorlevel 1 goto :mover_cima
 
-    :: ==============================================
-    :: LÓGICA DE LIMITES E MOVIMENTO
-    :: ==============================================
+:: ==============================================
+:: LÓGICA DE LIMITES E MOVIMENTO
+:: ==============================================
+:mover_cima
+    :: Limite do teto do cenário
+    if %pos_y% GTR 0 set /a pos_y -= 1
+goto :tela_cidade1
 
-    :mover_cima
-        :: Limite do teto do cenário
-        if %pos_y% GTR 0 set /a pos_y -= 1
-        goto :tela_jogo
+:mover_baixo
+    :: O lss verifica se o valor é "Menor Que" (Less Than) o limite [2]
+    if %pos_y% LSS 5 set /a pos_y += 1
+goto :tela_cidade1
 
-    :mover_baixo
-        :: O lss verifica se o valor é "Menor Que" (Less Than) o limite [2]
-        if %pos_y% LSS 5 set /a pos_y += 1
-        goto :tela_jogo
+:mover_direita
+    :: Impede de ultrapassar o lado direito da tela
+    if %pos_x% LSS 50 set /a pos_x += 2
+goto :tela_cidade1
 
-    :mover_direita
-        :: Impede de ultrapassar o lado direito da tela
-        if %pos_x% LSS 50 set /a pos_x += 2
-        goto :tela_jogo
+:mover_esquerda
+    :: Impede de ultrapassar o lado esquerdo
+    if %pos_x% GTR 0 set /a pos_x -= 2
+goto :tela_cidade1
 
-    :mover_esquerda
-        :: Impede de ultrapassar o lado esquerdo
-        if %pos_x% GTR 0 set /a pos_x -= 2
-        goto :tela_jogo
+:tela_cidade2
+    :: 0. VERIFICA EVENTOS DE POSIÇÃO (As portas do seu mapa)
+    :: Visualmente, a Taberna está na altura do X=27 ou 29, e Y=1
+    if "%pos_x%-%pos_y%" equ "25-0" goto :taverna_padrao
+    if "%pos_x%-%pos_y%" equ "26-0" goto :taverna_padrao
+    if "%pos_x%-%pos_y%" equ "51-1" goto :tela_cidade3
+    if "%pos_x%-%pos_y%" equ "51-2" goto :tela_cidade3
+    if "%pos_x%-%pos_y%" equ "51-3" goto :tela_cidade3
+    if "%pos_x%-%pos_y%" equ "51-4" goto :tela_cidade3
+    if "%pos_x%-%pos_y%" equ "51-5" goto :tela_cidade3
+
+    cls    
+    :: 1. DESENHA O TETO E O CENÁRIO DE FUNDO (ESTÁTICO)
+    :: Lembre-se que o caractere especial | (pipe) precisa ser escapado com ^ para virar ^| [3]
+    echo =================================================================
+    echo  Use [W] Cima, [S] Baixo, [A] Esquerda, [D] Direita
+    echo =================================================================
+    echo.
+    :: O cenário pode ser desenhado aqui, usando caracteres ASCII para criar o ambiente.
+    :: cenário precisa conter os cantos que o personagem não pode ultrapassar, como árvores, rochas, etc.
+    :: e os cantos que ele pode ir/entrar
+
+    :: 2. GERA AS LINHAS EM BRANCO (EIXO Y)
+    :: Isso empurra o personagem para baixo, afastando-o do cenário
+    if %pos_y% GTR 0 (
+        :: O laço numérico for /l itera pelo intervalo para criar o espaço em Y [4]
+        for /l %%i in (1,1,%pos_y%) do echo.
+    )
+
+    :: 3. GERA OS ESPAÇOS EM BRANCO (EIXO X)
+    set "espacos="
+    if %pos_x% GTR 0 (
+        for /l %%i in (1,1,%pos_x%) do (
+            set "espacos=!espacos! "
+        )
+    )
+
+    :: 4. DESENHA O PERSONAGEM
+    :: O uso de ^ antes do | previne o erro de sintaxe do redirecionamento [3]
+    echo %espacos%   %s1%
+    echo %espacos%   %s2% 
+    echo %espacos%   %s3%
+    echo %espacos%   %s4%
+    echo %espacos%   %s5%
+        
+    :: 5. DESENHA O CHÃO INFERIOR (Fixo no final da tela livre)
+    :: Vamos calcular quantas linhas faltam para manter o chão sempre na mesma altura.
+    :: Digamos que a área de andar tem 6 linhas de altura máxima.
+    set /a chao = 6 - pos_y
+    if !chao! GTR 0 (
+        for /l %%i in (1,1,!chao!) do echo.
+    )
+    echo =================================================================
+        
+    :: 6. AGUARDA O INPUT DO JOGADOR
+    :: O comando choice cria um menu interativo aguardando uma tecla [5]
+    choice /c WASD /n /m " Acao: "
+
+    :: 7. LÓGICA DE MOVIMENTAÇÃO (Da maior opção para a menor)
+    if errorlevel 4 goto :mover_direita
+    if errorlevel 3 goto :mover_baixo
+    if errorlevel 2 goto :mover_esquerda
+    if errorlevel 1 goto :mover_cima
+
+:: ==============================================
+:: LÓGICA DE LIMITES E MOVIMENTO
+:: ==============================================
+:mover_cima
+    :: Limite do teto do cenário
+    if %pos_y% GTR 0 set /a pos_y -= 1
+goto :tela_cidade2
+
+:mover_baixo
+    :: O lss verifica se o valor é "Menor Que" (Less Than) o limite [2]
+    if %pos_y% LSS 5 set /a pos_y += 1
+goto :tela_cidade2
+
+:mover_direita
+    :: Impede de ultrapassar o lado direito da tela
+    if %pos_x% LSS 50 set /a pos_x += 2
+goto :tela_cidade2
+
+:mover_esquerda
+    :: Impede de ultrapassar o lado esquerdo
+    if %pos_x% GTR 0 set /a pos_x -= 2
+goto :tela_cidade2
+
 exit
