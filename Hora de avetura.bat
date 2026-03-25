@@ -6,6 +6,7 @@ for /F %%a in ('echo prompt $E ^| cmd') do set "ESC=%%a"
 :: Variáveis de controle do personagem
 set /a pos_x = 5
 set /a pos_y = 1
+set /a cidade_atual=1
 
 :: ========================================================================
 :: MOTOR DE TEXTO HÍBRIDO (VBScript) - Geração do Arquivo
@@ -37,6 +38,64 @@ mode con: cols=94 lines=35
 
 goto :abertura
 goto :eof
+
+:: ========================================================================
+:: SISTEMA DE SAVE
+:: ========================================================================
+:salvar_jogo
+    cls
+    echo =========================================
+    echo         Salvando o progresso...
+    echo =========================================
+    
+    :: 1. DADOS DE MAPA E POSICAO (O primeiro usa > para resetar o arquivo)
+    echo set local_atual=%local_atual% > save.bat
+    echo set /a cidade_atual=%cidade_atual% >> save.bat
+    echo set /a pos_x=%pos_x% >> save.bat
+    echo set /a pos_y=%pos_y% >> save.bat
+    echo set /a visitou_cidade_1=%visitou_cidade_1% >> save.bat
+    
+    :: 2. STATUS DO PERSONAGEM (Texto com aspas, Numeros com /a)
+    echo set "nome_personagem=%nome_personagem%" >> save.bat
+    echo set "classe_personagem=%classe_personagem%" >> save.bat
+    echo set /a lvl_jogador=%lvl_jogador% >> save.bat
+    echo set /a xp_atual=%xp_atual% >> save.bat
+    echo set /a xp_proximo_lvl=%xp_proximo_lvl% >> save.bat
+    echo set /a hp_jogador=%hp_jogador% >> save.bat
+    echo set /a max_hp=%max_hp% >> save.bat
+    echo set /a forca_jogador=%forca_jogador% >> save.bat
+    echo set /a agil_jogador=%agil_jogador% >> save.bat
+    echo set /a def_jogador=%def_jogador% >> save.bat
+    echo set /a mana_jogador=%mana_jogador% >> save.bat
+    echo set /a max_mana=%max_mana% >> save.bat
+
+    :: 3. EQUIPAMENTOS
+    echo set /a armamento=%armamento% >> save.bat
+    echo set /a escudo=%escudo% >> save.bat
+    echo set /a armadura=%armadura% >> save.bat
+    echo set "nome_arma=%nome_arma%" >> save.bat
+    echo set "roupa=%roupa%" >> save.bat
+
+    :: 4. ITENS E INVENTARIO
+    echo set /a pocao_hp=%pocao_hp% >> save.bat
+    echo set /a pocao_mana=%pocao_mana% >> save.bat
+    echo set /a refeicao=%refeicao% >> save.bat
+    echo set /a ouro=%ouro% >> save.bat
+    echo set /a slot=%slot% >> save.bat
+    echo set /a qtd_itens=%qtd_itens% >> save.bat
+
+    :: 5. ATAQUES ESPECIAIS E PADRAO
+    echo set "atk_especial_1=%atk_especial_1%" >> save.bat
+    echo set "atk_especial_2=%atk_especial_2%" >> save.bat
+    echo set "atk_especial_3=%atk_especial_3%" >> save.bat
+    echo set "atk_padrao=%atk_padrao%" >> save.bat
+    
+    echo.
+    echo Jogo salvo com sucesso!
+    pause >nul
+    
+    :: Devolve o jogador pra tela em que ele estava
+    goto %local_atual% 
 
 :: ========================================================================
 :: LEVEL CHECK
@@ -604,7 +663,38 @@ pause > nul
 del "%temp%\sinal_neve.tmp" >nul 2>nul
 
 :: Avançar diretamente para o menu de heróis.
-goto :tela_selecao_aberto
+goto :verificar_save
+
+:: ========================================================================
+:: VERIFICA SAVE
+:: ========================================================================
+:verificar_save
+    cls
+    echo =========================================
+    echo             INICIANDO O JOGO...
+    echo =========================================
+        
+    :: Verifica se o arquivo save.bat existe na pasta [2, 4]
+    if exist save.bat (
+        echo.
+        echo Save encontrado! Carregando o seu progresso...
+            
+        :: Aguarda 2 segundos para o jogador ler a mensagem
+        ping 127.0.0.1 -n 3 >nul
+            
+        :: Executa o save para restaurar as variáveis
+        call save.bat
+        
+        :: Pula direto para a cena em que o jogador estava
+        goto !local_atual!
+    ) else (
+        echo.
+        echo Nenhum save encontrado. Iniciando uma nova jornada...
+        ping 127.0.0.1 -n 3 >nul
+            
+        :: Vai para a rotina que cria o personagem nível 1
+        goto :tela_selecao_aberto
+    )
 
 :: ========================================================================
 :: MOTOR DE NEVE (LINHA SECUNDÁRIA)
@@ -658,6 +748,7 @@ goto :tela_selecao_aberto
         pathping -n -q 1 -p 500 localhost >nul
 
     goto :snow_loop
+
 
 :: ========================================================================
 :: TELA DE SELEÇÃO DE PERSONAGEM
@@ -1381,18 +1472,39 @@ goto :tela_selecao_aberto
         echo  [3] Buscar informações sobre a floresta
         echo  [4] Investigar os desaparecimentos
         echo  [5] Buscar missões
-        echo  [6] Sair da taberna
-        echo.
+        if not exist save.bat (
+            echo  [6] Sair da taberna
+            echo.
 
-        choice /c 123456 /n /m " Fale logo o que vc quer e suma daqui: "
+            set local_atual=:cidade
 
-        if errorlevel 6 goto :%local%
-        if errorlevel 5 goto :missao
-        if errorlevel 4 goto :investigacao
-        if errorlevel 3 goto :informacao
-        if errorlevel 2 goto :menu_taberna
-        if errorlevel 1 goto :taverna_conversa
-        goto :taverna_padrao
+            choice /c 123456 /n /m " Fale logo o que vc quer e suma daqui: "
+
+            if errorlevel 6 goto :salvar_jogo
+            if errorlevel 5 goto :missao
+            if errorlevel 4 goto :investigacao
+            if errorlevel 3 goto :informacao
+            if errorlevel 2 goto :menu_taberna
+            if errorlevel 1 goto :taverna_conversa
+            goto :taverna_padrao
+        ) else (
+            echo  [6] Salvar o jogo
+            echo  [7] Sair da taberna
+            echo .
+
+            set local_atual=:cidade
+
+            choice /c 1234567 /n /m " Fale logo o que vc quer e suma daqui: "
+
+            if errorlevel 7 goto :cidade
+            if errorlevel 6 goto :salvar_jogo
+            if errorlevel 5 goto :missao
+            if errorlevel 4 goto :investigacao
+            if errorlevel 3 goto :informacao
+            if errorlevel 2 goto :menu_taberna
+            if errorlevel 1 goto :taverna_conversa
+            goto :taverna_padrao
+        )
         
         :missao
             echo Em breve...
@@ -1450,7 +1562,12 @@ goto :tela_selecao_aberto
             goto :taverna_padrao
 
     :cidade
+        if "%visitou_cidade_1%" equ "1" (
+            set local_atual=:tela_cidade
+            goto :tela_cidade
+        )
         cls
+        set /a visitou_cidade_1=1
         ::desenho da cidade aqui
         echo.
         echo  Você chega à cidade, um local pacífico cercado por uma floresta densa e misteriosa. 
@@ -1460,38 +1577,61 @@ goto :tela_selecao_aberto
         echo.
         echo                                                     (Pressione qualquer tecla para continuar)
         pause >nul
-    goto :
+    goto :tela_cidade
 
-:tela_cidade1
-    :: 0. VERIFICA EVENTOS DE POSIÇÃO (As portas do seu mapa)
-    :: Visualmente, a Taberna está na altura do X=27 ou 29, e Y=1
-    if "%pos_x%-%pos_y%" equ "25-0" goto :taverna_padrao
-    if "%pos_x%-%pos_y%" equ "26-0" goto :taverna_padrao
-    if "%pos_x%-%pos_y%" equ "51-1" goto :tela_cidade2
-    if "%pos_x%-%pos_y%" equ "51-2" goto :tela_cidade2
-    if "%pos_x%-%pos_y%" equ "51-3" goto :tela_cidade2
-    if "%pos_x%-%pos_y%" equ "51-4" goto :tela_cidade2
-    if "%pos_x%-%pos_y%" equ "51-5" goto :tela_cidade2
+:tela_cidade
+    :: 0. VERIFICA EVENTOS E TRANSIÇÕES DE MAPA
+    if "%cidade_atual%" equ "2" (
+        if "%pos_x%-%pos_y%" equ "25-0" goto :taverna_padrao
+        if "%pos_x%-%pos_y%" equ "26-0" goto :taverna_padrao
+    )
+    if "%cidade_atual%" equ "4" (
+        if "%pos_x%-%pos_y%" equ "25-0" goto :ferreiro
+        if "%pos_x%-%pos_y%" equ "26-0" goto :ferreiro
+    )
+    if "%cidade_atual%" equ "6" (
+        :: CIDADE 6: Se o jogador chegar na posição (25,0), ele entra na loja de poções
+        if "%pos_x%-%pos_y%" equ "25-0" goto :loja_pocoes
+        if "%pos_x%-%pos_y%" equ "26-0" goto :loja_pocoes
+    )
 
+    :: IR PARA A PRÓXIMA CIDADE 
+    if %pos_x% equ 51 (
+        if %pos_y% geq 0 if %pos_y% leq 6 (
+            set /a cidade_atual += 1
+            set /a pos_x = 1
+            goto :tela_cidade
+        )
+    )
+
+    :: VOLTAR PARA A CIDADE ANTERIOR 
+    if %pos_x% equ 0 (
+        if %cidade_atual% gtr 1 (
+            if %pos_y% geq 1 if %pos_y% leq 5 (
+                set /a cidade_atual -= 1
+                set /a pos_x = 50
+                goto :tela_cidade
+            )
+        )
+    )
+
+    :: =======================================================================
+    :: RENDERIZAÇÃO DA TELA
+    :: =======================================================================
     cls    
-    :: 1. DESENHA O TETO E O CENÁRIO DE FUNDO (ESTÁTICO)
-    :: Lembre-se que o caractere especial | (pipe) precisa ser escapado com ^ para virar ^| [3]
     echo =================================================================
     echo  Use [W] Cima, [S] Baixo, [A] Esquerda, [D] Direita
+    echo  [ HUD ] Local: Cidade !cidade_atual!  ^|  X:!pos_x! Y:!pos_y!
     echo =================================================================
     echo.
-    :: O cenário pode ser desenhado aqui, usando caracteres ASCII para criar o ambiente.
-    :: cenário precisa conter os cantos que o personagem não pode ultrapassar, como árvores, rochas, etc.
-    :: e os cantos que ele pode ir/entrar
+    
+    :: A MÁGICA ACONTECE AQUI: Ele vai lá no fundo do código, desenha e volta!
+    call :desenho_cidade_!cidade_atual!
 
-    :: 2. GERA AS LINHAS EM BRANCO (EIXO Y)
-    :: Isso empurra o personagem para baixo, afastando-o do cenário
     if %pos_y% GTR 0 (
-        :: O laço numérico for /l itera pelo intervalo para criar o espaço em Y [4]
         for /l %%i in (1,1,%pos_y%) do echo.
     )
 
-    :: 3. GERA OS ESPAÇOS EM BRANCO (EIXO X)
     set "espacos="
     if %pos_x% GTR 0 (
         for /l %%i in (1,1,%pos_x%) do (
@@ -1499,141 +1639,61 @@ goto :tela_selecao_aberto
         )
     )
 
-    :: 4. DESENHA O PERSONAGEM
-    :: O uso de ^ antes do | previne o erro de sintaxe do redirecionamento [3]
-    echo %espacos%   %s1%
-    echo %espacos%   %s2% 
-    echo %espacos%   %s3%
-    echo %espacos%   %s4%
-    echo %espacos%   %s5%
-        
-    :: 5. DESENHA O CHÃO INFERIOR (Fixo no final da tela livre)
-    :: Vamos calcular quantas linhas faltam para manter o chão sempre na mesma altura.
-    :: Digamos que a área de andar tem 6 linhas de altura máxima.
+    echo !espacos!   !s1!
+    echo !espacos!   !s2! 
+    echo !espacos!   !s3!
+    echo !espacos!   !s4!
+    echo !espacos!   !s5!
+
     set /a chao = 6 - pos_y
     if !chao! GTR 0 (
         for /l %%i in (1,1,!chao!) do echo.
     )
     echo =================================================================
-        
-    :: 6. AGUARDA O INPUT DO JOGADOR
-    :: O comando choice cria um menu interativo aguardando uma tecla [5]
     choice /c WASD /n /m " Acao: "
 
-    :: 7. LÓGICA DE MOVIMENTAÇÃO (Da maior opção para a menor)
     if errorlevel 4 goto :mover_direita
     if errorlevel 3 goto :mover_baixo
     if errorlevel 2 goto :mover_esquerda
     if errorlevel 1 goto :mover_cima
 
-:: ==============================================
-:: LÓGICA DE LIMITES E MOVIMENTO
-:: ==============================================
+:: (Rotinas de movimento)
 :mover_cima
-    :: Limite do teto do cenário
     if %pos_y% GTR 0 set /a pos_y -= 1
-goto :tela_cidade1
+goto :tela_cidade
 
 :mover_baixo
-    :: O lss verifica se o valor é "Menor Que" (Less Than) o limite [2]
     if %pos_y% LSS 5 set /a pos_y += 1
-goto :tela_cidade1
+goto :tela_cidade
 
 :mover_direita
-    :: Impede de ultrapassar o lado direito da tela
-    if %pos_x% LSS 50 set /a pos_x += 2
-goto :tela_cidade1
+    if %pos_x% LSS 51 set /a pos_x += 1
+goto :tela_cidade
 
 :mover_esquerda
-    :: Impede de ultrapassar o lado esquerdo
-    if %pos_x% GTR 0 set /a pos_x -= 2
-goto :tela_cidade1
+    if %pos_x% GTR 0 set /a pos_x -= 1
+goto :tela_cidade
 
-:tela_cidade2
-    :: 0. VERIFICA EVENTOS DE POSIÇÃO (As portas do seu mapa)
-    :: Visualmente, a Taberna está na altura do X=27 ou 29, e Y=1
-    if "%pos_x%-%pos_y%" equ "25-0" goto :taverna_padrao
-    if "%pos_x%-%pos_y%" equ "26-0" goto :taverna_padrao
-    if "%pos_x%-%pos_y%" equ "51-1" goto :tela_cidade3
-    if "%pos_x%-%pos_y%" equ "51-2" goto :tela_cidade3
-    if "%pos_x%-%pos_y%" equ "51-3" goto :tela_cidade3
-    if "%pos_x%-%pos_y%" equ "51-4" goto :tela_cidade3
-    if "%pos_x%-%pos_y%" equ "51-5" goto :tela_cidade3
-
-    cls    
-    :: 1. DESENHA O TETO E O CENÁRIO DE FUNDO (ESTÁTICO)
-    :: Lembre-se que o caractere especial | (pipe) precisa ser escapado com ^ para virar ^| [3]
-    echo =================================================================
-    echo  Use [W] Cima, [S] Baixo, [A] Esquerda, [D] Direita
-    echo =================================================================
-    echo.
-    :: O cenário pode ser desenhado aqui, usando caracteres ASCII para criar o ambiente.
-    :: cenário precisa conter os cantos que o personagem não pode ultrapassar, como árvores, rochas, etc.
-    :: e os cantos que ele pode ir/entrar
-
-    :: 2. GERA AS LINHAS EM BRANCO (EIXO Y)
-    :: Isso empurra o personagem para baixo, afastando-o do cenário
-    if %pos_y% GTR 0 (
-        :: O laço numérico for /l itera pelo intervalo para criar o espaço em Y [4]
-        for /l %%i in (1,1,%pos_y%) do echo.
-    )
-
-    :: 3. GERA OS ESPAÇOS EM BRANCO (EIXO X)
-    set "espacos="
-    if %pos_x% GTR 0 (
-        for /l %%i in (1,1,%pos_x%) do (
-            set "espacos=!espacos! "
-        )
-    )
-
-    :: 4. DESENHA O PERSONAGEM
-    :: O uso de ^ antes do | previne o erro de sintaxe do redirecionamento [3]
-    echo %espacos%   %s1%
-    echo %espacos%   %s2% 
-    echo %espacos%   %s3%
-    echo %espacos%   %s4%
-    echo %espacos%   %s5%
-        
-    :: 5. DESENHA O CHÃO INFERIOR (Fixo no final da tela livre)
-    :: Vamos calcular quantas linhas faltam para manter o chão sempre na mesma altura.
-    :: Digamos que a área de andar tem 6 linhas de altura máxima.
-    set /a chao = 6 - pos_y
-    if !chao! GTR 0 (
-        for /l %%i in (1,1,!chao!) do echo.
-    )
-    echo =================================================================
-        
-    :: 6. AGUARDA O INPUT DO JOGADOR
-    :: O comando choice cria um menu interativo aguardando uma tecla [5]
-    choice /c WASD /n /m " Acao: "
-
-    :: 7. LÓGICA DE MOVIMENTAÇÃO (Da maior opção para a menor)
-    if errorlevel 4 goto :mover_direita
-    if errorlevel 3 goto :mover_baixo
-    if errorlevel 2 goto :mover_esquerda
-    if errorlevel 1 goto :mover_cima
+exit
 
 :: ==============================================
-:: LÓGICA DE LIMITES E MOVIMENTO
+:: BANCO DE CENÁRIOS DAS CIDADES (SEMPRE NO FINAL DO ARQUIVO)
 :: ==============================================
-:mover_cima
-    :: Limite do teto do cenário
-    if %pos_y% GTR 0 set /a pos_y -= 1
-goto :tela_cidade2
 
-:mover_baixo
-    :: O lss verifica se o valor é "Menor Que" (Less Than) o limite [2]
-    if %pos_y% LSS 5 set /a pos_y += 1
-goto :tela_cidade2
+:desenho_cidade_1
+    :: O desenho da primeira cidade (Vila Inicial)
+    echo        /\                 _^\^|/_
+    echo       /  \      /\         / \
+    echo      /____\    /  \        (25, 0)
+    echo      ^|    ^|   /____\     Taberna [ ] 
+    goto :eof
 
-:mover_direita
-    :: Impede de ultrapassar o lado direito da tela
-    if %pos_x% LSS 50 set /a pos_x += 2
-goto :tela_cidade2
-
-:mover_esquerda
-    :: Impede de ultrapassar o lado esquerdo
-    if %pos_x% GTR 0 set /a pos_x -= 2
-goto :tela_cidade2
+:desenho_cidade_2
+    :: O desenho da segunda cidade (Capital)
+    echo     /\/\/\                 _^\^|/_
+    echo    /      \      /\         / \
+    echo   /        \    /  \      (25, 0)
+    echo  /__________\  /____\   Ferreiro [ ]
+    goto :eof
 
 exit

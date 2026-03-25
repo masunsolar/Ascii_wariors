@@ -29,6 +29,9 @@ set /a cidade_atual=1
         if "%pos_x%-%pos_y%" equ "26-0" goto :ferreiro
     )
     if "%cidade_atual%" equ "6" (
+        :: CIDADE 6: Se o jogador chegar na posição (25,0), ele entra na loja de poções
+        if "%pos_x%-%pos_y%" equ "25-0" goto :loja_pocoes
+        if "%pos_x%-%pos_y%" equ "26-0" goto :loja_pocoes
     )
 
     :: IR PARA A PRÓXIMA CIDADE 
