@@ -89,7 +89,21 @@ goto :eof
     echo set "atk_especial_2=%atk_especial_2%" >> save.bat
     echo set "atk_especial_3=%atk_especial_3%" >> save.bat
     echo set "atk_padrao=%atk_padrao%" >> save.bat
-    
+
+    :: 6. SPRITES (Essencial para manter o personagem igual ao salvar)
+    echo set "s1=!s1!" >> save.bat
+    echo set "s2=!s2!" >> save.bat
+    echo set "s3=!s3!" >> save.bat
+    echo set "s4=!s4!" >> save.bat
+    echo set "s5=!s5!" >> save.bat
+
+    echo set "sp1=!sp1!" >> save.bat
+    echo set "sp2=!sp2!" >> save.bat
+    echo set "sp3=!sp3!" >> save.bat
+    echo set "sp4=!sp4!" >> save.bat
+    echo set "sp5=!sp5!" >> save.bat
+
+
     echo.
     echo Jogo salvo com sucesso!
     pause >nul
@@ -710,12 +724,12 @@ goto :verificar_save
         cls
 
         :: 1. GERAR NOVA LINHA (O TOPO)
-        set "newLine=     "
-        for /l %%i in (1,1,17) do (
-            set /a "r=!random! %% 15"
-            if !r! equ 0 (set "newLine=!newLine!  * ") else (
-                if !r! equ 1 (set "newLine=!newLine!  .  ") else (
-                    set "newLine=!newLine!     "
+        set "newLine= "
+        for /l %%i in (1,1,46) do (
+            set /a "r=!random! %% 25"
+            if !r! equ 0 (set "newLine=!newLine! *") else (
+                if !r! equ 1 (set "newLine=!newLine! .") else (
+                    set "newLine=!newLine!  "
                 )
             )
         )
@@ -742,7 +756,7 @@ goto :verificar_save
         echo                                   Press any key to start...                                  
 
         :: 4. RENDERIZAÇÃO DA PARTE INFERIOR (Linhas 24 a 35)
-        for /l %%l in (24,1,35) do echo.!L%%l!
+        for /l %%l in (24,1,34) do echo.!L%%l!
 
         :: 5. CONTROLE DE VELOCIDADE
         pathping -n -q 1 -p 500 localhost >nul
@@ -990,6 +1004,17 @@ goto :verificar_save
     set "s3= ( o.o)┃   "
     set "s4= /(__)/┃   "
     set "s5=  /  \ ┃   "
+    set "sp1=    /\      "
+    set "sp2=┏┓_/__\_  "
+    set "sp3= ┃(o.o )   "
+    set "sp4= ┃\(__)\   "
+    set "sp5= ┃ /  \    "
+
+    set "spr1=!s1!"
+    set "spr2=!s2!"
+    set "spr3=!s3!"
+    set "spr4=!s4!"
+    set "spr5=!s5!"
     goto :confirmacao
 
 :sprite_sara
@@ -998,6 +1023,12 @@ goto :verificar_save
     set "s3= /^|__^|\_┃ "
     set "s4=  [__]  ┃  "
     set "s5=  /  \     "
+
+    set "spr1=!s1!"
+    set "spr2=!s2!"
+    set "spr3=!s3!"
+    set "spr4=!s4!"
+    set "spr5=!s5!"
     goto :confirmacao
 
 :sprite_soso
@@ -1006,6 +1037,12 @@ goto :verificar_save
     set "s3=    (¬_¬)    "
     set "s4= ━┫╸━}_{━╺┣━"
     set "s5=    _/ \_    "
+
+    set "spr1=!s1!"
+    set "spr2=!s2!"
+    set "spr3=!s3!"
+    set "spr4=!s4!"
+    set "spr5=!s5!"
     goto :confirmacao
 
 :: ==========================================
@@ -1078,12 +1115,12 @@ goto :verificar_save
             cls
 
             :: 1. GERAR NOVA LINHA DE NEVE
-            set "newLine=     "
-            for /l %%i in (1,1,17) do (
-                set /a "r=!random! %% 15"
-                if !r! equ 0 (set "newLine=!newLine!  * ") else (
-                    if !r! equ 1 (set "newLine=!newLine!  .  ") else (
-                        set "newLine=!newLine!     "
+            set "newLine= "
+            for /l %%i in (1,1,47) do (
+                set /a "r=!random! %% 25"
+                if !r! equ 0 (set "newLine=!newLine!  *") else (
+                    if !r! equ 1 (set "newLine=!newLine! .") else (
+                        set "newLine=!newLine!  "
                     )
                 )
             )
@@ -1319,12 +1356,12 @@ goto :verificar_save
     :cena_vila_frame1
         cls
         echo.
-        echo   _       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
-        echo   u\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
+        echo ___       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
+        echo uuu\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
         echo   ┃ /\// ┃  ______    ┃  ┃┃  _  /\  ┃    ┃  ___  ____ ┃ ┃ ___ _/  \  ┃┃  ┃ ____ _____ ┃ \\ ┃ ┃
         echo   ┃/  \ ┃┃  ┃ \o/┃    ┃  ┃┃ ┃_┃/__\ ┃    ┃ ┃___┃ ┃  ┃ ┃ ┃ ┃_┃ ┃/__\  ┃┃  ┃ ┃  ┃ ┃ ┃ ┃ ┃┃   ┃ ┃
-        echo  _┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
-        echo  ___┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
+        echo __┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
+        echo ____┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
         echo                                         o        \┃/
         echo           \┃/           \o             /┃\                                 \┃/    
         echo                          ┃\            / \                        o     \┃/
@@ -1341,12 +1378,12 @@ goto :verificar_save
     :cena_vila_frame2
         cls
         echo.
-        echo   _       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
-        echo   u\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
+        echo ___       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
+        echo uuu\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
         echo   ┃ /\// ┃  ______    ┃  ┃┃  _  /\  ┃    ┃  ___  ____ ┃ ┃ ___ _/  \  ┃┃  ┃ ____ _____ ┃ \\ ┃ ┃
         echo   ┃/  \ ┃┃  ┃ \o/┃    ┃  ┃┃ ┃_┃/__\ ┃    ┃ ┃___┃ ┃  ┃ ┃ ┃ ┃_┃ ┃/__\  ┃┃  ┃ ┃  ┃ ┃ ┃ ┃ ┃┃   ┃ ┃
-        echo  _┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
-        echo  ___┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
+        echo __┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
+        echo ____┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
         echo                                       __o__      \┃/
         echo           \┃/            o/             ┃                                  \┃/    
         echo                         /┃             / \                        o     \┃/       
@@ -1363,12 +1400,12 @@ goto :verificar_save
     :cena_vila_frame3
         cls
         echo.
-        echo   _       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
-        echo   u\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
+        echo ___       /UUUUUUUUUU\    ___________     /UUUUUUUUUU\  __________    ____/UUUUUUUUUU\     ___
+        echo uuu\   //UUUUUUUUUUUUUU\ /uuuuuuuuuuu\  /UUUUUUUUUUUUUU\uuuuuuu /\  /uuu/UUUUUUUUUUUUUU\\ /uuu
         echo   ┃ /\// ┃  ______    ┃  ┃┃  _  /\  ┃    ┃  ___  ____ ┃ ┃ ___ _/  \  ┃┃  ┃ ____ _____ ┃ \\ ┃ ┃
         echo   ┃/  \ ┃┃  ┃ \o/┃    ┃  ┃┃ ┃_┃/__\ ┃    ┃ ┃___┃ ┃  ┃ ┃ ┃ ┃_┃ ┃/__\  ┃┃  ┃ ┃  ┃ ┃ ┃ ┃ ┃┃   ┃ ┃
-        echo  _┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
-        echo  ___┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
+        echo __┃/__\_┃┃  ┃__┃_┃    ┃__\┃_____┃┃__┃____┃       ┃  ┃ ┃_┃_____┃┃┃┃___\┃__┃ ┃  ┃ ┃_┃_┃ ┃┃___\_┃
+        echo ____┃┃__\┃____________┃_________┃┃_______┃_______┃__┃_┃_________┃┃_______┃_┃__┃_______┃/______
         echo                                         o        \┃/
         echo           \┃/           \o             /┃\                                 \┃/ 
         echo                          ┃\            / \                       \o/    \┃/
@@ -1490,13 +1527,13 @@ goto :verificar_save
         ) else (
             echo  [6] Salvar o jogo
             echo  [7] Sair da taberna
-            echo .
+            echo.
 
             set local_atual=:cidade
 
             choice /c 1234567 /n /m " Fale logo o que vc quer e suma daqui: "
 
-            if errorlevel 7 goto :cidade
+            if errorlevel 7 goto :sair_taverna
             if errorlevel 6 goto :salvar_jogo
             if errorlevel 5 goto :missao
             if errorlevel 4 goto :investigacao
@@ -1505,6 +1542,11 @@ goto :verificar_save
             if errorlevel 1 goto :taverna_conversa
             goto :taverna_padrao
         )
+
+        :sair_taberna
+            :: Empurra o jogador uma casa para baixo para sair da porta
+            set /a pos_y=1
+            goto :tela_cidade
         
         :missao
             echo Em breve...
@@ -1639,11 +1681,11 @@ goto :verificar_save
         )
     )
 
-    echo !espacos!   !s1!
-    echo !espacos!   !s2! 
-    echo !espacos!   !s3!
-    echo !espacos!   !s4!
-    echo !espacos!   !s5!
+    echo !espacos!   !spr1!
+    echo !espacos!   !spr2! 
+    echo !espacos!   !spr3!
+    echo !espacos!   !spr4!
+    echo !espacos!   !spr5!
 
     set /a chao = 6 - pos_y
     if !chao! GTR 0 (
@@ -1667,10 +1709,20 @@ goto :tela_cidade
 goto :tela_cidade
 
 :mover_direita
+    set "spr1=!s1!"
+    set "spr2=!s2!"
+    set "spr3=!s3!"
+    set "spr4=!s4!"
+    set "spr5=!s5!"
     if %pos_x% LSS 51 set /a pos_x += 1
 goto :tela_cidade
 
 :mover_esquerda
+    set "spr1=!sp1!"
+    set "spr2=!sp2!"
+    set "spr3=!sp3!" 
+    set "spr4=!sp4!"
+    set "spr5=!sp5!"
     if %pos_x% GTR 0 set /a pos_x -= 1
 goto :tela_cidade
 
