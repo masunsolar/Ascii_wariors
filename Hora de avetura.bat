@@ -1509,6 +1509,7 @@ goto :verificar_save
         echo  [3] Buscar informações sobre a floresta
         echo  [4] Investigar os desaparecimentos
         echo  [5] Buscar missões
+
         if not exist save.bat (
             echo  [6] Sair da taberna
             echo.
@@ -1545,17 +1546,17 @@ goto :verificar_save
             
         )
         
-        :missao
+    :missao
             echo Em breve...
             pause
             goto :taverna_padrao
 
-        :investigacao
+    :investigacao
             echo Voce olha em volta... nada ainda.
             pause
             goto :taverna_padrao
 
-        :informacao
+    :informacao
             cls
             ::desenho de uma mesa com um cara sentado aqui
             echo.
@@ -1582,7 +1583,7 @@ goto :verificar_save
             pause >nul
             goto :taverna_padrao
 
-        :taverna_conversa
+    :taverna_conversa
             cls
             ::desenho de uma mesa com um cara sentado aqui
             echo.
@@ -1600,10 +1601,10 @@ goto :verificar_save
             pause >nul
             goto :taverna_padrao
 
-        :sair_taberna
-            :: Empurra o jogador uma casa para baixo para sair da porta
-            set /a pos_y=2
-            goto :tela_cidade
+    :sair_taverna
+        :: Empurra o jogador uma casa para baixo para sair da porta
+        set /a pos_y=2
+        goto :tela_cidade
 
     :cidade
         if "%visitou_cidade_1%" equ "1" (
