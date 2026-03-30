@@ -1541,12 +1541,9 @@ goto :verificar_save
             if errorlevel 2 goto :menu_taberna
             if errorlevel 1 goto :taverna_conversa
             goto :taverna_padrao
+            
+            
         )
-
-        :sair_taberna
-            :: Empurra o jogador uma casa para baixo para sair da porta
-            set /a pos_y=1
-            goto :tela_cidade
         
         :missao
             echo Em breve...
@@ -1602,6 +1599,11 @@ goto :verificar_save
             echo                                                     (Pressione qualquer tecla para continuar)
             pause >nul
             goto :taverna_padrao
+
+        :sair_taberna
+            :: Empurra o jogador uma casa para baixo para sair da porta
+            set /a pos_y=2
+            goto :tela_cidade
 
     :cidade
         if "%visitou_cidade_1%" equ "1" (

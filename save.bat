@@ -1,8 +1,8 @@
 set local_atual=:cidade 
-set /a cidade_atual=2 
-set /a pos_x=25 
-set /a pos_y=0 
-set /a visitou_cidade_1=1 
+set /a cidade_atual=1 
+set /a pos_x=5 
+set /a pos_y=1 
+set /a visitou_cidade_1= 
 set "nome_personagem=Tulio" 
 set "classe_personagem=O Mago" 
 set /a lvl_jogador=1 
