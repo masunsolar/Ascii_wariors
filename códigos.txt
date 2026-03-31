@@ -80,3 +80,56 @@ pause
 :: Se ainda tiver XP suficiente para outro level up, repete o processo
 if %xp_atual% geq %xp_proximo_lvl% goto :level_up
 goto :menu_principal
+
+
+
+
+2. Como Chamar os Inimigos no Jogo
+Quando você estiver desenhando o seu mapa ou fazendo um evento de história, você usará o comando call
+ seguido do nome do monstro. O comando call vai até o bestiário, lê a ficha, e volta para a linha seguinte instantaneamente
+. Depois disso, você usa o goto para mandar o jogador para a tela do motor de combate.
+Exemplo A: Encontro Fixo (Boss) Se o jogador entrar em uma sala específica e um chefe aparecer:
+:evento_taiven
+    cls
+    echo O chao treme. As chamas se erguem ao seu redor!
+    echo Taiven bloqueia o seu caminho e da um sorriso diabolico.
+    pause >nul
+    
+    :: 1. Carrega a ficha do Taiven na memoria usando CALL
+    call :spawn_taiven
+    
+    :: 2. Manda o jogador para o motor de combate
+    goto :iniciar_combate
+Exemplo B: Encontro Aleatório no Mapa Se o Túlio estiver andando na floresta e você quiser sortear um monstro usando a ferramenta %random% do Windows combinada com a operação módulo (%%)
+:
+:floresta_encontro_aleatorio
+    cls
+    echo Voce escuta um barulho nos arbustos...
+    ping 127.0.0.1 -n 2 >nul
+    
+    :: Gera um numero entre 0 e 1 (50% de chance para cada)
+    set /a sorteio=!random! %% 2
+    
+    if !sorteio! equ 0 (
+        :: Carrega o Goblin se rolar 0
+        call :spawn_goblin
+    ) else (
+        :: Carrega a Aranha se rolar 1
+        call :spawn_aranha
+    )
+    
+    :: Vai para o combate. Como o Call ja preencheu as variaveis "ini_", 
+    :: o motor de combate ja sabe contra quem o Tulio vai lutar!
+    goto :iniciar_combate
+3. Como o Combate Entende Isso?
+Como você carregou as variáveis com o prefixo ini_, o seu código de combate não precisa saber exatamente qual monstro é, ele só precisa ler as variáveis de forma universal.
+Lá no seu :iniciar_combate, você pode fazer a tela de introdução assim:
+:iniciar_combate
+    cls
+    echo ==============================================
+    echo  UM INIMIGO APARECEU: %ini_nome%
+    echo  HP: %ini_hp% / %ini_max_hp%
+    echo ==============================================
+    echo.
+    echo O que o Tulio vai fazer?
+    :: (Resto do menu de combate)

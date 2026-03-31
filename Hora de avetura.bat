@@ -40,6 +40,81 @@ goto :abertura
 goto :eof
 
 :: ========================================================================
+:: BESTIÁRIO (FICHAS DOS INIMIGOS)
+:: ========================================================================
+:spawn_goblin
+    set "ini_nome=Goblin Fraco"
+    set /a ini_hp=12
+    set /a ini_max_hp=12
+    set /a ini_agil=10
+    :: Dano: 2d6
+    set /a ini_dado_qtd=2
+    set /a ini_dado_faces=6
+    set /a ini_dano_bonus=0
+    :: Status
+    set /a ini_veneno_dano=0
+    set /a ini_veneno_turnos=0
+goto :eof
+
+:spawn_goblin_max
+    set "ini_nome=Goblin forte"
+    set /a ini_hp=48
+    set /a ini_max_hp=48
+    set /a ini_agil=14
+    :: Dano: 2d6
+    set /a ini_dado_qtd=3
+    set /a ini_dado_faces=8
+    set /a ini_dano_bonus=4
+    :: Status
+    set /a ini_veneno_dano=0
+    set /a ini_veneno_turnos=0
+goto :eof
+
+:spawn_aranha
+    set "ini_nome=Aranha Gigante da Floresta"
+    set /a ini_hp=35
+    set /a ini_max_hp=35
+    set /a ini_agil=14
+    :: Dano: 3d8+2
+    set /a ini_dado_qtd=3
+    set /a ini_dado_faces=8
+    set /a ini_dano_bonus=2
+    :: Status: Veneno 2 de dano por 3 turnos
+    set /a ini_veneno_dano=2
+    set /a ini_veneno_turnos=3
+goto :eof
+
+:spawn_sucuri
+    set "ini_nome=Sucuri"
+    set /a ini_hp=40
+    set /a ini_max_hp=40
+    set /a ini_agil=16
+    :: Dano: 3d8+2
+    set /a ini_dado_qtd=1
+    set /a ini_dado_faces=4
+    set /a ini_dano_bonus=2
+    :: Status: Veneno 2 de dano por 3 turnos
+    set /a ini_veneno_dano=3
+    set /a ini_veneno_turnos=3
+goto :eof
+
+:spawn_taiven
+    set "ini_nome=Taiven (Demonio)"
+    set /a ini_hp=150
+    set /a ini_max_hp=150
+    set /a ini_agil=15
+    :: Dano: 4d8+4
+    set /a ini_dado_qtd=4
+    set /a ini_dado_faces=8
+    set /a ini_dano_bonus=4
+    :: Especial e Status
+    set "ini_especial_nome=Pilar de Fogo"
+    set /a ini_esp_dado_qtd=3
+    set /a ini_esp_dado_faces=20
+    set /a ini_veneno_dano=0
+    set /a ini_veneno_turnos=0
+goto :eof
+:: ========================================================================
 :: SISTEMA DE SAVE
 :: ========================================================================
 :salvar_jogo
@@ -53,7 +128,7 @@ goto :eof
     echo set /a cidade_atual=%cidade_atual% >> save.bat
     echo set /a pos_x=%pos_x% >> save.bat
     echo set /a pos_y=%pos_y% >> save.bat
-    echo set /a visitou_cidade_1=%visitou_cidade_1% >> save.bat
+    echo set /a visitou_cidade=1>> save.bat
     
     :: 2. STATUS DO PERSONAGEM (Texto com aspas, Numeros com /a)
     echo set "nome_personagem=%nome_personagem%" >> save.bat
@@ -103,6 +178,11 @@ goto :eof
     echo set "sp4=!sp4!" >> save.bat
     echo set "sp5=!sp5!" >> save.bat
 
+    echo set "spr1=!spr1!" >> save.bat
+    echo set "spr2=!spr2!" >> save.bat
+    echo set "spr3=!spr3!" >> save.bat
+    echo set "spr4=!spr4!" >> save.bat
+    echo set "spr5=!spr5!" >> save.bat
 
     echo.
     echo Jogo salvo com sucesso!
@@ -125,23 +205,33 @@ goto :eof
     echo ===========================================
 
 :: ========================================================================
-:: Dados
+:: MOTOR DE COMBATE (ROLA QUALQUER DADO)
 :: ========================================================================
 :combat_engine
+    :: Inicia o dano em 0
     set /a resultado_jogada=0
-    set /a quantidade_dados=qd_jogador
+    
+    :: Se a quantidade de dados for 0 (ex: Javali com dano fixo 8), pula o loop
+    if %quantidade_dados% equ 0 goto :fim_rolagem
 
     :while_dados
     if %quantidade_dados% gtr 0 (
-        :: %random% gera de 0 a 32767. O %% d pega o resto da divisão.
-        set /a dado=!random! %% d + 1
+        :: %random% gera de 0 a 32767. O %% faces pega o resto da divisão.
+        set /a dado=!random! %% faces + 1
         set /a resultado_jogada+=dado
         set /a quantidade_dados-=1
         
         :: Volta para o teste do 'if' (isso cria o loop)
         goto :while_dados
     )
-    
+
+    :fim_rolagem
+    :: Adiciona o bônus final (ex: o +2 da Aranha no 2d8+2)
+    set /a resultado_jogada+=dano_bonus
+
+    :: O comando goto :eof devolve o jogo para a linha exata que o chamou [11, 12]
+    goto :eof
+
 :: ========================================================================
 :: SISTEMA DE MERCADO MAGO
 :: ========================================================================
@@ -999,6 +1089,7 @@ goto :verificar_save
     goto :confirmacao
 
 :sprite_tulio
+    set /a visitou_cidade=0
     set "s1=   /\      "
     set "s2= _/__\_┏┓  "
     set "s3= ( o.o)┃   "
@@ -1010,39 +1101,41 @@ goto :verificar_save
     set "sp4= ┃\(__)\   "
     set "sp5= ┃ /  \    "
 
-    set "spr1=!s1!"
-    set "spr2=!s2!"
-    set "spr3=!s3!"
-    set "spr4=!s4!"
-    set "spr5=!s5!"
+    set "spr1=%s1%"
+    set "spr2=%s2%"
+    set "spr3=%s3%"
+    set "spr4=%s4%"
+    set "spr5=%s5%"
     goto :confirmacao
 
 :sprite_sara
+    set /a visitou_cidade=0
     set "s1=  _/\_  ┳━┓"
     set "s2= ( o¬o)┣┃━┛ "
     set "s3= /^|__^|\_┃ "
     set "s4=  [__]  ┃  "
     set "s5=  /  \     "
 
-    set "spr1=!s1!"
-    set "spr2=!s2!"
-    set "spr3=!s3!"
-    set "spr4=!s4!"
-    set "spr5=!s5!"
+    set "spr1=%s1%"
+    set "spr2=%s2%"
+    set "spr3=%s3%"
+    set "spr4=%s4%"
+    set "spr5=%s5%"
     goto :confirmacao
 
 :sprite_soso
+    set /a visitou_cidade=0
     set "s1=      .     "
     set "s2=     /_\   "
     set "s3=    (¬_¬)    "
     set "s4= ━┫╸━}_{━╺┣━"
     set "s5=    _/ \_    "
 
-    set "spr1=!s1!"
-    set "spr2=!s2!"
-    set "spr3=!s3!"
-    set "spr4=!s4!"
-    set "spr5=!s5!"
+    set "spr1=%s1%"
+    set "spr2=%s2%"
+    set "spr3=%s3%"
+    set "spr4=%s4%"
+    set "spr5=%s5%"
     goto :confirmacao
 
 :: ==========================================
@@ -1530,7 +1623,7 @@ goto :verificar_save
             echo  [7] Sair da taberna
             echo.
 
-            set local_atual=:cidade
+            set local_atual=:taverna_padrao
 
             choice /c 1234567 /n /m " Fale logo o que vc quer e suma daqui: "
 
@@ -1607,12 +1700,12 @@ goto :verificar_save
         goto :tela_cidade
 
     :cidade
-        if "%visitou_cidade_1%" equ "1" (
+        if "%visitou_cidade%" equ "1" (
             set local_atual=:tela_cidade
             goto :tela_cidade
         )
         cls
-        set /a visitou_cidade_1=1
+        set /a visitou_cidade=1
         ::desenho da cidade aqui
         echo.
         echo  Você chega à cidade, um local pacífico cercado por uma floresta densa e misteriosa. 
