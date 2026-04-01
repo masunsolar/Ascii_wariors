@@ -47,9 +47,23 @@ goto :eof
     set /a ini_hp=12
     set /a ini_max_hp=12
     set /a ini_agil=10
-    :: Dano: 2d6
+    :: Dano: 2d6 (media: 7)
     set /a ini_dado_qtd=2
     set /a ini_dado_faces=6
+    set /a ini_dano_bonus=0
+    :: Status
+    set /a ini_veneno_dano=0
+    set /a ini_veneno_turnos=0
+goto :eof
+
+:spawn_javali
+    set "ini_nome=Javali de gelo"
+    set /a ini_hp=12
+    set /a ini_max_hp=20
+    set /a ini_agil=12
+    :: Dano: 2d8 (media: 10)
+    set /a ini_dado_qtd=4
+    set /a ini_dado_faces=4
     set /a ini_dano_bonus=0
     :: Status
     set /a ini_veneno_dano=0
@@ -61,7 +75,7 @@ goto :eof
     set /a ini_hp=48
     set /a ini_max_hp=48
     set /a ini_agil=14
-    :: Dano: 2d6
+    :: Dano: 3d8+4 (media: 18)
     set /a ini_dado_qtd=3
     set /a ini_dado_faces=8
     set /a ini_dano_bonus=4
@@ -75,7 +89,7 @@ goto :eof
     set /a ini_hp=35
     set /a ini_max_hp=35
     set /a ini_agil=14
-    :: Dano: 3d8+2
+    :: Dano: 3d8+2 (media: 15)
     set /a ini_dado_qtd=3
     set /a ini_dado_faces=8
     set /a ini_dano_bonus=2
@@ -84,12 +98,12 @@ goto :eof
     set /a ini_veneno_turnos=3
 goto :eof
 
-:spawn_sucuri
-    set "ini_nome=Sucuri"
+:spawn_cobra
+    set "ini_nome=cobra venenosa"
     set /a ini_hp=40
     set /a ini_max_hp=40
     set /a ini_agil=16
-    :: Dano: 3d8+2
+    :: Dano: 3d8+2 (media: 2)
     set /a ini_dado_qtd=1
     set /a ini_dado_faces=4
     set /a ini_dano_bonus=2
@@ -103,13 +117,49 @@ goto :eof
     set /a ini_hp=150
     set /a ini_max_hp=150
     set /a ini_agil=15
-    :: Dano: 4d8+4
+    :: Dano: 4d8+4 (media: 22)
     set /a ini_dado_qtd=4
     set /a ini_dado_faces=8
     set /a ini_dano_bonus=4
     :: Especial e Status
     set "ini_especial_nome=Pilar de Fogo"
+    :: Dano: 3d20 (media: 31)
     set /a ini_esp_dado_qtd=3
+    set /a ini_esp_dado_faces=20
+    set /a ini_veneno_dano=0
+    set /a ini_veneno_turnos=0
+goto :eof
+
+:spawn_orum
+    set "ini_nome=Orum (Demonio)"
+    set /a ini_hp=125
+    set /a ini_max_hp=125
+    set /a ini_agil=20
+    :: Dano: 3d12+4 (media: 23)
+    set /a ini_dado_qtd=3
+    set /a ini_dado_faces=12
+    set /a ini_dano_bonus=4
+    :: Especial e Status
+    set "ini_especial_nome=fogo vampirico"
+    :: Dano: 2d20 (media: 21 + roubo de vida)
+    set /a ini_esp_dado_qtd=2
+    set /a ini_esp_dado_faces=20
+    set /a ini_veneno_dano=%ini_esp_dado_faces%/3 & :: mudar o conceito de dano de veneno pra vampirico, que rouba vida ao invés de causar dano direto
+    set /a ini_veneno_turnos=2
+
+:spawn_trediron
+    set "ini_nome=Trediron (General demonio)"
+    set /a ini_hp=200
+    set /a ini_max_hp=200
+    set /a ini_agil=20
+    :: Dano: 4d12+8 (media: 34)
+    set /a ini_dado_qtd=4
+    set /a ini_dado_faces=12
+    set /a ini_dano_bonus=8
+    :: Especial e Status
+    set "ini_especial_nome=semnome"
+    :: Dano: 3d20 (media: 42)
+    set /a ini_esp_dado_qtd=4
     set /a ini_esp_dado_faces=20
     set /a ini_veneno_dano=0
     set /a ini_veneno_turnos=0
