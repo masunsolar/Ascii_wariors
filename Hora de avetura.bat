@@ -146,6 +146,7 @@ goto :eof
     set /a ini_esp_dado_faces=20
     set /a ini_veneno_dano=%ini_esp_dado_faces%/3 & :: mudar o conceito de dano de veneno pra vampirico, que rouba vida ao invés de causar dano direto
     set /a ini_veneno_turnos=2
+goto :eof
 
 :spawn_trediron
     set "ini_nome=Trediron (General demonio)"
@@ -245,19 +246,84 @@ goto :eof
 :: LEVEL CHECK
 :: ========================================================================
 :level_check
-    echo ===========================================
-    echo         STATUS DE %nome_personagem% (%classe_personagem%)
-    echo ===========================================
-    echo  LVL: %lvl_jogador%  ^|  XP: %xp_atual%/%xp_proximo_lvl%
-    echo  HP:  %hp_jogador%/%max_hp%
-    echo  MANA: %mana_jogador%/%max_mana%
-    echo  FOR: %forca_jogador%  ^|  AGI: %agil_jogador%  ^|  DEF: %def_jogador%
-    echo ===========================================
+    :: Se a XP atual for maior ou igual a necessária, ele sobe de nível
+    if %xp_atual% GEQ %xp_proximo_lvl% (
+        
+        :: Deduz a XP usada e sobe 1 Level
+        set /a xp_atual -= xp_proximo_lvl
+        set /a lvl_jogador += 1
+        
+        :: Aumenta a exigência de XP para o próximo nível em 50%
+        :: (Multiplica por 15 e divide por 10, porque Batch não aceita números quebrados como 1.5)
+        set /a xp_proximo_lvl = (xp_proximo_lvl * 15) / 10
+
+        :: Sobe os status usando as taxas individuais do personagem escolhido!
+        set /a max_hp += cresc_hp
+        set /a hp_jogador = max_hp  :: Recupera o HP ao upar!
+        set /a max_mana += cresc_mana
+        set /a mana_jogador = max_mana
+        
+        set /a forca_jogador += cresc_for
+        set /a agil_jogador += cresc_agi
+        set /a def_jogador += cresc_def
+
+        if "%nome_personagem%" equ "Tulio" (
+            ::Crescimento por nível::
+            set /a cresc_hp=3
+            set /a cresc_mana=10
+            set /a cresc_for=1
+            set /a cresc_agi=2
+            set /a cresc_def=1
+        )
+        if "%nome_personagem%" equ "Sara" (
+            ::Crescimento por nível::
+            set /a cresc_hp=3
+            set /a cresc_mana=10
+            set /a cresc_for=1
+            set /a cresc_agi=2
+            set /a cresc_def=1
+        )
+        if "%nome_personagem%" equ"Soso"(
+            ::Crescimento por nível::
+            set /a cresc_hp=3
+            set /a cresc_mana=10
+            set /a cresc_for=1
+            set /a cresc_agi=2
+            set /a cresc_def=1
+        )
+
+        cls
+        color 0E
+        echo ===========================================
+        echo             LEVEL UP! NIVEL %lvl_jogador%
+        echo ===========================================
+        echo  Seus atributos aumentaram!
+        echo  HP MAX: %max_hp%
+        echo  MANA MAX: %max_mana%
+        echo  FOR: %forca_jogador% ^| AGI: %agil_jogador% ^| DEF: %def_jogador%
+        
+        :: Verifica se aprendeu algo novo nesse exato nível
+        if %lvl_jogador% equ %unlock_esp1% echo  * NOVA HABILIDADE: %atk_especial_1% *
+        if %lvl_jogador% equ %unlock_esp2% echo  * NOVA HABILIDADE: %atk_especial_2% *
+        if %lvl_jogador% equ %unlock_esp3% echo  * NOVA HABILIDADE: %atk_especial_3% *
+        
+        echo ===========================================
+        pause >nul
+        color 07
+
+        :: Um loop de segurança usando GOTO [9]:
+        :: Volta pro começo da rotina. Vai que ele ganhou muita XP
+        :: e precisa subir 2 ou 3 níveis de uma vez só!
+        goto :level_check
+    )
+
+:: Quando ele não tiver mais XP para subir, o script encerra a rotina
+goto :eof
 
 :: ========================================================================
 :: MOTOR DE COMBATE (ROLA QUALQUER DADO)
 :: ========================================================================
-:combat_engine
+:dice_engine
     :: Inicia o dano em 0
     set /a resultado_jogada=0
     
@@ -281,6 +347,8 @@ goto :eof
 
     :: O comando goto :eof devolve o jogo para a linha exata que o chamou [11, 12]
     goto :eof
+
+:combat_engine
 
 :: ========================================================================
 :: SISTEMA DE MERCADO MAGO
@@ -988,8 +1056,10 @@ goto :verificar_save
     set "nome_personagem=Tulio"
     set "classe_personagem=O Mago"
     set /a lvl_jogador=1
+
     set /a xp_atual=0
-    set /a xp_proximo_lvl=50
+    set /a xp_proximo_lvl=45
+
     set /a hp_jogador=10
     set /a max_hp=10
     set /a forca_jogador=5
@@ -997,6 +1067,13 @@ goto :verificar_save
     set /a def_jogador=15
     set /a mana_jogador=30
     set /a max_mana=30
+
+    ::Crescimento por nível::
+    set /a cresc_hp=3
+    set /a cresc_mana=10
+    set /a cresc_for=1
+    set /a cresc_agi=2
+    set /a cresc_def=1
 
     ::Equipamentos::
     set /a armamento=0
@@ -1023,10 +1100,13 @@ goto :verificar_save
     ::Ataques Especiais::
         ::Dano de fogo em area que causa 120% da força do jogador e tem 30% de chance de causar queimadura, que causa dano adicional de 10% da força do jogador por 3 turnos.
     set "atk_especial_1=Bola de Fogo"
+    set /a unlock_esp1=3 :: Libera no nível 3
         ::Congela o inimigo por 1 turno e causa dano igual a 100% da força do jogador, mas reduz a agilidade do inimigo em 10% por 2 turnos.
-    set "atk_especial_2=Raio Congelante"
+    set "atk_especial_2=Raio Congelante" 
+    set /a unlock_esp2=5 ::Libera no nível 5
         ::Causa dano de eletricidade em área igual a 150% da força do jogador, tem 20% de chance de paralisar o inimigo por 1 turno, mas reduz a defesa do jogador em 15% por 3 turnos.
     set "atk_especial_3=Tempestade de Raios"
+    set /a unlock_esp3=8 :: Libera no nível 8
 
     ::Ataque padrão::
     set "atk_padrao=Ataque com Cajado"
@@ -1038,7 +1118,8 @@ goto :verificar_save
     set "classe_personagem=A Guerreira"
     set /a lvl_jogador=1
     set /a xp_atual=0
-    set /a xp_proximo_lvl=50
+    set /a xp_proximo_lvl=40
+
     set /a hp_jogador=25
     set /a max_hp=25
     set /a forca_jogador=25
@@ -1046,6 +1127,13 @@ goto :verificar_save
     set /a def_jogador=15
     set /a mana_jogador=0
     set /a max_mana=0
+
+    ::Crescimento por nível::
+    set /a cresc_hp=10
+    set /a cresc_mana=2
+    set /a cresc_for=5
+    set /a cresc_agi=2
+    set /a cresc_def=4
 
     ::Equipamentos::
     set /a armamento=0
@@ -1071,10 +1159,13 @@ goto :verificar_save
     ::Ataques Especiais::
         ::Atordoa o inimigo por 1 turno e causa dano igual a 150% da força do jogador, mas reduz a defesa do jogador em 10% por 2 turnos.
     set "atk_especial_1=Investida"
+    set /a unlock_esp1=2 :: Libera no nível 2
         ::Aumenta a força da equipe no próximo ataque em 30% e tem 20% de chance de atordoar o inimigo por 1 turno.
     set "atk_especial_2=Grito de Guerra"
+    set /a unlock_esp2=4 :: Libera no nível 4
         ::Aumenta a próxima jogada de ataque em 50% e ignora a defesa do inimigo, mas reduz a defesa do jogador em 20% por 3 turnos.
     set "atk_especial_3=Fúria Desenfreada" 
+    set /a unlock_esp3=9 :: Libera no nível 9
 
     ::Ataque padrão::
     set "atk_padrao=Ataque com Espada"
@@ -1087,6 +1178,7 @@ goto :verificar_save
     set /a lvl_jogador=1
     set /a xp_atual=0
     set /a xp_proximo_lvl=50
+
     set /a hp_jogador=12
     set /a max_hp=12
     set /a forca_jogador=10
@@ -1094,6 +1186,13 @@ goto :verificar_save
     set /a def_jogador=15
     set /a mana_jogador=10
     set /a max_mana=10
+
+    ::Crescimento por nível::
+    set /a cresc_hp=4
+    set /a cresc_mana=3
+    set /a cresc_for=3
+    set /a cresc_agi=5
+    set /a cresc_def=1
 
     ::Equipamentos::
     set /a armamento=0
@@ -1119,10 +1218,13 @@ goto :verificar_save
     ::Ataques Especiais::
         ::Causa dano igual a 120% da força do jogador e tem 25% de chance de causar sangramento, que causa dano adicional de 5% da força do jogador por 4 turnos.
     set "atk_especial_1=Golpe Soturno"
+    set /a unlock_esp1=4 :: Libera no nível 4
         ::Causa dano de veneno igual a 100% da força do jogador e tem 30% de chance de envenenar o inimigo, causando dano adicional de 15% da força do jogador por 3 turnos, mas reduz a defesa do jogador em 10% por 2 turnos.
     set "atk_especial_2=Flecha Sombria"
+    set /a unlock_esp2=6 :: Libera no nível 6
         ::Causa dano de maldição igual a 150% da força do jogador e tem 20% de chance de amaldiçoar o inimigo, reduzindo sua força em 20% por 3 turnos, mas reduz a agilidade do jogador em 15% por 2 turnos.
     set "atk_especial_3=Invocação de Sombra"
+    set /a unlock_esp3=10 :: Libera no nível 10
 
     ::Ataque padrão::
     set "atk_padrao=Ataque com Adaga"
