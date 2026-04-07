@@ -267,29 +267,33 @@ goto :eof
         set /a agil_jogador += cresc_agi
         set /a def_jogador += cresc_def
 
+        :: ============================================================
+        :: 2. CRESCIMENTO ESCALONADO (CURVA DE STATUS)
+        :: Aumenta a própria taxa de crescimento para o PRÓXIMO nível!
+        :: ============================================================
         if "%nome_personagem%" equ "Tulio" (
-            ::Crescimento por nível::
-            set /a cresc_hp=3
-            set /a cresc_mana=10
-            set /a cresc_for=1
-            set /a cresc_agi=2
-            set /a cresc_def=1
+            :: O Mago escala absurdamente em Mana e um pouco em Agilidade
+            set /a cresc_hp += 1
+            set /a cresc_mana += 3
+            set /a cresc_for += 0
+            set /a cresc_agi += 1
+            set /a cresc_def += 0
         )
         if "%nome_personagem%" equ "Sara" (
-            ::Crescimento por nível::
-            set /a cresc_hp=3
-            set /a cresc_mana=10
-            set /a cresc_for=1
-            set /a cresc_agi=2
-            set /a cresc_def=1
+            :: A Guerreira vira um tanque, escalando muito HP, Força e Defesa
+            set /a cresc_hp += 3
+            set /a cresc_mana += 0
+            set /a cresc_for += 2
+            set /a cresc_agi += 0
+            set /a cresc_def += 1
         )
-        if "%nome_personagem%" equ"Soso"(
-            ::Crescimento por nível::
-            set /a cresc_hp=3
-            set /a cresc_mana=10
-            set /a cresc_for=1
-            set /a cresc_agi=2
-            set /a cresc_def=1
+        if "%nome_personagem%" equ "Soso" (
+            :: A Ocultista fica extremamente letal e evasiva
+            set /a cresc_hp += 1
+            set /a cresc_mana += 1
+            set /a cresc_for += 1
+            set /a cresc_agi += 2
+            set /a cresc_def += 0
         )
 
         cls
