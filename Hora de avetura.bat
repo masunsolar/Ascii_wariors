@@ -43,87 +43,111 @@ goto :eof
 :: BESTIÁRIO (FICHAS DOS INIMIGOS)
 :: ========================================================================
 :spawn_goblin
-    set "ini_nome=Goblin Fraco"
-    set /a ini_hp=12
-    set /a ini_max_hp=12
-    set /a ini_agil=10
+    :: Definimos quantos inimigos haverá na batalha
+    set /a qtd_inimigos+=1
+    set /a i=qtd_inimigos
+
+    set "ini_nome[%i%]=Goblin Fraco"
+    set /a ini_hp[%i%]=12
+    set /a ini_max_hp[%i%]=12
+    set /a ini_agil[%i%]=10
     :: Dano: 2d6 (media: 7)
-    set /a ini_dado_qtd=2
-    set /a ini_dado_faces=6
-    set /a ini_dano_bonus=0
+    set /a ini_dado_qtd[%i%]=2
+    set /a ini_dado_faces[%i%]=6
+    set /a ini_dano_bonus[%i%]=0
     :: Status
-    set /a ini_veneno_dano=0
-    set /a ini_veneno_turnos=0
+    set /a ini_veneno_dano[%i%]=0
+    set /a ini_veneno_turnos[%i%]=0
 goto :eof
 
 :spawn_javali
-    set "ini_nome=Javali de gelo"
-    set /a ini_hp=12
-    set /a ini_max_hp=20
-    set /a ini_agil=12
+    :: Definimos quantos inimigos haverá na batalha
+    set /a qtd_inimigos+=1
+    set /a i=qtd_inimigos
+
+    set "ini_nome[%i%]=Javali de gelo"
+    set /a ini_hp[%i%]=12
+    set /a ini_max_hp[%i%]=20
+    set /a ini_agil[%i%]=12
     :: Dano: 2d8 (media: 10)
-    set /a ini_dado_qtd=4
-    set /a ini_dado_faces=4
-    set /a ini_dano_bonus=0
+    set /a ini_dado_qtd[%i%]=4
+    set /a ini_dado_faces[%i%]=4
+    set /a ini_dano_bonus[%i%]=0
     :: Status
-    set /a ini_veneno_dano=0
-    set /a ini_veneno_turnos=0
+    set /a ini_veneno_dano[%i%]=0
+    set /a ini_veneno_turnos[%i%]=0
 goto :eof
 
 :spawn_goblin_max
-    set "ini_nome=Goblin forte"
-    set /a ini_hp=48
-    set /a ini_max_hp=48
-    set /a ini_agil=14
+    :: Definimos quantos inimigos haverá na batalha
+    set /a qtd_inimigos+=1
+    set /a i=qtd_inimigos
+
+    set "ini_nome[%i%]=Goblin forte"
+    set /a ini_hp[%i%]=48
+    set /a ini_max_hp[%i%]=48
+    set /a ini_agil[%i%]=14
     :: Dano: 3d8+4 (media: 18)
-    set /a ini_dado_qtd=3
-    set /a ini_dado_faces=8
-    set /a ini_dano_bonus=4
+    set /a ini_dado_qtd[%i%]=3
+    set /a ini_dado_faces[%i%]=8
+    set /a ini_dano_bonus[%i%]=4
     :: Status
-    set /a ini_veneno_dano=0
-    set /a ini_veneno_turnos=0
+    set /a ini_veneno_dano[%i%]=0
+    set /a ini_veneno_turnos[%i%]=0
 goto :eof
 
 :spawn_aranha
-    set "ini_nome=Aranha Gigante da Floresta"
-    set /a ini_hp=35
-    set /a ini_max_hp=35
-    set /a ini_agil=14
+    :: Definimos quantos inimigos haverá na batalha
+    set /a qtd_inimigos+=1
+    set /a i=qtd_inimigos
+
+    set "ini_nome[%i%]=Aranha Gigante da Floresta"
+    set /a ini_hp[%i%]=35
+    set /a ini_max_hp[%i%]=35
+    set /a ini_agil[%i%]=14
     :: Dano: 3d8+2 (media: 15)
-    set /a ini_dado_qtd=3
-    set /a ini_dado_faces=8
-    set /a ini_dano_bonus=2
+    set /a ini_dado_qtd[%i%]=3
+    set /a ini_dado_faces[%i%]=8
+    set /a ini_dano_bonus[%i%]=2
     :: Status: Veneno 2 de dano por 3 turnos
-    set /a ini_veneno_dano=2
-    set /a ini_veneno_turnos=3
+    set /a ini_veneno_dano[%i%]=2
+    set /a ini_veneno_turnos[%i%]=3
 goto :eof
 
 :spawn_cobra
-    set "ini_nome=cobra venenosa"
-    set /a ini_hp=40
-    set /a ini_max_hp=40
-    set /a ini_agil=16
+    :: Definimos quantos inimigos haverá na batalha
+    set /a qtd_inimigos+=1
+    set /a i=qtd_inimigos
+
+    set "ini_nome[%i%]=cobra venenosa"
+    set /a ini_hp[%i%]=40
+    set /a ini_max_hp[%i%]=40
+    set /a ini_agil[%i%]=16
     :: Dano: 3d8+2 (media: 2)
-    set /a ini_dado_qtd=1
-    set /a ini_dado_faces=4
-    set /a ini_dano_bonus=2
+    set /a ini_dado_qtd[%i%]=1
+    set /a ini_dado_faces[%i%]=4
+    set /a ini_dano_bonus[%i%]=2
     :: Status: Veneno 2 de dano por 3 turnos
-    set /a ini_veneno_dano=3
-    set /a ini_veneno_turnos=3
+    set /a ini_veneno_dano[%i%]=3
+    set /a ini_veneno_turnos[%i%]=3
 goto :eof
 
 :spawn_taiven
-    set "ini_nome=Taiven (Demonio)"
-    set /a ini_hp=150
-    set /a ini_max_hp=150
-    set /a ini_agil=15
+    :: Definimos quantos inimigos haverá na batalha
+    set /a qtd_inimigos+=1
+    set /a i=qtd_inimigos
+
+    set "ini_nome[%i%]=Taiven (Demonio)"
+    set /a ini_hp=[%i%]150
+    set /a ini_max_hp=[%i%]150
+    set /a ini_agil[%i%]=15
     :: Dano: 4d8+4 (media: 22)
-    set /a ini_dado_qtd=4
-    set /a ini_dado_faces=8
-    set /a ini_dano_bonus=4
+    set /a ini_dado_qtd[%i%]=4
+    set /a ini_dado_faces[%i%]=8
+    set /a ini_dano_bonus[%i%]=4
     :: Especial e Status
-    set "ini_especial_nome=Pilar de Fogo"
-    :: Dano: 3d20 (media: 31)
+    set "ini_especial_nome=P[%i%]ilar de Fogo"
+    :: Dano: 3d20 (media: 3[%i%]1)
     set /a ini_esp_dado_qtd=3
     set /a ini_esp_dado_faces=20
     set /a ini_veneno_dano=0
@@ -131,17 +155,21 @@ goto :eof
 goto :eof
 
 :spawn_orum
-    set "ini_nome=Orum (Demonio)"
-    set /a ini_hp=125
-    set /a ini_max_hp=125
-    set /a ini_agil=20
+    :: Definimos quantos inimigos haverá na batalha
+    set /a qtd_inimigos+=1
+    set /a i=qtd_inimigos
+
+    set "ini_nome[%i%]=Orum (Demonio)"
+    set /a ini_hp=[%i%]125
+    set /a ini_max_hp=[%i%]125
+    set /a ini_agil[%i%]=20
     :: Dano: 3d12+4 (media: 23)
-    set /a ini_dado_qtd=3
-    set /a ini_dado_faces=12
-    set /a ini_dano_bonus=4
+    set /a ini_dado_qtd[%i%]=3
+    set /a ini_dado_faces=[%i%]12
+    set /a ini_dano_bonus[%i%]=4
     :: Especial e Status
-    set "ini_especial_nome=fogo vampirico"
-    :: Dano: 2d20 (media: 21 + roubo de vida)
+    set "ini_especial_nome=f[%i%]ogo vampirico"
+    :: Dano: 2d20 (media: 21 + [%i%]roubo de vida)
     set /a ini_esp_dado_qtd=2
     set /a ini_esp_dado_faces=20
     set /a ini_veneno_dano=%ini_esp_dado_faces%/3 & :: mudar o conceito de dano de veneno pra vampirico, que rouba vida ao invés de causar dano direto
@@ -149,17 +177,21 @@ goto :eof
 goto :eof
 
 :spawn_trediron
-    set "ini_nome=Trediron (General demonio)"
-    set /a ini_hp=200
-    set /a ini_max_hp=200
-    set /a ini_agil=20
+    :: Definimos quantos inimigos haverá na batalha
+    set /a qtd_inimigos+=1
+    set /a i=qtd_inimigos
+
+    set "ini_nome[%i%]=Trediron (General demonio)"
+    set /a ini_hp=[%i%]200
+    set /a ini_max_hp=[%i%]200
+    set /a ini_agil[%i%]=20
     :: Dano: 4d12+8 (media: 34)
-    set /a ini_dado_qtd=4
-    set /a ini_dado_faces=12
-    set /a ini_dano_bonus=8
+    set /a ini_dado_qtd[%i%]=4
+    set /a ini_dado_faces=[%i%]12
+    set /a ini_dano_bonus[%i%]=8
     :: Especial e Status
-    set "ini_especial_nome=semnome"
-    :: Dano: 3d20 (media: 42)
+    set "ini_especial_nome=s[%i%]emnome"
+    :: Dano: 3d20 (media: 4[%i%]2)
     set /a ini_esp_dado_qtd=4
     set /a ini_esp_dado_faces=20
     set /a ini_veneno_dano=0
@@ -352,7 +384,242 @@ goto :eof
     :: O comando goto :eof devolve o jogo para a linha exata que o chamou [11, 12]
     goto :eof
 
+:: ========================================================================
+:: MOTOR DE COMBATE ESTILO POKÉMON (COM SUPORTE A GRUPOS)
+:: ========================================================================
 :combat_engine
+    set /a turno_atual=1
+
+:combat_loop
+    cls
+    color 0F
+    echo =======================================================
+    echo                     TURNO !turno_atual!
+    echo =======================================================
+    
+    :: 1. DESENHA A LISTA DE INIMIGOS (Verifica quem esta vivo)
+    set /a inimigos_vivos=0
+    for /L %%i in (1, 1, !qtd_inimigos!) do (
+        if !ini_hp[%%i]! GTR 0 (
+            set /a inimigos_vivos+=1
+            echo  [%%i] !ini_nome[%%i]! - HP: !ini_hp[%%i]! / !ini_max_hp[%%i]!
+        ) else (
+            echo  [%%i] !ini_nome[%%i]! - [ MORTO ]
+        )
+    )
+    echo =======================================================
+    
+    :: CHECAGEM DE VITORIA/DERROTA ANTES DO TURNO
+    if !inimigos_vivos! equ 0 goto :vitoria
+    if !hp_jogador! leq 0 goto :game_over
+
+    :: 2. DESENHA O SEU PERSONAGEM
+    echo  !nome_personagem! Nv.!lvl_jogador! (!classe_personagem!)
+    echo  HP: !hp_jogador! / !max_hp!   ^|   MANA: !mana_jogador! / !max_mana!
+    echo =======================================================
+    echo.
+    echo  O que voce vai fazer?
+    echo  [1] Lutar
+    echo  [2] Mochila (Item)
+    echo  [3] Fugir
+    echo.
+    
+    choice /c 123 /n /m "Escolha uma acao: "
+    if !errorlevel! equ 3 goto :tentar_fugir
+    if !errorlevel! equ 2 goto :menu_item
+    if !errorlevel! equ 1 goto :menu_lutar
+
+:: =======================================================
+:: SUBMENU 1: LUTAR (TRAVADO POR LEVEL E MÚLTIPLOS ALVOS)
+:: =======================================================
+:menu_lutar
+    :: SE HOUVER MAIS DE 1 INIMIGO, PERGUNTA O ALVO!
+    set /a alvo=1
+    if !qtd_inimigos! GTR 1 (
+        echo.
+        set /p alvo="Qual inimigo atacar (Digite o numero de 1 a !qtd_inimigos!)? "
+    )
+    
+    :: Verifica se o cara mirou num inimigo que ja morreu
+    if !ini_hp[%alvo%]! LEQ 0 (
+        echo.
+        echo Este inimigo ja esta morto! Escolha outro alvo.
+        pause >nul
+        goto :combat_loop
+    )
+
+    cls
+    echo =======================================================
+    echo                 ATAQUES DISPONIVEIS
+    echo =======================================================
+    echo  [1] !atk_padrao!
+    
+    :: O MS-DOS esconde o ataque se o LVL do Túlio for menor que o Unlock!
+    if !lvl_jogador! GEQ !unlock_esp1! ( echo  [2] !atk_especial_1! ) else ( echo  [2] ??? [Bloqueado Nv.!unlock_esp1!] )
+    if !lvl_jogador! GEQ !unlock_esp2! ( echo  [3] !atk_especial_2! ) else ( echo  [3] ??? [Bloqueado Nv.!unlock_esp2!] )
+    if !lvl_jogador! GEQ !unlock_esp3! ( echo  [4] !atk_especial_3! ) else ( echo  [4] ??? [Bloqueado Nv.!unlock_esp3!] )
+    echo  [5] Voltar
+    echo =======================================================
+    
+    choice /c 12345 /n /m "Escolha seu ataque: "
+    set /a acao=!errorlevel!
+    
+    if !acao! equ 5 goto :combat_loop
+    
+    :: Seguranças: Bloqueia o uso se apertou o botão de magia não aprendida
+    if !acao! equ 4 if !lvl_jogador! LSS !unlock_esp3! ( echo Bloqueado! & pause >nul & goto :menu_lutar )
+    if !acao! equ 3 if !lvl_jogador! LSS !unlock_esp2! ( echo Bloqueado! & pause >nul & goto :menu_lutar )
+    if !acao! equ 2 if !lvl_jogador! LSS !unlock_esp1! ( echo Bloqueado! & pause >nul & goto :menu_lutar )
+
+    :: PROCESSA O DANO COM BASE NA ESCOLHA E MANDA PRO MOTOR
+    echo.
+    if !acao! equ 1 (
+        echo !nome_personagem! usa !atk_padrao! contra !ini_nome[%alvo%]!!
+        set /a quantidade_dados=1 & set /a faces=6 & set /a dano_bonus=!forca_jogador!
+    )
+    if !acao! equ 2 (
+        echo !nome_personagem! conjura !atk_especial_1! contra !ini_nome[%alvo%]!!
+        set /a quantidade_dados=2 & set /a faces=8 & set /a dano_bonus=!forca_jogador!
+    )
+    :: (Aqui no futuro você expande o ataque 3 e 4)
+    
+    :: Chama o SEU motor de dados
+    call :dice_engine
+    
+    :: Tira o HP do alvo especifico!
+    echo Causou !resultado_jogada! de dano!
+    set /a ini_hp[%alvo%] -= resultado_jogada
+    
+    if !ini_hp[%alvo%]! LEQ 0 echo !ini_nome[%alvo%]! foi derrotado!
+    pause >nul
+    goto :turno_inimigo
+
+:: =======================================================
+:: SUBMENU 2: MOCHILA
+:: =======================================================
+:menu_item
+    cls
+    echo =======================================================
+    echo                       MOCHILA
+    echo =======================================================
+    echo  [1] Pocao de HP   (Qtd: !pocao_hp!)
+    echo  [2] Pocao de Mana (Qtd: !pocao_mana!)
+    echo  [3] Voltar
+    echo =======================================================
+    choice /c 123 /n /m "Escolha: "
+    set /a escolha_item=!errorlevel!
+    
+    if !escolha_item! equ 3 goto :combat_loop
+    
+    if !escolha_item! equ 1 (
+        if !pocao_hp! GTR 0 (
+            set /a pocao_hp -= 1
+            set /a hp_jogador += 15
+            if !hp_jogador! GTR !max_hp! set /a hp_jogador=max_hp
+            echo Voce recuperou 15 HP!
+            pause >nul
+            goto :turno_inimigo
+        ) else ( echo Voce nao tem Pocoes de HP! & pause >nul & goto :menu_item )
+    )
+    :: (A poção de mana seria copiada abaixo se fizesse algo)
+    goto :combat_loop
+
+:: =======================================================
+:: SUBMENU 3: FUGIR (COM SISTEMA DE RNG)
+:: =======================================================
+:tentar_fugir
+    cls
+    echo !nome_personagem! tenta escapar da batalha correndo...
+    ping 127.0.0.1 -n 2 >nul
+    
+    :: RNG: Rola 1d20 + Agilidade do jogador
+    set /a fuga_roll = (!random! %% 20) + 1
+    set /a fuga_total = fuga_roll + agil_jogador
+    
+    :: A Dificuldade é baseada no quão ágeis os inimigos são. Usaremos o monstro do Slot 1 como base:
+    set /a dificuldade = 10 + ini_agil[1]
+    
+    echo [D20 Fuga: !fuga_total! vs Dificuldade Inimigo: !dificuldade!]
+    
+    :: Testa o sucesso ou falha da rolagem
+    if !fuga_total! GEQ !dificuldade! (
+        echo Voce encontrou uma brecha e fugiu com sucesso!
+        pause >nul
+        goto :eof
+    ) else (
+        echo Falhou! O inimigo e muito rapido e cortou seu caminho. Voce perdeu o turno!
+        pause >nul
+        goto :turno_inimigo
+    )
+
+:: =======================================================
+:: TURNO DO INIMIGO (VARRENDO O ARRAY)
+:: =======================================================
+:turno_inimigo
+    cls
+    echo =======================================================
+    echo                TURNO DOS INIMIGOS
+    echo =======================================================
+    
+    :: Este FOR mágico vai fazer TODOS os inimigos da mesa atacarem o Túlio
+    for /L %%i in (1, 1, !qtd_inimigos!) do (
+        
+        :: Inimigo só ataca se estiver vivo (HP > 0)
+        if !ini_hp[%%i]! GTR 0 (
+            echo.
+            echo O !ini_nome[%%i]! ataca !nome_personagem!!
+            ping 127.0.0.1 -n 2 >nul
+            
+            :: Carrega os dados DAQUELE monstro que está atacando agora
+            set /a quantidade_dados = !ini_qd[%%i]!
+            set /a faces = !ini_faces[%%i]!
+            set /a dano_bonus = !ini_bonus[%%i]!
+            
+            :: Rola o seu Motor!
+            call :dice_engine
+            
+            echo Voce sofre !resultado_jogada! de dano!
+            set /a hp_jogador -= resultado_jogada
+            pause >nul
+            
+            :: Se o Túlio morrer durante o combo de ataques, cancela a fila
+            if !hp_jogador! LEQ 0 goto :game_over
+        )
+    )
+    
+    :: Se o jogador sobreviveu à rodada inteira de apanhar, volta ao menu dele
+    set /a turno_atual += 1
+    goto :combat_loop
+
+:: =======================================================
+:: FIM DE JOGO
+:: =======================================================
+:vitoria
+    cls
+    echo =======================================================
+    echo                     VITORIA!
+    echo =======================================================
+    echo Todos os monstros foram derrotados!
+    echo.
+    echo Recompensas Obtidas:
+    echo + 45 XP
+    echo + 20 Moedas de Ouro
+    
+    set /a xp_atual += 45
+    set /a ouro += 20
+    pause >nul
+    
+    :: Aqui voce usaria o seu "call :level_check" pra ver se o jogador upou!
+goto :eof
+
+:game_over
+    cls
+    color 4F
+    echo =======================================================
+    echo                    VOCE MORREU
+    echo =======================================================
+    pause >nul
+goto :eof
 
 :: ========================================================================
 :: SISTEMA DE MERCADO MAGO
