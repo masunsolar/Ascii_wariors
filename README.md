@@ -28,9 +28,9 @@ Este projeto é um RPG de aventura desenvolvido inteiramente em **Batch Script**
 ## 🛠 O que falta implementar (Roadmap)
 
 ### 📈 Sistema de Progressão
-- [ ] **Lógica de Level Up:** Implementar a função que verifica se o XP atual atingiu o limite para subir de nível.
-- [ ] **Upagem de Atributos:** Criar interface para o jogador distribuir pontos ganhos ao subir de nível.
-- [ ] **Habilidades Desbloqueáveis:** Condicionar o acesso a novos ataques baseando-se no nível do jogador.
+- [x] **Lógica de Level Up:** Implementar a função que verifica se o XP atual atingiu o limite para subir de nível.
+- [x] **Upagem de Atributos:** Criar interface para o jogador distribuir pontos ganhos ao subir de nível.
+- [x] **Habilidades Desbloqueáveis:** Condicionar o acesso a novos ataques baseando-se no nível do jogador.
 
 ### ⚔️ Sistema de Batalha (Inspirado em Pokémon/Retro)
 - [ ] **Menu de Combate:** Opções de [1] Lutar (escolher entre 4 ataques - 1 normal e 3 especiais), [2] Mochila (itens), [3] Fugir.
@@ -42,8 +42,8 @@ Este projeto é um RPG de aventura desenvolvido inteiramente em **Batch Script**
 - [ ] **Finais Múltiplos:** Lógica de encerramento baseada na quantidade de pessoas salvas durante a campanha.
 
 ### 💰 Economia e Itens
-- [ ] **Sistema de Inventário:** Menu para visualizar ouro, poções e equipamentos.
-- [ ] **Mercado (Loja):** Rótulo `:mercado` com lógica de compra (verificação de saldo e adição de itens ao inventário).
+- [x] **Sistema de Inventário:** Menu para visualizar ouro, poções e equipamentos.
+- [x] **Mercado (Loja):** Rótulo `:mercado` com lógica de compra (verificação de saldo e adição de itens ao inventário).
 
 ### 📖 História e Conteúdo
 - [ ] **Continuidade do Roteiro:** Implementar os eventos descritos no [Google Docs](https://docs.google.com/document/d/1vbjkA0dLJjwNukCCbBl1jCxax6QmqbZ6pmW3w3SdZYs/edit).
